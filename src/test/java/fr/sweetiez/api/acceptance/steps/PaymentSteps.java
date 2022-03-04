@@ -13,5 +13,8 @@ public class PaymentSteps implements En {
         Then("^the purchase is a success$", () -> {
             throw new PendingException();
         });
+        Then("^the purchase is a failure$", () -> {
+            throw new PendingException();
+        });
     }
 }
