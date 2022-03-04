@@ -18,7 +18,7 @@ Feature: Any customer - Pay an order
   Scenario Outline: Pay an order with a credit card successfully
     Given I am authenticated as "<customer_email>"
     And the cart value is "<cart_price_before>" with "<cart_articles_number_before>" items remaining
-    And my points of loyalty are "<points_before>"
+    And my loyalty points are "<points_before>"
     And my credit card details are correct
     When I try to pay the cart value
     Then the purchase is a success
