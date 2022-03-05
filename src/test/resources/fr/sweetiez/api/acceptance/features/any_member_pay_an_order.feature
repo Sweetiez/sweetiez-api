@@ -47,7 +47,7 @@ Feature: Any customer - Pay an order
       | i.am@sorry.wilson          | 120                         | 120                        | 122               | 50               | 4045          | 4045         |
 
 
-  Scenario Outline: Pay an order with a PayPal successfully
+  Scenario Outline: Pay an order with PayPal successfully
     Given I am authenticated as "<customer_email>"
     And the cart value is "<cart_price_before>" with "<cart_articles_number_before>" items remaining
     And my loyalty points are "<points_before>"
@@ -62,7 +62,7 @@ Feature: Any customer - Pay an order
       | winter@is.coming           | 30                          | 0                          | 35                | 0                | 0             | 50           |
       | i.am@sorry.wilson          | 120                         | 0                          | 122               | 0                | 4045          | 4245         |
 
-  Scenario Outline: Pay an order with a PayPal unsuccessfully
+  Scenario Outline: Pay an order with PayPal unsuccessfully
     Given I am authenticated as "<customer_email>"
     And the cart value is "<cart_price_before>" with "<cart_articles_number_before>" items remaining
     And my loyalty points are "<points_before>"
