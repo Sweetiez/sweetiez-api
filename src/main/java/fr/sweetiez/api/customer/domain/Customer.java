@@ -23,4 +23,8 @@ public class Customer {
                 ", email='" + email + '\'' +
                 '}';
     }
+
+    public String getEmail() {
+        return email;
+    }
 }

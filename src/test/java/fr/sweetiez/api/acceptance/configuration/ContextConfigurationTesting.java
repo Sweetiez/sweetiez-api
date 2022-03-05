@@ -6,6 +6,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @CucumberContextConfiguration
 @ContextConfiguration(classes = {
-        RepositoriesConfiguration.class
+        RepositoriesConfiguration.class,
+        ServicesConfiguration.class
 })
 class ContextConfigurationTesting implements En {}
