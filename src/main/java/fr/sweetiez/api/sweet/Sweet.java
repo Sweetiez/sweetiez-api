@@ -13,7 +13,6 @@ public class Sweet {
         this.price = price;
     }
 
-    @Override
     public String toString() {
         return "Sweet{" +
                 "id='" + id + '\'' +
