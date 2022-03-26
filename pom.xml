@@ -15,6 +15,7 @@
 	<artifactId>sweetiez-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Sweetiez Api</name>
+	<packaging>pom</packaging>
 
 	<description>
 		An API to centralize FI SWEETS features for different clients: Web application, Mobile application, ...
@@ -24,6 +25,10 @@
 		<java.version>11</java.version>
 		<cucumber.version>7.2.3</cucumber.version>
 	</properties>
+
+	<modules>
+		<module>launcher</module>
+	</modules>
 
 	<dependencies>
 		<dependency>
@@ -96,7 +101,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>${project.parent.version}</version>
 				<configuration>
 					<excludes>
 						<exclude>
