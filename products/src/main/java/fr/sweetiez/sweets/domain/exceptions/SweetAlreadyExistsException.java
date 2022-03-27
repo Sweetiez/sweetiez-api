@@ -1,3 +1,3 @@
-package fr.sweetiez.sweets.use_cases;
+package fr.sweetiez.sweets.domain.exceptions;
 
 public class SweetAlreadyExistsException extends RuntimeException { }
