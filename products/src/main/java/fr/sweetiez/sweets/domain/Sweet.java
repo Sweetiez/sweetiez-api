@@ -1,9 +1,9 @@
-package fr.sweetiez.sweets.model;
+package fr.sweetiez.sweets.domain;
 
-import fr.sweetiez.sweets.use_cases.InvalidPriceException;
-import fr.sweetiez.sweets.use_cases.InvalidSweetNameException;
-import fr.sweetiez.sweets.use_cases.SweetAlreadyExistsException;
-import fr.sweetiez.sweets.use_cases.SweetDTO;
+import fr.sweetiez.sweets.domain.exceptions.InvalidPriceException;
+import fr.sweetiez.sweets.domain.exceptions.InvalidSweetNameException;
+import fr.sweetiez.sweets.domain.exceptions.SweetAlreadyExistsException;
+import fr.sweetiez.sweets.exposition.SweetDTO;
 
 import java.math.BigDecimal;
 import java.util.Objects;

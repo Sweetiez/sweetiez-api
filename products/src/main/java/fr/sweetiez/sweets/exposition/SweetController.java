@@ -1,9 +1,8 @@
 package fr.sweetiez.sweets.exposition;
 
-import fr.sweetiez.sweets.model.Sweet;
-import fr.sweetiez.sweets.model.Sweets;
+import fr.sweetiez.sweets.domain.Sweet;
+import fr.sweetiez.sweets.domain.Sweets;
 import fr.sweetiez.sweets.use_cases.CreateSweet;
-import fr.sweetiez.sweets.use_cases.SweetDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

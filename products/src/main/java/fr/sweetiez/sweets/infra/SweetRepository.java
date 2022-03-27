@@ -1,7 +1,7 @@
 package fr.sweetiez.sweets.infra;
 
-import fr.sweetiez.sweets.model.Sweet;
-import fr.sweetiez.sweets.model.Sweets;
+import fr.sweetiez.sweets.domain.Sweet;
+import fr.sweetiez.sweets.domain.Sweets;
 import org.springframework.stereotype.Repository;
 
 import java.util.Set;

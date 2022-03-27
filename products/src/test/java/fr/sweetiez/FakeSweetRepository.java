@@ -1,7 +1,7 @@
 package fr.sweetiez;
 
-import fr.sweetiez.sweets.model.Sweet;
-import fr.sweetiez.sweets.model.Sweets;
+import fr.sweetiez.sweets.domain.Sweet;
+import fr.sweetiez.sweets.domain.Sweets;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,7 +1,8 @@
 package fr.sweetiez.sweets.use_cases;
 
-import fr.sweetiez.sweets.model.Sweet;
-import fr.sweetiez.sweets.model.Sweets;
+import fr.sweetiez.sweets.domain.Sweet;
+import fr.sweetiez.sweets.domain.Sweets;
+import fr.sweetiez.sweets.exposition.SweetDTO;
 
 
 public class CreateSweet {

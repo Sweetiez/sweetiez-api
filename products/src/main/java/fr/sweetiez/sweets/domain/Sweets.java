@@ -1,4 +1,4 @@
-package fr.sweetiez.sweets.model;
+package fr.sweetiez.sweets.domain;
 
 import java.util.Set;
 

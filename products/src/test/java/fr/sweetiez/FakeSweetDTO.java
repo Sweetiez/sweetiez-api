@@ -1,6 +1,6 @@
 package fr.sweetiez;
 
-import fr.sweetiez.sweets.use_cases.SweetDTO;
+import fr.sweetiez.sweets.exposition.SweetDTO;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 
 import java.math.BigDecimal;
@@ -11,7 +11,7 @@ public class FakeSweetDTO {
     public FakeSweetDTO() {}
 
     public SweetDTO createValidSweetDTO() {
-        var name = RandomString.make();
+        var name = "Sweet name";
         var ingredients = new HashSet<String>();
         var price = BigDecimal.valueOf(1.95);
 

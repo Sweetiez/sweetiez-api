@@ -1,8 +1,8 @@
 package fr.sweetiez;
 
 import fr.sweetiez.sweets.use_cases.CreateSweet;
-import fr.sweetiez.sweets.use_cases.InvalidSweetNameException;
-import fr.sweetiez.sweets.use_cases.SweetAlreadyExistsException;
+import fr.sweetiez.sweets.domain.exceptions.InvalidSweetNameException;
+import fr.sweetiez.sweets.domain.exceptions.SweetAlreadyExistsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
