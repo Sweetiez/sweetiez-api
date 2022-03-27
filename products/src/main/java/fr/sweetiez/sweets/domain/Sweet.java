@@ -12,6 +12,7 @@ import java.util.UUID;
 
 public class Sweet {
     private final SweetID id;
+    private final Status status;
     private final String name;
     private final Set<String> ingredients;
     private final BigDecimal price;
@@ -19,10 +20,11 @@ public class Sweet {
     public Sweet(SweetDTO sweet, Set<Sweet> sweets) {
         checkValidity(sweet, sweets);
 
-        this.id = getValidRandomID(sweets);
-        this.name = sweet.getName();
-        this.ingredients = sweet.getIngredients();
-        this.price = sweet.getPrice();
+        id = getValidRandomID(sweets);
+        status = Status.CREATED;
+        name = sweet.getName();
+        ingredients = sweet.getIngredients();
+        price = sweet.getPrice();
 
     }
 
@@ -70,19 +72,20 @@ public class Sweet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Sweet sweet = (Sweet) o;
-        return id.equals(sweet.id) && name.equals(sweet.name) && ingredients.equals(sweet.ingredients);
+        return Objects.equals(id, sweet.id);
     }
 
     public int hashCode() {
-        return Objects.hash(id, name, ingredients);
+        return Objects.hash(id);
     }
 
     public String toString() {
         return "Sweet{" +
                 "id=" + id +
+                ", status=" + status +
                 ", name='" + name + '\'' +
-                ", ingredients=" + ingredients + '\'' +
-                ", price=" + price + '\'' +
+                ", ingredients=" + ingredients +
+                ", price=" + price +
                 '}';
     }
 }
