@@ -1,4 +1,4 @@
-package fr.sweetiez;
+package fr.sweetiez.sweets;
 
 import fr.sweetiez.sweets.domain.Sweet;
 import fr.sweetiez.sweets.domain.Sweets;

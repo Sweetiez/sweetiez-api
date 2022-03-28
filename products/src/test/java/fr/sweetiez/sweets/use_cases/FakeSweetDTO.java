@@ -1,4 +1,4 @@
-package fr.sweetiez.use_cases;
+package fr.sweetiez.sweets.use_cases;
 
 import fr.sweetiez.sweets.exposition.SweetDTO;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
