@@ -6,6 +6,8 @@ import fr.sweetiez.sweets.use_cases.CreateSweet;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 @RestController
 @RequestMapping("/sweets")
 public class SweetController {
@@ -21,7 +23,8 @@ public class SweetController {
     public ResponseEntity<Sweet> create(@RequestBody SweetDTO sweetDTO) {
         try {
             CreateSweet useCase = new CreateSweet(sweetsRepository);
-            return ResponseEntity.ok(useCase.create(sweetDTO));
+            Sweet sweet = useCase.create(sweetDTO);
+            return ResponseEntity.created(URI.create("/sweets/" + sweet.getId().toString())).build();
 
         } catch (Exception exception) {
             return ResponseEntity.badRequest().build();

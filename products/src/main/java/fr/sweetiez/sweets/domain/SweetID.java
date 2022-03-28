@@ -24,8 +24,6 @@ public class SweetID {
     }
 
     public String toString() {
-        return "SweetID{" +
-                "id=" + id +
-                '}';
+        return id.toString();
     }
 }
