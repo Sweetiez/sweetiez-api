@@ -1,5 +1,6 @@
-package fr.sweetiez;
+package fr.sweetiez.use_cases;
 
+import fr.sweetiez.FakeSweetRepository;
 import fr.sweetiez.sweets.domain.exceptions.InvalidIngredientsException;
 import fr.sweetiez.sweets.domain.exceptions.InvalidPriceException;
 import fr.sweetiez.sweets.use_cases.CreateSweet;

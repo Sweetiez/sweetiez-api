@@ -29,7 +29,7 @@ public class Sweet {
 
     }
 
-    public void checkValidity(SweetDTO sweet, Set<Sweet> sweets) {
+    private void checkValidity(SweetDTO sweet, Set<Sweet> sweets) {
         checkNameValidity(sweet.getName(), sweets);
         checkPriceValidity(sweet.getPrice());
         checkIngredientsValidity(sweet.getIngredients());
