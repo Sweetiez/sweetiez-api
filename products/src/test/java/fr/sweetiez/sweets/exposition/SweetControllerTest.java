@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SweetControllerTest {
     private final FakeSweetDTO fakeSweetDTO;
@@ -36,5 +36,15 @@ public class SweetControllerTest {
         var response = sweetController.create(fakeSweet);
 
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCodeValue());
+    }
+
+    @Test
+    public void shouldReturnResponseWithEmptyListOfPublishedSweets() {
+        var response = sweetController.findAllPublished();
+        var sweets = response.getBody();
+
+        assertNotNull(sweets);
+        assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
+        assertTrue(sweets.isEmpty());
     }
 }

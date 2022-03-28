@@ -43,6 +43,10 @@ public class Sweet {
         return name;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
     private void checkNameValidity(String name, Set<Sweet> sweets) {
         if (name == null || name.isEmpty() || !name.matches("^[A-Za-z][ A-Za-z]+$"))
             throw new InvalidSweetNameException();
