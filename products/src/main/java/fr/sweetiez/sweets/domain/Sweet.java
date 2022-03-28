@@ -1,5 +1,6 @@
 package fr.sweetiez.sweets.domain;
 
+import fr.sweetiez.sweets.domain.exceptions.InvalidIngredientsException;
 import fr.sweetiez.sweets.domain.exceptions.InvalidPriceException;
 import fr.sweetiez.sweets.domain.exceptions.InvalidSweetNameException;
 import fr.sweetiez.sweets.domain.exceptions.SweetAlreadyExistsException;
@@ -31,6 +32,7 @@ public class Sweet {
     public void checkValidity(SweetDTO sweet, Set<Sweet> sweets) {
         checkNameValidity(sweet.getName(), sweets);
         checkPriceValidity(sweet.getPrice());
+        checkIngredientsValidity(sweet.getIngredients());
     }
 
     public SweetID getId() {
@@ -42,7 +44,8 @@ public class Sweet {
     }
 
     private void checkNameValidity(String name, Set<Sweet> sweets) {
-        if (name.isEmpty() || !name.matches("^[A-Za-z][ A-Za-z]+$")) throw new InvalidSweetNameException();
+        if (name == null || name.isEmpty() || !name.matches("^[A-Za-z][ A-Za-z]+$"))
+            throw new InvalidSweetNameException();
 
         boolean nameAlreadyExists = sweets.stream().anyMatch(sweet -> sweet.getName().equals(name));
         if (nameAlreadyExists) throw new SweetAlreadyExistsException();
@@ -50,6 +53,14 @@ public class Sweet {
 
     private void checkPriceValidity(BigDecimal price) {
         if (price.doubleValue() <= 0) throw new InvalidPriceException();
+    }
+
+    private void checkIngredientsValidity(Set<String> ingredients) {
+        if (ingredients == null || ingredients.isEmpty()) throw new InvalidIngredientsException();
+
+        for (var ingredient : ingredients) {
+            if (ingredient == null || ingredient.isEmpty()) throw new InvalidIngredientsException();
+        }
     }
 
     private SweetID getValidRandomID(Set<Sweet> ids) {

@@ -1,5 +1,7 @@
 package fr.sweetiez;
 
+import fr.sweetiez.sweets.domain.exceptions.InvalidIngredientsException;
+import fr.sweetiez.sweets.domain.exceptions.InvalidPriceException;
 import fr.sweetiez.sweets.use_cases.CreateSweet;
 import fr.sweetiez.sweets.domain.exceptions.InvalidSweetNameException;
 import fr.sweetiez.sweets.domain.exceptions.SweetAlreadyExistsException;
@@ -52,5 +54,53 @@ public class CreateSweetTest {
 
         ThrowingCallable creatSweet = () -> admin.create(sweetDto);
         assertThatExceptionOfType(InvalidSweetNameException.class).isThrownBy(creatSweet);
+    }
+
+    @Test
+    public void shouldThrowAnExceptionIfSweetPriceIsLowerThanZero() {
+        var sweetDto = fakeSweetDTO.withNegativePrice();
+
+        ThrowingCallable creatSweet = () -> admin.create(sweetDto);
+        assertThatExceptionOfType(InvalidPriceException.class).isThrownBy(creatSweet);
+    }
+
+    @Test
+    public void shouldThrowAnExceptionIfSweetPriceEqualsToZero() {
+        var sweetDto = fakeSweetDTO.withPriceEqualsZero();
+
+        ThrowingCallable creatSweet = () -> admin.create(sweetDto);
+        assertThatExceptionOfType(InvalidPriceException.class).isThrownBy(creatSweet);
+    }
+
+    @Test
+    public void shouldThrowAnExceptionIfSweetIngredientsIsNull() {
+        var sweetDto = fakeSweetDTO.withIngredientsEqualsNull();
+
+        ThrowingCallable creatSweet = () -> admin.create(sweetDto);
+        assertThatExceptionOfType(InvalidIngredientsException.class).isThrownBy(creatSweet);
+    }
+
+    @Test
+    public void shouldThrowAnExceptionIfSweetIngredientsIsEmpty() {
+        var sweetDto = fakeSweetDTO.withEmptyIngredients();
+
+        ThrowingCallable creatSweet = () -> admin.create(sweetDto);
+        assertThatExceptionOfType(InvalidIngredientsException.class).isThrownBy(creatSweet);
+    }
+
+    @Test
+    public void shouldThrowAnExceptionIfSweetIngredientsContainsNullValue() {
+        var sweetDto = fakeSweetDTO.withIngredientsContainingNullValue();
+
+        ThrowingCallable creatSweet = () -> admin.create(sweetDto);
+        assertThatExceptionOfType(InvalidIngredientsException.class).isThrownBy(creatSweet);
+    }
+
+    @Test
+    public void shouldThrowAnExceptionIfSweetIngredientsContainsEmptyValue() {
+        var sweetDto = fakeSweetDTO.withIngredientsContainingEmptyValue();
+
+        ThrowingCallable creatSweet = () -> admin.create(sweetDto);
+        assertThatExceptionOfType(InvalidIngredientsException.class).isThrownBy(creatSweet);
     }
 }
