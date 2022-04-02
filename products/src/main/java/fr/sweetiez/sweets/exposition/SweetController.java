@@ -30,10 +30,10 @@ public class SweetController {
 
 
     @PostMapping
-    public ResponseEntity<Sweet> create(@RequestBody SweetDTO sweetDTO) {
+    public ResponseEntity<Sweet> create(@RequestBody CreateSweetRequest request) {
         try {
             CreateSweet useCase = new CreateSweet(sweetsRepository);
-            Sweet sweet = useCase.create(sweetDTO);
+            Sweet sweet = useCase.create(request);
             return ResponseEntity.created(URI.create("/sweets/" + sweet.getId().toString())).build();
         }
         catch (InvalidSweetNameException

@@ -4,7 +4,7 @@ import fr.sweetiez.sweets.domain.exceptions.InvalidIngredientsException;
 import fr.sweetiez.sweets.domain.exceptions.InvalidPriceException;
 import fr.sweetiez.sweets.domain.exceptions.InvalidSweetNameException;
 import fr.sweetiez.sweets.domain.exceptions.SweetAlreadyExistsException;
-import fr.sweetiez.sweets.exposition.SweetDTO;
+import fr.sweetiez.sweets.exposition.CreateSweetRequest;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -19,7 +19,7 @@ public class Sweet {
     private final Set<String> ingredients;
     private final BigDecimal price;
 
-    public Sweet(SweetDTO sweet, Set<Sweet> sweets) {
+    public Sweet(CreateSweetRequest sweet, Set<Sweet> sweets) {
         checkValidity(sweet, sweets);
 
         id = getValidRandomID(sweets);
@@ -40,7 +40,7 @@ public class Sweet {
         price = sweet.getPrice();
     }
 
-    private void checkValidity(SweetDTO sweet, Set<Sweet> sweets) {
+    private void checkValidity(CreateSweetRequest sweet, Set<Sweet> sweets) {
         checkNameValidity(sweet.getName(), sweets);
         checkPriceValidity(sweet.getPrice());
         checkIngredientsValidity(sweet.getIngredients());

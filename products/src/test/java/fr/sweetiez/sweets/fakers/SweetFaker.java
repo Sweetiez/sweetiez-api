@@ -1,7 +1,7 @@
 package fr.sweetiez.sweets.fakers;
 
 import fr.sweetiez.sweets.domain.Sweet;
-import fr.sweetiez.sweets.exposition.SweetDTO;
+import fr.sweetiez.sweets.exposition.CreateSweetRequest;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -13,7 +13,7 @@ public class SweetFaker {
     public Sweet fakeSweet(String name) {
         var sweets = new HashSet<Sweet>();
         return new Sweet(
-                new SweetDTO(name, new HashSet<>(List.of("a", "b", "c")), new BigDecimal("0.95")),
+                new CreateSweetRequest(name, new HashSet<>(List.of("a", "b", "c")), new BigDecimal("0.95")),
                 sweets);
     }
 
@@ -22,7 +22,7 @@ public class SweetFaker {
 
         for (int i = 0; i < 3; i++) {
             var sweet = new Sweet(
-                    new SweetDTO("a" + i, new HashSet<>(List.of("a", "b", "c")), new BigDecimal(i + 0.95)),
+                    new CreateSweetRequest("a" + i, new HashSet<>(List.of("a", "b", "c")), new BigDecimal(i + 0.95)),
                     sweets);
             sweets.add(sweet);
         }

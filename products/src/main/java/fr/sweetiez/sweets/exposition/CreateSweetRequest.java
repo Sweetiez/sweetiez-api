@@ -4,12 +4,12 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Set;
 
-public class SweetDTO {
+public class CreateSweetRequest {
     private final String name;
     private final Set<String> ingredients;
     private final BigDecimal price;
 
-    public SweetDTO(String name, Set<String> ingredients, BigDecimal price) {
+    public CreateSweetRequest(String name, Set<String> ingredients, BigDecimal price) {
         this.name = name;
         this.ingredients = ingredients;
         this.price = price;
@@ -29,10 +29,10 @@ public class SweetDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SweetDTO sweetDTO = (SweetDTO) o;
+        CreateSweetRequest request = (CreateSweetRequest) o;
 
-        if (!Objects.equals(name, sweetDTO.name)) return false;
-        return Objects.equals(ingredients, sweetDTO.ingredients);
+        if (!Objects.equals(name, request.name)) return false;
+        return Objects.equals(ingredients, request.ingredients);
     }
 
     public int hashCode() {

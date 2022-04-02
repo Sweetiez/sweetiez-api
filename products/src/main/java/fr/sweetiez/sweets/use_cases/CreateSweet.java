@@ -2,7 +2,7 @@ package fr.sweetiez.sweets.use_cases;
 
 import fr.sweetiez.sweets.domain.Sweet;
 import fr.sweetiez.sweets.domain.Sweets;
-import fr.sweetiez.sweets.exposition.SweetDTO;
+import fr.sweetiez.sweets.exposition.CreateSweetRequest;
 
 
 public class CreateSweet {
@@ -13,9 +13,9 @@ public class CreateSweet {
         this.sweets = sweets;
     }
 
-    public Sweet create(SweetDTO sweetDTO) {
+    public Sweet create(CreateSweetRequest request) {
         var existingSweets = this.sweets.all();
-        var sweet = new Sweet(sweetDTO, existingSweets);
+        var sweet = new Sweet(request, existingSweets);
         this.sweets.save(sweet);
 
         return sweet;

@@ -1,6 +1,6 @@
 package fr.sweetiez.sweets.fakers;
 
-import fr.sweetiez.sweets.exposition.SweetDTO;
+import fr.sweetiez.sweets.exposition.CreateSweetRequest;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 
 import java.math.BigDecimal;
@@ -9,7 +9,7 @@ import java.util.HashSet;
 public class FakeSweetDTO {
     public FakeSweetDTO() {}
 
-    public SweetDTO createValidSweetDTO() {
+    public CreateSweetRequest createValidSweetDTO() {
         var name = "Sweet name";
         var ingredients = new HashSet<String>();
         var price = BigDecimal.valueOf(1.95);
@@ -18,14 +18,14 @@ public class FakeSweetDTO {
             ingredients.add(RandomString.make());
         }
 
-        return new SweetDTO(name, ingredients, price);
+        return new CreateSweetRequest(name, ingredients, price);
     }
 
-    public SweetDTO copyOf(SweetDTO dto) {
-        return new SweetDTO(dto.getName(), dto.getIngredients(), dto.getPrice());
+    public CreateSweetRequest copyOf(CreateSweetRequest dto) {
+        return new CreateSweetRequest(dto.getName(), dto.getIngredients(), dto.getPrice());
     }
 
-    public SweetDTO withEmptyName() {
+    public CreateSweetRequest withEmptyName() {
         var name = "";
         var ingredients = new HashSet<String>();
         var price = BigDecimal.valueOf(1.95);
@@ -34,10 +34,10 @@ public class FakeSweetDTO {
             ingredients.add(RandomString.make());
         }
 
-        return new SweetDTO(name, ingredients, price);
+        return new CreateSweetRequest(name, ingredients, price);
     }
 
-    public SweetDTO withInvalidName() {
+    public CreateSweetRequest withInvalidName() {
         var name = "F1s€3t$";
         var ingredients = new HashSet<String>();
         var price = BigDecimal.valueOf(1.95);
@@ -46,10 +46,10 @@ public class FakeSweetDTO {
             ingredients.add(RandomString.make());
         }
 
-        return new SweetDTO(name, ingredients, price);
+        return new CreateSweetRequest(name, ingredients, price);
     }
 
-    public SweetDTO withNegativePrice() {
+    public CreateSweetRequest withNegativePrice() {
         var name = "Valid name";
         var ingredients = new HashSet<String>();
         var price = BigDecimal.valueOf(-1.95);
@@ -58,10 +58,10 @@ public class FakeSweetDTO {
             ingredients.add(RandomString.make());
         }
 
-        return new SweetDTO(name, ingredients, price);
+        return new CreateSweetRequest(name, ingredients, price);
     }
 
-    public SweetDTO withPriceEqualsZero() {
+    public CreateSweetRequest withPriceEqualsZero() {
         var name = "Valid name";
         var ingredients = new HashSet<String>();
         var price = BigDecimal.valueOf(0);
@@ -70,10 +70,10 @@ public class FakeSweetDTO {
             ingredients.add(RandomString.make());
         }
 
-        return new SweetDTO(name, ingredients, price);
+        return new CreateSweetRequest(name, ingredients, price);
     }
 
-    public SweetDTO withPriceEqualsNull() {
+    public CreateSweetRequest withPriceEqualsNull() {
         var name = "Valid name";
         var ingredients = new HashSet<String>();
 
@@ -81,35 +81,35 @@ public class FakeSweetDTO {
             ingredients.add(RandomString.make());
         }
 
-        return new SweetDTO(name, ingredients, null);
+        return new CreateSweetRequest(name, ingredients, null);
     }
 
-    public SweetDTO withNameEqualsNull() {
+    public CreateSweetRequest withNameEqualsNull() {
         var ingredients = new HashSet<String>();
         var price = BigDecimal.valueOf(0);
 
         for (int i = 0; i < 3; i++) {
             ingredients.add(RandomString.make());
         }
-        return new SweetDTO(null, ingredients, price);
+        return new CreateSweetRequest(null, ingredients, price);
     }
 
-    public SweetDTO withIngredientsEqualsNull() {
+    public CreateSweetRequest withIngredientsEqualsNull() {
         var name = "Valid name";
         var price = BigDecimal.valueOf(1.95);
 
-        return new SweetDTO(name, null, price);
+        return new CreateSweetRequest(name, null, price);
     }
 
-    public SweetDTO withEmptyIngredients() {
+    public CreateSweetRequest withEmptyIngredients() {
         var name = "Valid name";
         var ingredients = new HashSet<String>();
         var price = BigDecimal.valueOf(1.95);
 
-        return new SweetDTO(name, ingredients, price);
+        return new CreateSweetRequest(name, ingredients, price);
     }
 
-    public SweetDTO withIngredientsContainingNullValue() {
+    public CreateSweetRequest withIngredientsContainingNullValue() {
         var name = "Valid name";
         var ingredients = new HashSet<String>();
         var price = BigDecimal.valueOf(1.95);
@@ -120,10 +120,10 @@ public class FakeSweetDTO {
             } else ingredients.add(RandomString.make());
         }
 
-        return new SweetDTO(name, ingredients, price);
+        return new CreateSweetRequest(name, ingredients, price);
     }
 
-    public SweetDTO withIngredientsContainingEmptyValue() {
+    public CreateSweetRequest withIngredientsContainingEmptyValue() {
         var name = "Valid name";
         var ingredients = new HashSet<String>();
         var price = BigDecimal.valueOf(1.95);
@@ -134,6 +134,6 @@ public class FakeSweetDTO {
             } else ingredients.add(RandomString.make());
         }
 
-        return new SweetDTO(name, ingredients, price);
+        return new CreateSweetRequest(name, ingredients, price);
     }
 }
