@@ -3,7 +3,14 @@ package fr.sweetiez.sweets.exposition;
 import fr.sweetiez.sweets.domain.Status;
 import fr.sweetiez.sweets.domain.Sweet;
 import fr.sweetiez.sweets.domain.Sweets;
+import fr.sweetiez.sweets.domain.exceptions.InvalidIngredientsException;
+import fr.sweetiez.sweets.domain.exceptions.InvalidPriceException;
+import fr.sweetiez.sweets.domain.exceptions.InvalidSweetNameException;
+import fr.sweetiez.sweets.domain.exceptions.SweetAlreadyExistsException;
+import fr.sweetiez.sweets.use_cases.AnySweetFoundException;
 import fr.sweetiez.sweets.use_cases.CreateSweet;
+import fr.sweetiez.sweets.use_cases.PublishSweet;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,9 +35,14 @@ public class SweetController {
             CreateSweet useCase = new CreateSweet(sweetsRepository);
             Sweet sweet = useCase.create(sweetDTO);
             return ResponseEntity.created(URI.create("/sweets/" + sweet.getId().toString())).build();
-
-        } catch (Exception exception) {
+        }
+        catch (InvalidSweetNameException
+                | InvalidPriceException
+                | InvalidIngredientsException exception) {
             return ResponseEntity.badRequest().build();
+        }
+        catch (SweetAlreadyExistsException exception) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
 
@@ -41,5 +53,18 @@ public class SweetController {
                 .collect(Collectors.toSet());
 
         return ResponseEntity.ok(publishedSweets);
+    }
+
+    @PostMapping("/publish")
+    public ResponseEntity<Sweet> publish(@RequestBody PublishSweetRequest request) {
+        PublishSweet useCase = new PublishSweet(sweetsRepository);
+
+        try {
+            Sweet sweet = useCase.publish(request.getId(), request.getPriority());
+            return ResponseEntity.ok(sweet);
+        }
+        catch (AnySweetFoundException exception) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
