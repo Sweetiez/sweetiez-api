@@ -14,6 +14,7 @@ import java.util.UUID;
 public class Sweet {
     private final SweetID id;
     private final Status status;
+    private final Priority priority;
     private final String name;
     private final Set<String> ingredients;
     private final BigDecimal price;
@@ -23,10 +24,20 @@ public class Sweet {
 
         id = getValidRandomID(sweets);
         status = Status.CREATED;
+        priority = Priority.COMMON;
         name = sweet.getName();
         ingredients = sweet.getIngredients();
         price = sweet.getPrice();
 
+    }
+
+    public Sweet(Sweet sweet, Priority priority) {
+        id = sweet.getId();
+        status = Status.PUBLISHED;
+        this.priority = priority;
+        name = sweet.getName();
+        ingredients = sweet.getIngredients();
+        price = sweet.getPrice();
     }
 
     private void checkValidity(SweetDTO sweet, Set<Sweet> sweets) {
@@ -47,6 +58,18 @@ public class Sweet {
         return status;
     }
 
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public Set<String> getIngredients() {
+        return ingredients;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
     private void checkNameValidity(String name, Set<Sweet> sweets) {
         if (name == null || name.isEmpty() || !name.matches("^[A-Za-z][ A-Za-z]+$"))
             throw new InvalidSweetNameException();
@@ -56,7 +79,7 @@ public class Sweet {
     }
 
     private void checkPriceValidity(BigDecimal price) {
-        if (price.doubleValue() <= 0) throw new InvalidPriceException();
+        if (price == null || price.doubleValue() <= 0) throw new InvalidPriceException();
     }
 
     private void checkIngredientsValidity(Set<String> ingredients) {

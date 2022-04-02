@@ -4,6 +4,7 @@ import fr.sweetiez.sweets.domain.Sweet;
 import fr.sweetiez.sweets.domain.Sweets;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -15,5 +16,9 @@ public class SweetRepository implements Sweets {
 
     public Set<Sweet> all() {
         return null;
+    }
+
+    public Optional<Sweet> findByID(String id) {
+        return Optional.empty();
     }
 }

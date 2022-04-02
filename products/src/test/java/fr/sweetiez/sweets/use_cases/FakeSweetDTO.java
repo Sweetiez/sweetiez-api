@@ -37,7 +37,7 @@ public class FakeSweetDTO {
         return new SweetDTO(name, ingredients, price);
     }
 
-    public SweetDTO withNumbersInName() {
+    public SweetDTO withInvalidName() {
         var name = "F1s€3t$";
         var ingredients = new HashSet<String>();
         var price = BigDecimal.valueOf(1.95);

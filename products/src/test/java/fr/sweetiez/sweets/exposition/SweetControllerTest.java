@@ -38,13 +38,19 @@ public class SweetControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCodeValue());
     }
 
-    @Test
-    public void shouldReturnResponseWithEmptyListOfPublishedSweets() {
-        var response = sweetController.findAllPublished();
-        var sweets = response.getBody();
-
-        assertNotNull(sweets);
-        assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
-        assertTrue(sweets.isEmpty());
-    }
+//    @Test
+//    public void shouldReturnResponseWithEmptyListOfPublishedSweets() {
+//        var response = sweetController.findAllPublished();
+//        var sweets = response.getBody();
+//
+//        assertNotNull(sweets);
+//        assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
+//        assertTrue(sweets.isEmpty());
+//    }
+//
+//    @Test
+//    public void shouldReturnResponseWithNonEmptyListOfPublishedSweets() {
+//        var sweet = sweetFaker.fakeSweet();
+//
+//    }
 }

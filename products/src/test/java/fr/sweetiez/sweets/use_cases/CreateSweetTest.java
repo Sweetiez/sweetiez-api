@@ -1,6 +1,8 @@
 package fr.sweetiez.sweets.use_cases;
 
 import fr.sweetiez.sweets.FakeSweetRepository;
+import fr.sweetiez.sweets.domain.Priority;
+import fr.sweetiez.sweets.domain.Status;
 import fr.sweetiez.sweets.domain.exceptions.InvalidIngredientsException;
 import fr.sweetiez.sweets.domain.exceptions.InvalidPriceException;
 import fr.sweetiez.sweets.domain.exceptions.InvalidSweetNameException;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.ThrowableAssert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CreateSweetTest {
     private final FakeSweetDTO fakeSweetDTO;
@@ -32,6 +35,15 @@ public class CreateSweetTest {
         assertThatCode(() -> admin.create(sweetDto)).doesNotThrowAnyException();
     }
 
+    @Test
+    public void shouldHaveCreatedStatusAndCommonPriority() {
+        var sweetDto = fakeSweetDTO.createValidSweetDTO();
+        var sweet = admin.create(sweetDto);
+
+        assertEquals(Status.CREATED, sweet.getStatus());
+        assertEquals(Priority.COMMON, sweet.getPriority());
+    }
+
     @Test void shouldThrowAnExceptionIfSweetNameIsAlreadyTaken() {
         var sweetDto = fakeSweetDTO.createValidSweetDTO();
         assertThatCode(() -> admin.create(sweetDto)).doesNotThrowAnyException();
@@ -49,8 +61,24 @@ public class CreateSweetTest {
     }
 
     @Test
+    public void shouldThrowAnExceptionIfSweetNameIsNull() {
+        var sweetDto = fakeSweetDTO.withNameEqualsNull();
+
+        ThrowingCallable creatSweet = () -> admin.create(sweetDto);
+        assertThatExceptionOfType(InvalidSweetNameException.class).isThrownBy(creatSweet);
+    }
+
+    @Test
+    public void shouldThrowAnExceptionIfSweetPriceIsNull() {
+        var sweetDto = fakeSweetDTO.withPriceEqualsNull();
+
+        ThrowingCallable creatSweet = () -> admin.create(sweetDto);
+        assertThatExceptionOfType(InvalidPriceException.class).isThrownBy(creatSweet);
+    }
+
+    @Test
     public void shouldThrowAnExceptionIfSweetNameContainsNumbers() {
-        var sweetDto = fakeSweetDTO.withNumbersInName();
+        var sweetDto = fakeSweetDTO.withInvalidName();
 
         ThrowingCallable creatSweet = () -> admin.create(sweetDto);
         assertThatExceptionOfType(InvalidSweetNameException.class).isThrownBy(creatSweet);
