@@ -2,6 +2,7 @@ package fr.sweetiez.sweets.use_cases;
 
 import fr.sweetiez.sweets.FakeSweetRepository;
 import fr.sweetiez.sweets.domain.*;
+import fr.sweetiez.sweets.fakers.SweetFaker;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

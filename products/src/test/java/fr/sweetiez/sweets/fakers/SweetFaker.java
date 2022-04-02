@@ -1,4 +1,4 @@
-package fr.sweetiez.sweets.use_cases;
+package fr.sweetiez.sweets.fakers;
 
 import fr.sweetiez.sweets.domain.Sweet;
 import fr.sweetiez.sweets.exposition.SweetDTO;

@@ -7,6 +7,7 @@ import fr.sweetiez.sweets.domain.exceptions.InvalidIngredientsException;
 import fr.sweetiez.sweets.domain.exceptions.InvalidPriceException;
 import fr.sweetiez.sweets.domain.exceptions.InvalidSweetNameException;
 import fr.sweetiez.sweets.domain.exceptions.SweetAlreadyExistsException;
+import fr.sweetiez.sweets.fakers.FakeSweetDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
