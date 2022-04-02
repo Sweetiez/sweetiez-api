@@ -121,6 +121,7 @@ public class Sweet {
         return "Sweet{" +
                 "id=" + id +
                 ", status=" + status +
+                ", priority=" + priority +
                 ", name='" + name + '\'' +
                 ", ingredients=" + ingredients +
                 ", price=" + price +

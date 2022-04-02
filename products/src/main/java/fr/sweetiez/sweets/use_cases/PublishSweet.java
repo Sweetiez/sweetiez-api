@@ -13,11 +13,7 @@ public class PublishSweet {
     }
 
     public Sweet publish(String id, Priority priority) {
-        var optional = sweets.findByID(id);
-        if (optional.isEmpty()) {
-            throw new AnySweetFoundException();
-        }
-        Sweet sweet = optional.get();
+        Sweet sweet = sweets.findByID(id).orElseThrow(AnySweetFoundException::new);
 
         Sweet publishedSweet = new Sweet(sweet, priority);
 

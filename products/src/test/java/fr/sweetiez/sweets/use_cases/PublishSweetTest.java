@@ -2,11 +2,14 @@ package fr.sweetiez.sweets.use_cases;
 
 import fr.sweetiez.sweets.FakeSweetRepository;
 import fr.sweetiez.sweets.domain.*;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
+import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PublishSweetTest {
@@ -36,8 +39,28 @@ public class PublishSweetTest {
     @Test
     public void shouldChangeTheStatusOfGivenSweetToPublished() {
         var sweet = createdSweets.iterator().next();
+        assertEquals(Status.CREATED, sweet.getStatus());
 
         var updatedSweet = authorizedEmployee.publish(sweet.getId().toString(), Priority.COMMON);
         assertEquals(Status.PUBLISHED, updatedSweet.getStatus());
+    }
+
+    @Test
+    public void shouldNotChangeTheStatusOfGivenSweetToPublishedIfItsStatusIsAlreadyPublished() {
+        var sweet = createdSweets.iterator().next();
+        assertEquals(Status.CREATED, sweet.getStatus());
+
+        var updatedSweet = authorizedEmployee.publish(sweet.getId().toString(), Priority.COMMON);
+        assertEquals(Status.PUBLISHED, updatedSweet.getStatus());
+
+        var updatedSweetSecondTime = authorizedEmployee.publish(sweet.getId().toString(), Priority.TOP);
+        assertEquals(Status.PUBLISHED, updatedSweetSecondTime.getStatus());
+    }
+
+    @Test
+    public void shouldAlertThatAnySweetHasBeenFound() {
+        String id = UUID.randomUUID().toString();
+        ThrowingCallable publishSweet = () -> authorizedEmployee.publish(id, Priority.COMMON);
+        assertThatExceptionOfType(AnySweetFoundException.class).isThrownBy(publishSweet);
     }
 }
