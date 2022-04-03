@@ -1,9 +1,10 @@
-package fr.sweetiez.sweets.exposition;
+package fr.sweetiez.exposition;
 
-import fr.sweetiez.sweets.FakeSweetRepository;
+import fr.sweetiez.fakers.FakeSweetRepository;
+import fr.sweetiez.fakers.FakeSweetDTO;
+import fr.sweetiez.fakers.SweetFaker;
 import fr.sweetiez.sweets.domain.Priority;
-import fr.sweetiez.sweets.fakers.FakeSweetDTO;
-import fr.sweetiez.sweets.fakers.SweetFaker;
+import fr.sweetiez.sweets.use_cases.PublishSweetRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;

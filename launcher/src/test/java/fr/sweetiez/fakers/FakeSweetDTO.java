@@ -1,4 +1,4 @@
-package fr.sweetiez.sweets.fakers;
+package fr.sweetiez.fakers;
 
 import fr.sweetiez.sweets.use_cases.CreateSweetRequest;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;

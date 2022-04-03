@@ -1,4 +1,4 @@
-package fr.sweetiez.sweets.exposition;
+package fr.sweetiez.sweets.use_cases;
 
 import java.math.BigDecimal;
 import java.util.Objects;
