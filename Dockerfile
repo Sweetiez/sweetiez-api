@@ -8,16 +8,11 @@ RUN mvn dependency:go-offline
 
 RUN mvn clean package
 
-FROM openjdk:17-jdk-alpine
+FROM openjdk:17-jdk
 
 WORKDIR /usr/src/app
 
 COPY --from=build /usr/src/app/launcher/target/*.jar /home/spring/app.jar
-
-RUN addgroup -S spring \
-    && adduser -S spring -G spring
-
-USER spring:spring
 
 WORKDIR /home/spring
 
