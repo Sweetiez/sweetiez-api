@@ -1,4 +1,4 @@
-package fr.sweetiez.sweets.fakers;
+package fr.sweetiez.fakers;
 
 import fr.sweetiez.sweets.domain.Sweet;
 import fr.sweetiez.sweets.use_cases.CreateSweetRequest;

@@ -4,7 +4,7 @@ import fr.sweetiez.sweets.domain.exceptions.InvalidIngredientsException;
 import fr.sweetiez.sweets.domain.exceptions.InvalidPriceException;
 import fr.sweetiez.sweets.domain.exceptions.InvalidSweetNameException;
 import fr.sweetiez.sweets.domain.exceptions.SweetAlreadyExistsException;
-import fr.sweetiez.sweets.exposition.CreateSweetRequest;
+import fr.sweetiez.sweets.use_cases.CreateSweetRequest;
 
 import java.math.BigDecimal;
 import java.util.Objects;

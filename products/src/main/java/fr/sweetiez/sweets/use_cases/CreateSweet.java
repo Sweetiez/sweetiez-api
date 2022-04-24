@@ -2,7 +2,6 @@ package fr.sweetiez.sweets.use_cases;
 
 import fr.sweetiez.sweets.domain.Sweet;
 import fr.sweetiez.sweets.domain.Sweets;
-import fr.sweetiez.sweets.exposition.CreateSweetRequest;
 
 
 public class CreateSweet {

@@ -1,4 +1,4 @@
-package fr.sweetiez.sweets.exposition;
+package fr.sweetiez.sweets.use_cases;
 
 import fr.sweetiez.sweets.domain.Priority;
 

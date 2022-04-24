@@ -9,6 +9,10 @@ public class SweetID {
         this.id = id;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public boolean equals(Object o) {
         if (this == o) return true;
 

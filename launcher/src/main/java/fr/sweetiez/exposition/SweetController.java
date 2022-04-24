@@ -1,4 +1,4 @@
-package fr.sweetiez.sweets.exposition;
+package fr.sweetiez.exposition;
 
 import fr.sweetiez.sweets.domain.Status;
 import fr.sweetiez.sweets.domain.Sweet;
@@ -7,6 +7,8 @@ import fr.sweetiez.sweets.domain.exceptions.InvalidIngredientsException;
 import fr.sweetiez.sweets.domain.exceptions.InvalidPriceException;
 import fr.sweetiez.sweets.domain.exceptions.InvalidSweetNameException;
 import fr.sweetiez.sweets.domain.exceptions.SweetAlreadyExistsException;
+import fr.sweetiez.sweets.use_cases.CreateSweetRequest;
+import fr.sweetiez.sweets.use_cases.PublishSweetRequest;
 import fr.sweetiez.sweets.use_cases.AnySweetFoundException;
 import fr.sweetiez.sweets.use_cases.CreateSweet;
 import fr.sweetiez.sweets.use_cases.PublishSweet;
