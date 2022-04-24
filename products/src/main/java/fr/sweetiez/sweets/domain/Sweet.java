@@ -18,6 +18,8 @@ public class Sweet {
     private final String name;
     private final Set<String> ingredients;
     private final BigDecimal price;
+    private final String description;
+    private final SweetType type;
 
     public Sweet(CreateSweetRequest sweet, Set<Sweet> sweets) {
         checkValidity(sweet, sweets);
@@ -28,6 +30,8 @@ public class Sweet {
         name = sweet.getName();
         ingredients = sweet.getIngredients();
         price = sweet.getPrice();
+        description = sweet.getDescription();
+        type = sweet.getType();
 
     }
 
@@ -38,6 +42,8 @@ public class Sweet {
         name = sweet.getName();
         ingredients = sweet.getIngredients();
         price = sweet.getPrice();
+        description = sweet.getDescription();
+        type = sweet.getType();
     }
 
     private void checkValidity(CreateSweetRequest sweet, Set<Sweet> sweets) {
@@ -73,6 +79,9 @@ public class Sweet {
     private void checkNameValidity(String name, Set<Sweet> sweets) {
         if (name == null || name.isEmpty() || !name.matches("^[A-Za-z][ A-Za-z]+$"))
             throw new InvalidSweetNameException();
+
+        if(sweets == null || sweets.isEmpty())
+            return;
 
         boolean nameAlreadyExists = sweets.stream().anyMatch(sweet -> sweet.getName().equals(name));
         if (nameAlreadyExists) throw new SweetAlreadyExistsException();
@@ -126,5 +135,13 @@ public class Sweet {
                 ", ingredients=" + ingredients +
                 ", price=" + price +
                 '}';
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public SweetType getType() {
+        return type;
     }
 }

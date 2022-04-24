@@ -16,8 +16,9 @@ public class FakeSweetRepository implements Sweets {
         this.sweets = new HashSet<>();
     }
 
-    public void save(Sweet sweet) {
+    public Optional<UUID> save(Sweet sweet, UUID creator) {
         sweets.add(sweet);
+        return Optional.of(sweet.getId().getId());
     }
 
     public Set<Sweet> all() {

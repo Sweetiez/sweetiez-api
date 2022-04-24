@@ -12,6 +12,7 @@ import fr.sweetiez.sweets.use_cases.PublishSweetRequest;
 import fr.sweetiez.sweets.use_cases.AnySweetFoundException;
 import fr.sweetiez.sweets.use_cases.CreateSweet;
 import fr.sweetiez.sweets.use_cases.PublishSweet;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ public class SweetController {
 
     private final Sweets sweetsRepository;
 
+    @Autowired
     public SweetController(Sweets sweetsRepository) {
         this.sweetsRepository = sweetsRepository;
     }

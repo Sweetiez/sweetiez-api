@@ -15,7 +15,8 @@ public class CreateSweet {
     public Sweet create(CreateSweetRequest request) {
         var existingSweets = this.sweets.all();
         var sweet = new Sweet(request, existingSweets);
-        this.sweets.save(sweet);
+        System.out.println(sweet);
+        this.sweets.save(sweet, request.getCreator());
 
         return sweet;
     }

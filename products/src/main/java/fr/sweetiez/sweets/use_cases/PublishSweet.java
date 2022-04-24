@@ -17,7 +17,7 @@ public class PublishSweet {
 
         Sweet publishedSweet = new Sweet(sweet, priority);
 
-        sweets.save(publishedSweet);
+        // sweets.save(publishedSweet);
 
         return publishedSweet;
     }
