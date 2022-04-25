@@ -76,6 +76,14 @@ public class Sweet {
         return price;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public SweetType getType() {
+        return type;
+    }
+
     private void checkNameValidity(String name, Set<Sweet> sweets) {
         if (name == null || name.isEmpty() || !name.matches("^[A-Za-z][ A-Za-z]+$"))
             throw new InvalidSweetNameException();
@@ -134,6 +142,8 @@ public class Sweet {
                 ", name='" + name + '\'' +
                 ", ingredients=" + ingredients +
                 ", price=" + price +
+                ", description='" + description + '\'' +
+                ", type=" + type +
                 '}';
     }
 
