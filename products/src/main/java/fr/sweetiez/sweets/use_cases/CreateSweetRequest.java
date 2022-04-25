@@ -1,6 +1,5 @@
 package fr.sweetiez.sweets.use_cases;
 
-import fr.sweetiez.sweets.domain.Priority;
 import fr.sweetiez.sweets.domain.SweetType;
 
 import java.math.BigDecimal;
@@ -35,10 +34,15 @@ public class CreateSweetRequest {
     }
 
     public BigDecimal getPrice() { return price; }
+
     public String getDescription() { return description; }
 
     public SweetType getType() {
         return type;
+    }
+
+    public UUID getCreator() {
+        return creator;
     }
 
     public boolean equals(Object o) {
@@ -58,14 +62,13 @@ public class CreateSweetRequest {
     }
 
     public String toString() {
-        return "SweetDTO{" +
+        return "CreateSweetRequest{" +
                 "name='" + name + '\'' +
-                ", ingredients=" + ingredients + '\'' +
-                ", price=" + price + '\'' +
+                ", ingredients=" + ingredients +
+                ", description='" + description + '\'' +
+                ", type=" + type +
+                ", price=" + price +
+                ", creator=" + creator +
                 '}';
-    }
-
-    public UUID getCreator() {
-        return creator;
     }
 }
