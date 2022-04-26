@@ -46,6 +46,17 @@ public class Sweet {
         type = sweet.getType();
     }
 
+    private Sweet(Builder builder) {
+        this.id = builder.id;
+        this.status = builder.status;
+        this.priority = builder.priority;
+        this.name = builder.name;
+        this.ingredients = builder.ingredients;
+        this.price = builder.price;
+        this.description = builder.description;
+        this.type = builder.type;
+    }
+
     private void checkValidity(CreateSweetRequest sweet, Set<Sweet> sweets) {
         checkNameValidity(sweet.getName(), sweets);
         checkPriceValidity(sweet.getPrice());
@@ -147,11 +158,58 @@ public class Sweet {
                 '}';
     }
 
-    public String getDescription() {
-        return description;
-    }
+    public static class Builder {
+        private SweetID id;
+        private Status status;
+        private Priority priority;
+        private String name;
+        private Set<String> ingredients;
+        private BigDecimal price;
+        private String description;
+        private SweetType type;
 
-    public SweetType getType() {
-        return type;
+        public Builder id(UUID id) {
+            this.id = new SweetID(id);
+            return this;
+        }
+
+        public Builder status(Status status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder priority(Priority priority) {
+            this.priority = priority;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder ingredients(Set<String> ingredients) {
+            this.ingredients = ingredients;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder price(BigDecimal price) {
+            this.price = price;
+            return this;
+        }
+
+        public Builder type(SweetType type) {
+            this.type = type;
+            return this;
+        }
+
+        public Sweet build() {
+            return new Sweet(this);
+        }
     }
 }

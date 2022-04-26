@@ -4,6 +4,8 @@ import fr.sweetiez.sweets.domain.Priority;
 import fr.sweetiez.sweets.domain.Sweet;
 import fr.sweetiez.sweets.domain.Sweets;
 
+import java.util.UUID;
+
 public class PublishSweet {
 
     private final Sweets sweets;
@@ -17,7 +19,7 @@ public class PublishSweet {
 
         Sweet publishedSweet = new Sweet(sweet, priority);
 
-        // sweets.save(publishedSweet);
+        sweets.update(publishedSweet, UUID.randomUUID());
 
         return publishedSweet;
     }

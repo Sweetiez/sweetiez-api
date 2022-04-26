@@ -31,4 +31,9 @@ public class FakeSweetRepository implements Sweets {
                 .filter(sweet -> sweet.getId().equals(sweetID))
                 .findFirst();
     }
+
+    @Override
+    public void update(Sweet publishedSweet, UUID randomUUID) {
+
+    }
 }

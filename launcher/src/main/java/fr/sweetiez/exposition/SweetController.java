@@ -59,7 +59,7 @@ public class SweetController {
         return ResponseEntity.ok(publishedSweets);
     }
 
-    @PostMapping("/publish")
+    @PutMapping("/publish")
     public ResponseEntity<Sweet> publish(@RequestBody PublishSweetRequest request) {
         PublishSweet useCase = new PublishSweet(sweetsRepository);
 

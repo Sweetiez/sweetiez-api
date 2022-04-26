@@ -8,4 +8,5 @@ public interface Sweets {
     Optional<UUID> save(Sweet sweet, UUID creator);
     Set<Sweet> all();
     Optional<Sweet> findByID(String id);
+    void update(Sweet publishedSweet, UUID randomUUID);
 }

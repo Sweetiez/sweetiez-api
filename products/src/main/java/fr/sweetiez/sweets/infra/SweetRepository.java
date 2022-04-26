@@ -2,19 +2,20 @@ package fr.sweetiez.sweets.infra;
 
 import fr.sweetiez.sweets.domain.Sweet;
 import fr.sweetiez.sweets.domain.Sweets;
-import fr.sweetiez.sweets.use_cases.CreateSweetRequest;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class SweetRepository implements Sweets {
 
-    private final JpaRepository<SweetDatabaseModel, Long> jpaRepository;
+    private final SweetJpaRepository jpaRepository;
 
-    public SweetRepository(JpaRepository<SweetDatabaseModel, Long> jpaRepository) {
+    @Autowired
+    public SweetRepository(SweetJpaRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
     }
 
@@ -23,6 +24,7 @@ public class SweetRepository implements Sweets {
             SweetDatabaseModel.SweetBuilder builder = new SweetDatabaseModel.SweetBuilder();
             builder.id(sweet.getId().getId());
             builder.name(sweet.getName());
+            builder.price(sweet.getPrice());
             builder.description(sweet.getDescription());
             builder.type(sweet.getType());
             builder.priority(sweet.getPriority());
@@ -37,20 +39,25 @@ public class SweetRepository implements Sweets {
         }
     }
 
-    public Set<Sweet> all() {
-        /*var sweets = new HashSet<Sweet>();
-        var dto = new CreateSweetRequest(
-                "So good",
-                new HashSet<>(List.of("a", "b", "c")),
-                BigDecimal.valueOf(0.95));
-        var sweet = new Sweet(dto, sweets);
-        sweets.add(sweet);
+    @Transactional
+    public void update(Sweet publishedSweet, UUID author) {
+        jpaRepository.publish(
+                publishedSweet.getId().getId(),
+                publishedSweet.getStatus().ordinal(),
+                publishedSweet.getPriority().ordinal(),
+                author
+        );
+    }
 
-        return sweets;*/
-        return null;
+    public Set<Sweet> all() {
+        return jpaRepository.findAll().stream()
+            .map(SweetDatabaseModel::toSweet)
+            .collect(Collectors.toSet());
     }
 
     public Optional<Sweet> findByID(String id) {
-        return Optional.empty();
+        return all().stream()
+                .filter(sweet -> sweet.getId().toString().equals(id))
+                .findFirst();
     }
 }
