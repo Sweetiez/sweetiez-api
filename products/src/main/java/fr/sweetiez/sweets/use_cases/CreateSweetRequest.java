@@ -1,18 +1,28 @@
-package fr.sweetiez.sweets.exposition;
+package fr.sweetiez.sweets.use_cases;
+
+import fr.sweetiez.sweets.domain.SweetType;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 public class CreateSweetRequest {
     private final String name;
     private final Set<String> ingredients;
+    private final String description;
+    private final SweetType type;
     private final BigDecimal price;
 
-    public CreateSweetRequest(String name, Set<String> ingredients, BigDecimal price) {
+    private final UUID creator;
+
+    public CreateSweetRequest(String name, Set<String> ingredients, String description, BigDecimal price, SweetType type, UUID creator) {
         this.name = name;
         this.ingredients = ingredients;
+        this.description = description;
+        this.type = type;
         this.price = price;
+        this.creator = creator;
     }
 
     public String getName() {
@@ -24,6 +34,16 @@ public class CreateSweetRequest {
     }
 
     public BigDecimal getPrice() { return price; }
+
+    public String getDescription() { return description; }
+
+    public SweetType getType() {
+        return type;
+    }
+
+    public UUID getCreator() {
+        return creator;
+    }
 
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -42,10 +62,13 @@ public class CreateSweetRequest {
     }
 
     public String toString() {
-        return "SweetDTO{" +
+        return "CreateSweetRequest{" +
                 "name='" + name + '\'' +
-                ", ingredients=" + ingredients + '\'' +
-                ", price=" + price + '\'' +
+                ", ingredients=" + ingredients +
+                ", description='" + description + '\'' +
+                ", type=" + type +
+                ", price=" + price +
+                ", creator=" + creator +
                 '}';
     }
 }

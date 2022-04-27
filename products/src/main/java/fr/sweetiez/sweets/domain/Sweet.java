@@ -4,7 +4,7 @@ import fr.sweetiez.sweets.domain.exceptions.InvalidIngredientsException;
 import fr.sweetiez.sweets.domain.exceptions.InvalidPriceException;
 import fr.sweetiez.sweets.domain.exceptions.InvalidSweetNameException;
 import fr.sweetiez.sweets.domain.exceptions.SweetAlreadyExistsException;
-import fr.sweetiez.sweets.exposition.CreateSweetRequest;
+import fr.sweetiez.sweets.use_cases.CreateSweetRequest;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -18,6 +18,8 @@ public class Sweet {
     private final String name;
     private final Set<String> ingredients;
     private final BigDecimal price;
+    private final String description;
+    private final SweetType type;
 
     public Sweet(CreateSweetRequest sweet, Set<Sweet> sweets) {
         checkValidity(sweet, sweets);
@@ -28,6 +30,8 @@ public class Sweet {
         name = sweet.getName();
         ingredients = sweet.getIngredients();
         price = sweet.getPrice();
+        description = sweet.getDescription();
+        type = sweet.getType();
 
     }
 
@@ -38,6 +42,19 @@ public class Sweet {
         name = sweet.getName();
         ingredients = sweet.getIngredients();
         price = sweet.getPrice();
+        description = sweet.getDescription();
+        type = sweet.getType();
+    }
+
+    private Sweet(Builder builder) {
+        this.id = builder.id;
+        this.status = builder.status;
+        this.priority = builder.priority;
+        this.name = builder.name;
+        this.ingredients = builder.ingredients;
+        this.price = builder.price;
+        this.description = builder.description;
+        this.type = builder.type;
     }
 
     private void checkValidity(CreateSweetRequest sweet, Set<Sweet> sweets) {
@@ -70,9 +87,20 @@ public class Sweet {
         return price;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public SweetType getType() {
+        return type;
+    }
+
     private void checkNameValidity(String name, Set<Sweet> sweets) {
         if (name == null || name.isEmpty() || !name.matches("^[A-Za-z][ A-Za-z]+$"))
             throw new InvalidSweetNameException();
+
+        if(sweets == null || sweets.isEmpty())
+            return;
 
         boolean nameAlreadyExists = sweets.stream().anyMatch(sweet -> sweet.getName().equals(name));
         if (nameAlreadyExists) throw new SweetAlreadyExistsException();
@@ -125,6 +153,63 @@ public class Sweet {
                 ", name='" + name + '\'' +
                 ", ingredients=" + ingredients +
                 ", price=" + price +
+                ", description='" + description + '\'' +
+                ", type=" + type +
                 '}';
+    }
+
+    public static class Builder {
+        private SweetID id;
+        private Status status;
+        private Priority priority;
+        private String name;
+        private Set<String> ingredients;
+        private BigDecimal price;
+        private String description;
+        private SweetType type;
+
+        public Builder id(UUID id) {
+            this.id = new SweetID(id);
+            return this;
+        }
+
+        public Builder status(Status status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder priority(Priority priority) {
+            this.priority = priority;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder ingredients(Set<String> ingredients) {
+            this.ingredients = ingredients;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder price(BigDecimal price) {
+            this.price = price;
+            return this;
+        }
+
+        public Builder type(SweetType type) {
+            this.type = type;
+            return this;
+        }
+
+        public Sweet build() {
+            return new Sweet(this);
+        }
     }
 }

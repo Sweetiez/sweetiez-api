@@ -1,4 +1,4 @@
-package fr.sweetiez.sweets;
+package fr.sweetiez.sweets.fakers;
 
 import fr.sweetiez.sweets.domain.Sweet;
 import fr.sweetiez.sweets.domain.SweetID;
@@ -16,8 +16,9 @@ public class FakeSweetRepository implements Sweets {
         this.sweets = new HashSet<>();
     }
 
-    public void save(Sweet sweet) {
+    public Optional<UUID> save(Sweet sweet, UUID creator) {
         sweets.add(sweet);
+        return Optional.of(sweet.getId().getId());
     }
 
     public Set<Sweet> all() {
@@ -29,5 +30,10 @@ public class FakeSweetRepository implements Sweets {
         return sweets.stream()
                 .filter(sweet -> sweet.getId().equals(sweetID))
                 .findFirst();
+    }
+
+    @Override
+    public void update(Sweet publishedSweet, UUID randomUUID) {
+
     }
 }

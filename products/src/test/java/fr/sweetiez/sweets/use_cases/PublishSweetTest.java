@@ -1,6 +1,6 @@
 package fr.sweetiez.sweets.use_cases;
 
-import fr.sweetiez.sweets.FakeSweetRepository;
+import fr.sweetiez.sweets.fakers.FakeSweetRepository;
 import fr.sweetiez.sweets.domain.*;
 import fr.sweetiez.sweets.fakers.SweetFaker;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
@@ -29,7 +29,7 @@ public class PublishSweetTest {
         for (int i = 0; i < 3; i++) {
             var name = Character.toString('a' + i);
             var sweet = sweetFaker.fakeSweet("a" + name);
-            fakeSweetRepository.save(sweet);
+            fakeSweetRepository.save(sweet, UUID.randomUUID());
         }
 
         createdSweets = fakeSweetRepository.all();

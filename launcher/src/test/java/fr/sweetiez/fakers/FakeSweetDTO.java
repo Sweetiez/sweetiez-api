@@ -1,4 +1,4 @@
-package fr.sweetiez.sweets.fakers;
+package fr.sweetiez.fakers;
 
 import fr.sweetiez.sweets.domain.SweetType;
 import fr.sweetiez.sweets.use_cases.CreateSweetRequest;
@@ -27,7 +27,7 @@ public class FakeSweetDTO {
     }
 
     public CreateSweetRequest copyOf(CreateSweetRequest dto) {
-        return new CreateSweetRequest(dto.getName(), dto.getIngredients(), dto.getDescription(), dto.getPrice(), dto.getType(), dto.getCreator());
+        return new CreateSweetRequest(dto.getName(), dto.getIngredients(),dto.getDescription(), dto.getPrice(), dto.getType(), dto.getCreator());
     }
 
     public CreateSweetRequest withEmptyName() {
@@ -42,7 +42,7 @@ public class FakeSweetDTO {
             ingredients.add(RandomString.make());
         }
 
-        return new CreateSweetRequest(name, ingredients, description, price, type, creator);
+        return new CreateSweetRequest(name, ingredients,  description, price, type, creator);
     }
 
     public CreateSweetRequest withInvalidName() {
