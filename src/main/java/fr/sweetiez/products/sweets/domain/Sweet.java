@@ -25,11 +25,11 @@ public class Sweet {
         id = null;
         state = State.CREATED;
         highlight = Highlight.COMMON;
-        name = sweet.getName();
-        ingredients = sweet.getIngredients();
-        price = sweet.getPrice();
-        description = sweet.getDescription();
-        flavor = sweet.getFlavor();
+        name = sweet.name();
+        ingredients = sweet.ingredients();
+        price = sweet.price();
+        description = sweet.description();
+        flavor = sweet.flavor();
     }
 
     public Sweet(Sweet sweet, Highlight highlight) {

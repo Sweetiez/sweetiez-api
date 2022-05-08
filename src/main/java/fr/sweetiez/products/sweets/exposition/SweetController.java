@@ -23,7 +23,7 @@ public class SweetController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody CreateSweetRequest request) {
         try {
-            Sweet sweet = service.create(new Sweet(request), request.getCreator());
+            Sweet sweet = service.create(new Sweet(request), request.creator());
 
             return ResponseEntity
                     .created(URI.create("/sweets/" + sweet.getId().toString()))
@@ -45,7 +45,7 @@ public class SweetController {
     @PutMapping("/publish")
     public ResponseEntity<Sweet> publish(@RequestBody PublishSweetRequest request) {
         try {
-            Sweet sweet = service.publish(request.getId().toString(), request.getHighlight(), request.getEmployee());
+            Sweet sweet = service.publish(request.id().toString(), request.highlight(), request.employee());
             return ResponseEntity.ok(sweet);
         }
         catch (NoSuchElementException exception) {
