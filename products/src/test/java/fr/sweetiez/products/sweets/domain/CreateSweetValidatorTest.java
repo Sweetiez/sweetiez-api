@@ -3,8 +3,11 @@ package fr.sweetiez.products.sweets.domain;
 import fr.sweetiez.products.common.Highlight;
 import fr.sweetiez.products.common.Flavor;
 import fr.sweetiez.products.common.State;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -14,38 +17,38 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SweetValidatorTest {
+class CreateSweetValidatorTest {
 
-    private SweetValidator sut;
+    private CreateSweetValidator sut;
 
+    @BeforeEach
+    void setUp() {
+        sut = new CreateSweetValidator();
+    }
 
     @ParameterizedTest
     @MethodSource("provideInvalidSweets")
     void shouldDetectErrorsWhenItemHasInvalidFields(Sweet sweet) {
-        sut = new SweetValidator(sweet);
-        assertTrue(sut.hasErrors());
+        assertTrue(sut.hasErrors(sweet));
     }
 
     @ParameterizedTest
     @MethodSource("provideValidSweets")
     void shouldNotDetectErrorsWhenItemHasValidFields(Sweet sweet) {
-        sut = new SweetValidator(sweet);
-        assertFalse(sut.hasErrors());
+        assertFalse(sut.hasErrors(sweet));
     }
 
     @ParameterizedTest
     @MethodSource("provideValidSweets")
     void shouldNotContainErrorsWhenItemHasValidFields(Sweet sweet) {
-        sut = new SweetValidator(sweet);
-        sut.hasErrors();
+        sut.hasErrors(sweet);
         assertTrue(sut.getErrors().isEmpty());
     }
 
     @ParameterizedTest
     @MethodSource("provideInvalidSweets")
     void shouldContainErrorsWhenItemHasInvalidFields(Sweet sweet) {
-        sut = new SweetValidator(sweet);
-        sut.hasErrors();
+        sut.hasErrors(sweet);
         assertFalse(sut.getErrors().isEmpty());
     }
 

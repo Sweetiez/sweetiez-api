@@ -2,22 +2,22 @@ package fr.sweetiez.products.sweets.domain;
 
 import fr.sweetiez.products.common.validators.FieldValidator;
 import fr.sweetiez.products.common.validators.InvalidFieldException;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SweetValidator implements FieldValidator {
+@Component
+public class CreateSweetValidator implements FieldValidator<Sweet> {
 
-    private final Sweet sweet;
     private final Set<InvalidFieldException> errors;
 
-    public SweetValidator(Sweet sweet) {
-        this.sweet = sweet;
+    public CreateSweetValidator() {
         this.errors = new HashSet<>();
     }
 
-    public boolean hasErrors() {
+    public boolean hasErrors(Sweet sweet) {
         checkNameValidity(sweet.getName());
         checkPriceValidity(sweet.getPrice());
         checkIngredientsValidity(sweet.getIngredients());

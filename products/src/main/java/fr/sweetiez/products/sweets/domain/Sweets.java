@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface Sweets {
     Sweet create(Sweet sweet, UUID creator);
-    Set<Sweet> all();
+    Set<Sweet> findAllPublished();
     Sweet findById(UUID id);
     Sweet publish(String sweetId, Highlight priority, UUID employee);
 }
