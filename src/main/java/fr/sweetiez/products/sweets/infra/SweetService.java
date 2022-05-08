@@ -51,8 +51,9 @@ public class SweetService implements Sweets {
 
     public Set<Sweet> findAllPublished() {
         return repository.findAll().stream()
-            .map(SweetEntity::toSweet)
-            .collect(Collectors.toSet());
+                .filter(entity -> entity.getState().equals(State.PUBLISHED))
+                .map(SweetEntity::toSweet)
+                .collect(Collectors.toSet());
     }
 
     public Sweet findById(UUID id) {
