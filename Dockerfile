@@ -12,7 +12,7 @@ FROM openjdk:17-jdk
 
 WORKDIR /usr/src/app
 
-COPY --from=build /usr/src/app/products/target/*.jar /home/spring/app.jar
+COPY --from=build /usr/src/app/target/*.jar /home/spring/app.jar
 
 WORKDIR /home/spring
 
