@@ -20,7 +20,6 @@
 
     <modules>
         <module>products</module>
-        <module>launcher</module>
     </modules>
 
     <name>FI Sweets API</name>
