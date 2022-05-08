@@ -18,9 +18,9 @@ services:
     restart: always
     env_file: .env
     environment:
-      POSTGRES_DB: ${FI_SWEETS_DB_NAME}
-      POSTGRES_USER: ${FI_SWEETS_DB_USER}
-      POSTGRES_PASSWORD: ${FI_SWEETS_DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
 
   server:
     build:
@@ -32,6 +32,6 @@ services:
       - "7777:8080"
     env_file: .env
     environment:
-      POSTGRES_URL: ${FI_SWEETS_DB_URL}
-      POSTGRES_USER: ${FI_SWEETS_DB_USER}
-      POSTGRES_PASSWORD: ${FI_SWEETS_DB_PASSWORD}
+      POSTGRES_URL: ${DB_URL}/${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
