@@ -1,6 +1,5 @@
 package fr.sweetiez.products.sweets.exposition;
 
-import fr.sweetiez.products.common.State;
 import fr.sweetiez.products.sweets.domain.Sweet;
 import fr.sweetiez.products.sweets.domain.Sweets;
 import fr.sweetiez.products.sweets.domain.exceptions.InvalidFieldsException;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/sweets")
@@ -23,7 +21,7 @@ public class SweetController {
     private final Sweets service;
 
     @PostMapping
-    public ResponseEntity<Sweet> create(@RequestBody CreateSweetRequest request) {
+    public ResponseEntity<?> create(@RequestBody CreateSweetRequest request) {
         try {
             Sweet sweet = service.create(new Sweet(request), request.getCreator());
 
@@ -41,11 +39,7 @@ public class SweetController {
 
     @GetMapping("/published")
     public ResponseEntity<Set<Sweet>> findAllPublished() {
-        var publishedSweets = service.all().stream()
-                .filter(sweet -> sweet.getState().equals(State.PUBLISHED))
-                .collect(Collectors.toSet());
-
-        return ResponseEntity.ok(publishedSweets);
+        return ResponseEntity.ok(service.findAllPublished());
     }
 
     @PutMapping("/publish")
