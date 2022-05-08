@@ -29,7 +29,7 @@ public class Sweet {
         ingredients = sweet.getIngredients();
         price = sweet.getPrice();
         description = sweet.getDescription();
-        flavor = sweet.getType();
+        flavor = sweet.getFlavor();
     }
 
     public Sweet(Sweet sweet, Highlight highlight) {

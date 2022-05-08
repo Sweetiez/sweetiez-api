@@ -14,7 +14,7 @@ public class CreateSweetRequest {
     private final String name;
     private final Set<String> ingredients;
     private final String description;
-    private final Flavor type;
+    private final Flavor flavor;
     private final BigDecimal price;
     private final UUID creator;
 }
