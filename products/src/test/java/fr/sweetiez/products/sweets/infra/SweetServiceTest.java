@@ -20,8 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -32,7 +31,7 @@ class SweetServiceTest {
     private SweetRepository repository;
 
     @Mock
-    private FieldValidator validator;
+    private FieldValidator<Sweet> validator;
 
     @InjectMocks
     private SweetService sut;
@@ -47,14 +46,14 @@ class SweetServiceTest {
                 .name(sweet.getName())
                 .build();
 
-        when(validator.hasErrors()).thenReturn(false);
+        when(validator.hasErrors(any())).thenReturn(false);
         when(repository.existsByName(anyString())).thenReturn(true);
         when(repository.findAll()).thenReturn(List.of(entity));
 
         ThrowingCallable callable = () -> sut.create(sweet, UUID.randomUUID());
         assertThatThrownBy(callable).isInstanceOf(SweetAlreadyExistsException.class);
 
-        verify(validator).hasErrors();
+        verify(validator).hasErrors(any());
         verify(repository).existsByName(anyString());
         verify(repository).findAll();
         verifyNoMoreInteractions(repository);
@@ -66,12 +65,12 @@ class SweetServiceTest {
                 .name("Sweet name")
                 .build();
 
-        when(validator.hasErrors()).thenReturn(true);
+        when(validator.hasErrors(any())).thenReturn(true);
 
         ThrowingCallable callable = () -> sut.create(sweet, UUID.randomUUID());
         assertThatThrownBy(callable).isInstanceOf(InvalidFieldsException.class);
 
-        verify(validator).hasErrors();
+        verify(validator).hasErrors(any());
         verifyNoInteractions(repository);
     }
 
@@ -81,14 +80,14 @@ class SweetServiceTest {
                 .name("Sweet name")
                 .build();
 
-        when(validator.hasErrors()).thenReturn(false);
+        when(validator.hasErrors(any())).thenReturn(false);
         when(repository.findAll()).thenReturn(List.of());
         when(repository.existsByName(anyString())).thenReturn(false);
         when(repository.save(any())).thenReturn(mock(SweetEntity.class));
 
         assertThatCode(() -> sut.create(sweet, UUID.randomUUID())).doesNotThrowAnyException();
 
-        verify(validator).hasErrors();
+        verify(validator).hasErrors(any());
         verify(repository).findAll();
         verify(repository).existsByName(anyString());
         verify(repository).save(any());
@@ -119,7 +118,7 @@ class SweetServiceTest {
                 .build();
 
         when(repository.findById(anyString())).thenReturn(Optional.of(entity));
-        when(repository.save(entity)).thenReturn(entity);
+        when(repository.save(any())).thenReturn(entity);
 
         sut.publish(sweetId.toString(), Highlight.COMMON, UUID.randomUUID());
         var sweetEntityArgumentCaptor = ArgumentCaptor.forClass(SweetEntity.class);
@@ -138,7 +137,7 @@ class SweetServiceTest {
     void shouldProvideAnEmptyCollectionOfSweets() {
         when(repository.findAll()).thenReturn(List.of());
 
-        var res = sut.all();
+        var res = sut.findAllPublished();
 
         assertTrue(res.isEmpty());
 
@@ -147,17 +146,17 @@ class SweetServiceTest {
     }
 
     @Test
-    void shouldProvideCollectionOfSweetsWhichIsNotEmpty() {
+    void shouldProvideNonEmptyCollectionOfPublishedSweets() {
         SweetEntity entity = SweetEntity.builder()
                 .dbId(1L)
                 .id(UUID.randomUUID().toString())
                 .name("Sweet name")
-                .state(State.CREATED)
+                .state(State.PUBLISHED)
                 .build();
 
         when(repository.findAll()).thenReturn(List.of(entity));
 
-        var res = sut.all();
+        var res = sut.findAllPublished();
 
         assertFalse(res.isEmpty());
 
@@ -182,7 +181,9 @@ class SweetServiceTest {
         when(repository.findById(anyString()))
                 .thenReturn(Optional.of(SweetEntity.builder().id(id.toString()).build()));
 
-        assertThatCode(() -> sut.findById(id)).doesNotThrowAnyException();
+        Sweet sweet = sut.findById(id);
+
+        assertEquals(id, sweet.getId());
 
         verify(repository).findById(anyString());
         verifyNoMoreInteractions(repository);

@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 public class SweetService implements Sweets {
 
     private final SweetRepository repository;
-    private final FieldValidator validator;
+    private final FieldValidator<Sweet> validator;
 
     public Sweet create(Sweet sweet, UUID creator) {
-        if (validator.hasErrors()) {
+        if (validator.hasErrors(sweet)) {
             throw new InvalidFieldsException();
         }
 
@@ -49,7 +49,7 @@ public class SweetService implements Sweets {
         return repository.save(entity).toSweet();
     }
 
-    public Set<Sweet> all() {
+    public Set<Sweet> findAllPublished() {
         return repository.findAll().stream()
             .map(SweetEntity::toSweet)
             .collect(Collectors.toSet());
