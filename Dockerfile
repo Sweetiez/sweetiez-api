@@ -2,18 +2,18 @@ FROM maven:3-openjdk-17-slim as build
 
 WORKDIR /usr/src/app
 
-COPY . .
+COPY pom.xml .
 
 RUN mvn dependency:go-offline
+
+COPY . .
 
 RUN mvn clean package
 
 FROM openjdk:17-jdk
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY --from=build /usr/src/app/launcher/target/*.jar /home/spring/app.jar
-
-WORKDIR /home/spring
+COPY --from=build /app/target/*.jar /app.jar
 
 CMD java -jar ./app.jar

@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+spring:
+  h2:
+    console:
+      enabled: true
+  devtools:
+    restart:
+      enabled: true
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+
+logging:
+  level:
+    org:
+      springframework:
+        security: error
