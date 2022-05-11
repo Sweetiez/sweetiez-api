@@ -32,7 +32,7 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/api:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/api:${{ steps.get_tag.outputs.tag }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/api:${{ steps.get_tag.outputs.TAG_NAME }}
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
