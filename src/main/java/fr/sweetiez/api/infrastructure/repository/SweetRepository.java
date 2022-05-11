@@ -10,7 +10,5 @@ import java.util.Optional;
 @Repository
 public interface SweetRepository extends JpaRepository<SweetEntity, Long> {
     Optional<SweetEntity> findById(String id);
-    boolean existsByName(String name);
-
     List<SweetEntity> findAllByState(State state);
 }

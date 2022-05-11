@@ -147,22 +147,6 @@ public class SpringSweetControllerAcceptanceTest {
                         Flavor.SWEET,
                         UUID.randomUUID().toString()
                 ),
-//                new CreateSweetRequest(
-//                        "Sweet name",
-//                        BigDecimal.valueOf(1.99),
-//                        Set.of(),
-//                        "Sweet description",
-//                        Flavor.SWEET,
-//                        UUID.randomUUID().toString()
-//                ),
-//                new CreateSweetRequest(
-//                        "Sweet name",
-//                        BigDecimal.valueOf(1.99),
-//                        Set.of(new Ingredient("", Set.of())),
-//                        "Sweet description",
-//                        Flavor.SWEET,
-//                        UUID.randomUUID().toString()
-//                ),
                 new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(-1.45),
