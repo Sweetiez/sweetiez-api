@@ -178,12 +178,17 @@ class SpringSweetControllerIntegrationTest {
 
     public static Stream<Sweets> provideSetOfSweets() {
         var mapper = new SweetMapper();
-        var entity = SweetEntity.builder()
-                .dbId(1L)
-                .id(UUID.randomUUID().toString())
-                .name("Sweet name")
-                .state(State.PUBLISHED)
-                .build();
+        var entity = new SweetEntity(
+                1L,
+                UUID.randomUUID().toString(),
+                "Sweet name",
+                "",
+                BigDecimal.ONE,
+                Highlight.COMMON,
+                State.PUBLISHED,
+                Flavor.SWEET,
+                ""
+        );
 
         return Stream.of(
                 new Sweets(Set.of()),

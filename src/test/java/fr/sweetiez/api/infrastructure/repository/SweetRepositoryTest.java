@@ -30,17 +30,18 @@ class SweetRepositoryTest {
 
     @Test
     void shouldFindSweetEntityByDomainIdWhenExists() {
-
-        String id = UUID.randomUUID().toString();
-        SweetEntity entity = SweetEntity.builder()
-                .id(id)
-                .name("Sweet name")
-                .price(BigDecimal.valueOf(1.99))
-                .state(State.CREATED)
-                .flavor(Flavor.SWEET)
-                .highlight(Highlight.COMMON)
-                .creator(UUID.randomUUID().toString())
-                .build();
+        var id = UUID.randomUUID().toString();
+        var entity = new SweetEntity(
+                null,
+                id,
+                "Sweet name",
+                "",
+                BigDecimal.ONE,
+                Highlight.COMMON,
+                State.CREATED,
+                Flavor.SWEET,
+                ""
+        );
 
         sut.save(entity);
 
@@ -77,39 +78,48 @@ class SweetRepositoryTest {
 
     private static Set<SweetEntity> provideSweetEntityWithDifferentStates() {
         return Set.of(
-                SweetEntity.builder()
-                        .id(UUID.randomUUID().toString())
-                        .name("Created").price(BigDecimal.valueOf(1.))
-                        .state(State.CREATED)
-                        .creator(UUID.randomUUID().toString())
-                        .flavor(Flavor.SWEET)
-                        .highlight(Highlight.COMMON)
-                        .build(),
-                SweetEntity.builder()
-                        .id(UUID.randomUUID().toString())
-                        .name("Published").price(BigDecimal.valueOf(1.))
-                        .state(State.PUBLISHED)
-                        .creator(UUID.randomUUID().toString())
-                        .flavor(Flavor.SWEET)
-                        .highlight(Highlight.COMMON)
-                        .build(),
-                SweetEntity.builder()
-                        .id(UUID.randomUUID().toString())
-                        .name("Non published").price(BigDecimal.valueOf(1.))
-                        .state(State.NON_PUBLISHED)
-                        .creator(UUID.randomUUID().toString())
-                        .flavor(Flavor.SWEET)
-                        .highlight(Highlight.COMMON)
-                        .creator("")
-                        .build(),
-                SweetEntity.builder()
-                        .id(UUID.randomUUID().toString())
-                        .name("Deleted").price(BigDecimal.valueOf(1.))
-                        .state(State.DELETED)
-                        .creator(UUID.randomUUID().toString())
-                        .flavor(Flavor.SWEET)
-                        .highlight(Highlight.COMMON)
-                        .build()
+                new SweetEntity(
+                        null,
+                        UUID.randomUUID().toString(),
+                        "CREATED",
+                        "",
+                        BigDecimal.ONE,
+                        Highlight.COMMON,
+                        State.CREATED,
+                        Flavor.SWEET,
+                        ""
+                ),
+                new SweetEntity(
+                        null,
+                        UUID.randomUUID().toString(),
+                        "PUBLISHED",
+                        "",
+                        BigDecimal.ONE,
+                        Highlight.COMMON,
+                        State.PUBLISHED,
+                        Flavor.SWEET,
+                        ""
+                ),new SweetEntity(
+                        null,
+                        UUID.randomUUID().toString(),
+                        "NON_PUBLISHED",
+                        "",
+                        BigDecimal.ONE,
+                        Highlight.COMMON,
+                        State.NON_PUBLISHED,
+                        Flavor.SWEET,
+                        ""
+                ),new SweetEntity(
+                        null,
+                        UUID.randomUUID().toString(),
+                        "DELETED",
+                        "",
+                        BigDecimal.ONE,
+                        Highlight.COMMON,
+                        State.DELETED,
+                        Flavor.SWEET,
+                        ""
+                )
         );
     }
 }

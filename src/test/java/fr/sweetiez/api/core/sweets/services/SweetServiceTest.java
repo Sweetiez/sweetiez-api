@@ -62,7 +62,7 @@ class SweetServiceTest {
         );
 
         when(reader.findAll()).thenReturn(new Sweets(Set.of()));
-        when(writer.save(any(), any())).thenReturn(new Sweet(sweetId, request));
+        when(writer.save(any())).thenReturn(new Sweet(sweetId, request));
 
         var sweet = sut.createSweet(request);
 
@@ -70,7 +70,7 @@ class SweetServiceTest {
 
         verify(reader).findAll();
         verifyNoMoreInteractions(reader);
-        verify(writer).save(any(), any());
+        verify(writer).save(any());
         verifyNoMoreInteractions(writer);
     }
 
@@ -128,14 +128,14 @@ class SweetServiceTest {
         var publishRequest = new PublishSweetRequest(sweetId.value(), Highlight.PROMOTED, UUID.randomUUID().toString());
 
         when(reader.findById(any())).thenReturn(Optional.of(sweet));
-        when(writer.save(any(), any())).thenReturn(sweet);
+        when(writer.save(any())).thenReturn(sweet);
 
         sut.publishSweet(publishRequest);
         var sweetArgumentCaptor = ArgumentCaptor.forClass(Sweet.class);
 
         verify(reader).findById(any());
         verifyNoMoreInteractions(reader);
-        verify(writer).save(sweetArgumentCaptor.capture(), any());
+        verify(writer).save(sweetArgumentCaptor.capture());
         verifyNoMoreInteractions(writer);
 
         var capturedSweet = sweetArgumentCaptor.getValue();

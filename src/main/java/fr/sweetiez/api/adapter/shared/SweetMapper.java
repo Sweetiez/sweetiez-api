@@ -1,6 +1,5 @@
 package fr.sweetiez.api.adapter.shared;
 
-import fr.sweetiez.api.core.employees.models.EmployeeId;
 import fr.sweetiez.api.core.ingredients.models.Ingredients;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import fr.sweetiez.api.core.sweets.models.sweet.SweetId;
@@ -14,19 +13,18 @@ import java.util.Set;
 
 public class SweetMapper {
 
-    public SweetEntity toEntity(Sweet sweet, EmployeeId employeeId) {
-        return SweetEntity.builder()
-                .id(sweet.id().value())
-                .name(sweet.name().value())
-                .price(sweet.price().value())
-                .imageUrl(sweet.details().imageUrl())
-                .description(sweet.details().description())
-                .flavor(sweet.details().flavor())
-                .state(sweet.states().state())
-                .highlight(sweet.states().highlight())
-                .creator(employeeId.value())
-                .updateAuthor(employeeId.value())
-                .build();
+    public SweetEntity toEntity(Sweet sweet) {
+        return new SweetEntity(
+                null,
+                sweet.id().value(),
+                sweet.name().value(),
+                sweet.details().description(),
+                sweet.price().value(),
+                sweet.states().highlight(),
+                sweet.states().state(),
+                sweet.details().flavor(),
+                sweet.details().imageUrl()
+        );
     }
 
     public Sweet toDto(SweetEntity entity) {

@@ -4,10 +4,9 @@ import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import fr.sweetiez.api.core.sweets.models.sweet.SweetId;
-import fr.sweetiez.api.core.sweets.ports.SweetsWriter;
-import fr.sweetiez.api.core.employees.models.EmployeeId;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweets;
 import fr.sweetiez.api.core.sweets.ports.SweetsReader;
+import fr.sweetiez.api.core.sweets.ports.SweetsWriter;
 import fr.sweetiez.api.core.sweets.services.exceptions.InvalidFieldsException;
 import fr.sweetiez.api.core.sweets.services.exceptions.SweetAlreadyExistsException;
 
@@ -42,7 +41,7 @@ public class SweetService {
             throw new SweetAlreadyExistsException();
         }
 
-        return writer.save(sweetToCreate, new EmployeeId(sweet.employee()));
+        return writer.save(sweetToCreate);
     }
 
     public Sweet publishSweet(PublishSweetRequest request) {
@@ -50,7 +49,7 @@ public class SweetService {
                 .orElseThrow()
                 .publish(request.highlight());
 
-        return writer.save(sweetToPublish, new EmployeeId(request.employee()));
+        return writer.save(sweetToPublish);
     }
 
     public Sweets retrievePublishedSweets() {
