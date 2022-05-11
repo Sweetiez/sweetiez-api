@@ -25,12 +25,14 @@ services:
   server:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     networks:
       - postgres
     ports:
       - "7777:8080"
     env_file: .env
+    volumes:
+      - ./:/app
     environment:
       POSTGRES_URL: ${DB_URL}/${DB_NAME}
       POSTGRES_USER: ${DB_USER}
