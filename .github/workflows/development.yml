@@ -3,10 +3,22 @@ name: DEV CI/CD
 on:
   push:
     branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
 
-#  workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Lint Commit
+        uses: wagoid/commitlint-github-action@v4.1.1
+
   build_image:
     runs-on: ubuntu-latest
     steps:
@@ -25,7 +37,7 @@ jobs:
         with:
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/api:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/api:latest-dev
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

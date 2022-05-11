@@ -3,23 +3,6 @@ name: Push workflow
 on: [push]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: mvn clean package
-
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Build docker image (no push)
-        uses: docker/build-push-action@v2
-
   commitlint:
     runs-on: ubuntu-latest
     steps:
@@ -30,18 +13,26 @@ jobs:
       - name: Lint Commit
         uses: wagoid/commitlint-github-action@v4.1.1
 
+  docker:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Build docker image (no push)
+        uses: docker/build-push-action@v2
+
   release:
     name: Publish new release
-    needs: [build, docker, commitlint]
+    needs: [docker, commitlint]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2.2.0
-        with:
-          node-version: 14
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
