@@ -1,0 +1,39 @@
+version: "3.4"
+
+networks:
+  postgres:
+
+volumes:
+  postgres-data:
+  postgres-log:
+
+services:
+  database:
+    image: postgres
+    networks:
+      - postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - postgres-log:/var/log/postgresql
+    restart: always
+    env_file: .env
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    networks:
+      - postgres
+    ports:
+      - "7777:8080"
+    env_file: .env
+    volumes:
+      - ./:/app
+    environment:
+      POSTGRES_URL: ${DB_URL}/${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
