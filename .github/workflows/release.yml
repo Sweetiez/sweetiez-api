@@ -29,7 +29,7 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/api:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/api:${{ steps.get_tag.outputs.tag }}
-      - name: Deploy on DEV server
+      - name: Deploy on PROD server
         uses: fjogeleit/http-request-action@master
         with:
           url: ${{ secrets.WEBHOOK_DEV_SERVER_URL }}

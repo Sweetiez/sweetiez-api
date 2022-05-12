@@ -9,16 +9,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  commitlint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Lint Commit
-        uses: wagoid/commitlint-github-action@v4.1.1
-
   build_image:
     runs-on: ubuntu-latest
     steps:
