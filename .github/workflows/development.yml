@@ -37,3 +37,5 @@ jobs:
         with:
           url: ${{ secrets.WEBHOOK_DEV_SERVER_URL }}
           method: POST
+          username: ${{ secrets.DEV_CRED_USER }}
+          password: ${{ secrets.DEV_CRED_PWD }}
