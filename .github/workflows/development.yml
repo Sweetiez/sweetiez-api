@@ -53,21 +53,21 @@ jobs:
       - name: Build with Maven
         run: |
           mvn clean test package
-      - name: Depcheck - HTML
-        uses: dependency-check/Dependency-Check_Action@main
-        id: DepcheckHTML
-        with:
-          project: 'sweetiez-api'
-          path: '.'
-          format: 'HTML'
-          args: >
-            --failOnCVSS 7
-            --enableRetired
-      - name: Upload Test results
-        uses: actions/upload-artifact@master
-        with:
-          name: Dependency-Check-Report
-          path: ${{github.workspace}}/target/dependency-check-report
+#      - name: Depcheck - HTML
+#        uses: dependency-check/Dependency-Check_Action@main
+#        id: DepcheckHTML
+#        with:
+#          project: 'sweetiez-api'
+#          path: '.'
+#          format: 'HTML'
+#          args: >
+#            --failOnCVSS 7
+#            --enableRetired
+#      - name: Upload Test results
+#        uses: actions/upload-artifact@master
+#        with:
+#          name: Dependency-Check-Report
+#          path: ${{github.workspace}}/target/dependency-check-report
 
       #      - uses: actions/cache@v1
       #        with:
