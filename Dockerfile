@@ -1,6 +1,6 @@
 FROM maven:3-openjdk-17-slim as build
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY pom.xml .
 
