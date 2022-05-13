@@ -1,6 +1,7 @@
 package fr.sweetiez.api.adapter.delivery;
 
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
+import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweets;
 import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
@@ -11,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 public class SweetEndPoints {
 
@@ -46,7 +49,12 @@ public class SweetEndPoints {
         }
     }
 
-    public ResponseEntity<Sweets> retrievePublishedSweets() {
-        return ResponseEntity.ok(sweetService.retrievePublishedSweets());
+    public ResponseEntity<Collection<SimpleSweetResponse>> retrievePublishedSweets() {
+        var publishedSweets = sweetService.retrievePublishedSweets().content()
+                .stream()
+                .map(SimpleSweetResponse::new)
+                .collect(Collectors.toSet());
+
+        return ResponseEntity.ok(publishedSweets);
     }
 }

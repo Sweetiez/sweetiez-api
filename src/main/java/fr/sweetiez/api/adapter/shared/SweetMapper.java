@@ -41,7 +41,8 @@ public class SweetMapper {
                         entity.getDescription(),
                         entity.getFlavor(),
                         List.of(entity.getImages().split(";")),
-                        new Ingredients(Set.of())
+                        new Ingredients(Set.of()),
+                        5.
                 )
         );
     }

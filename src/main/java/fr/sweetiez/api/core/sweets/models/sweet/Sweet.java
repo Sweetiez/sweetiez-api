@@ -24,11 +24,10 @@ public record Sweet(
                 new Name(request.name()),
                 new Price(request.price()),
                 new States(Highlight.COMMON, State.CREATED),
-                new Details(
-                        request.description(),
-                        request.flavor(),
+                new Details(request.description(), request.flavor(),
                         Set.of(),
-                        new Ingredients(request.ingredients())
+                        new Ingredients(request.ingredients()),
+                        5.
                 )
         );
     }

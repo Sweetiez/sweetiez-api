@@ -36,7 +36,8 @@ class SweetMapperTest {
                         "Sweet description",
                         Flavor.SWEET,
                         List.of("a", "b"),
-                        new Ingredients(Set.of()))
+                        new Ingredients(Set.of()),
+                        5.)
         );
 
         var expected = new SweetEntity(
@@ -81,7 +82,8 @@ class SweetMapperTest {
                         "Sweet description",
                         Flavor.SWEET,
                         List.of("a", "b"),
-                        new Ingredients(Set.of()))
+                        new Ingredients(Set.of()),
+                        5.)
         );
 
         var result = sut.toDto(sweetEntity);

@@ -4,7 +4,7 @@ import fr.sweetiez.api.core.ingredients.models.Ingredients;
 
 import java.util.Collection;
 
-public record Details(String description, Flavor flavor, Collection<String> images, Ingredients ingredients) {
+public record Details(String description, Flavor flavor, Collection<String> images, Ingredients ingredients, double score) {
     public boolean isValid() {
         return description != null && flavor != null && images != null && ingredients.isValid();
     }

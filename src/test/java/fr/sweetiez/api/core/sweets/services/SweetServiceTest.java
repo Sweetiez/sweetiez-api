@@ -183,7 +183,8 @@ class SweetServiceTest {
                         "",
                         Flavor.SWEET,
                         Set.of(),
-                        new Ingredients(Set.of()))
+                        new Ingredients(Set.of()),
+                        5.)
         );
 
         when(reader.findAllPublished()).thenReturn(new Sweets(Set.of(publishedSweet)));
