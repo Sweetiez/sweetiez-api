@@ -57,8 +57,7 @@ class SweetServiceTest {
                 BigDecimal.valueOf(1.99),
                 Set.of(new Ingredient("Ingredient name", Set.of())),
                 "Sweet description",
-                Flavor.SWEET,
-                UUID.randomUUID().toString()
+                Flavor.SWEET
         );
 
         when(reader.findAll()).thenReturn(new Sweets(Set.of()));
@@ -81,8 +80,7 @@ class SweetServiceTest {
                 BigDecimal.valueOf(1.99),
                 Set.of(new Ingredient("Ingredient name", Set.of())),
                 "Sweet description",
-                Flavor.SWEET,
-                UUID.randomUUID().toString()
+                Flavor.SWEET
         );
         var id = new SweetId(UUID.randomUUID().toString());
         var sweet= new Sweet(id, request);
@@ -120,8 +118,7 @@ class SweetServiceTest {
                 BigDecimal.valueOf(1.99),
                 Set.of(new Ingredient("Ingredient name", Set.of())),
                 "Sweet description",
-                Flavor.SWEET,
-                UUID.randomUUID().toString()
+                Flavor.SWEET
         );
         var sweetId = new SweetId(UUID.randomUUID().toString());
         var sweet = new Sweet(sweetId, createRequest);
@@ -207,48 +204,42 @@ class SweetServiceTest {
                         BigDecimal.valueOf(1.99),
                         Set.of(new Ingredient("Ingredient name", Set.of())),
                         "Sweet description",
-                        Flavor.SWEET,
-                        UUID.randomUUID().toString()
+                        Flavor.SWEET
                 ),
                 new CreateSweetRequest(
                         "",
                         BigDecimal.valueOf(1.99),
                         Set.of(new Ingredient("Ingredient name", Set.of())),
                         "Sweet description",
-                        Flavor.SWEET,
-                        UUID.randomUUID().toString()
+                        Flavor.SWEET
                 ),
                 new CreateSweetRequest(
                         null,
                         BigDecimal.valueOf(1.99),
                         Set.of(new Ingredient("Ingredient name", Set.of())),
                         "Sweet description",
-                        Flavor.SWEET,
-                        UUID.randomUUID().toString()
+                        Flavor.SWEET
                 ),
                 new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(1.99),
                         null,
                         "Sweet description",
-                        Flavor.SWEET,
-                        UUID.randomUUID().toString()
+                        Flavor.SWEET
                 ),
                 new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(-1.45),
                         Set.of(new Ingredient("Ingredient name", Set.of())),
                         "Sweet description",
-                        Flavor.SWEET,
-                        UUID.randomUUID().toString()
+                        Flavor.SWEET
                 ),
                 new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(0.),
                         Set.of(new Ingredient("Ingredient name", Set.of())),
                         "Sweet description",
-                        Flavor.SWEET,
-                        UUID.randomUUID().toString()
+                        Flavor.SWEET
                 )
         );
     }

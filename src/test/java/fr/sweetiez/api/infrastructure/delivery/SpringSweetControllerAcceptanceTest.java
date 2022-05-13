@@ -17,7 +17,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,8 +48,7 @@ public class SpringSweetControllerAcceptanceTest {
                 BigDecimal.valueOf(1.99),
                 Set.of(new Ingredient("Ingredient name", Set.of())),
                 "Sweet description",
-                Flavor.SWEET,
-                UUID.randomUUID().toString()
+                Flavor.SWEET
         );
 
         ResponseEntity<Object> responseEntity;
@@ -75,8 +73,7 @@ public class SpringSweetControllerAcceptanceTest {
                 BigDecimal.valueOf(1.99),
                 Set.of(new Ingredient("Ingredient name", Set.of())),
                 "Sweet description",
-                Flavor.SWEET,
-                UUID.randomUUID().toString()
+                Flavor.SWEET
         );
 
         ResponseEntity<Object> responseEntity;
@@ -120,48 +117,42 @@ public class SpringSweetControllerAcceptanceTest {
                         BigDecimal.valueOf(1.99),
                         Set.of(new Ingredient("Ingredient name", Set.of())),
                         "Sweet description",
-                        Flavor.SWEET,
-                        UUID.randomUUID().toString()
+                        Flavor.SWEET
                 ),
                 new CreateSweetRequest(
                         "",
                         BigDecimal.valueOf(1.99),
                         Set.of(new Ingredient("Ingredient name", Set.of())),
                         "Sweet description",
-                        Flavor.SWEET,
-                        UUID.randomUUID().toString()
+                        Flavor.SWEET
                 ),
                 new CreateSweetRequest(
                         null,
                         BigDecimal.valueOf(1.99),
                         Set.of(new Ingredient("Ingredient name", Set.of())),
                         "Sweet description",
-                        Flavor.SWEET,
-                        UUID.randomUUID().toString()
+                        Flavor.SWEET
                 ),
                 new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(1.99),
                         null,
                         "Sweet description",
-                        Flavor.SWEET,
-                        UUID.randomUUID().toString()
+                        Flavor.SWEET
                 ),
                 new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(-1.45),
                         Set.of(new Ingredient("Ingredient name", Set.of())),
                         "Sweet description",
-                        Flavor.SWEET,
-                        UUID.randomUUID().toString()
+                        Flavor.SWEET
                 ),
                 new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(0.),
                         Set.of(new Ingredient("Ingredient name", Set.of())),
                         "Sweet description",
-                        Flavor.SWEET,
-                        UUID.randomUUID().toString()
+                        Flavor.SWEET
                 )
         );
     }

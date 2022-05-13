@@ -11,5 +11,4 @@ public record CreateSweetRequest(
         BigDecimal price,
         Collection<Ingredient> ingredients,
         String description,
-        Flavor flavor,
-        String employee) {}
+        Flavor flavor) {}
