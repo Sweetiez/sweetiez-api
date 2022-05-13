@@ -57,8 +57,7 @@ class SpringSweetControllerIntegrationTest {
                 BigDecimal.valueOf(1.99),
                 Set.of(new Ingredient("Ingredient name", Set.of())),
                 "Sweet description",
-                Flavor.SWEET,
-                UUID.randomUUID().toString()
+                Flavor.SWEET
         );
 
         when(sweetsEndPoints.create(any())).thenReturn(response);
@@ -81,8 +80,7 @@ class SpringSweetControllerIntegrationTest {
                 BigDecimal.valueOf(1.99),
                 Set.of(new Ingredient("Ingredient name", Set.of())),
                 "Sweet description",
-                Flavor.SWEET,
-                UUID.randomUUID().toString()
+                Flavor.SWEET
         );
 
         when(sweetsEndPoints.create(any())).thenReturn(response);
@@ -103,8 +101,7 @@ class SpringSweetControllerIntegrationTest {
                 BigDecimal.valueOf(1.99),
                 Set.of(new Ingredient("Ingredient name", Set.of())),
                 "Sweet description",
-                Flavor.SWEET,
-                UUID.randomUUID().toString()
+                Flavor.SWEET
         );
 
         when(sweetsEndPoints.create(any())).thenReturn(response);
@@ -159,8 +156,7 @@ class SpringSweetControllerIntegrationTest {
                 BigDecimal.valueOf(1.99),
                 Set.of(new Ingredient("Ingredient name", Set.of())),
                 "Sweet description",
-                Flavor.SWEET,
-                UUID.randomUUID().toString()
+                Flavor.SWEET
         );
         var sweet = new Sweet(new SweetId(sweetId.toString()), createSweetRequest);
         var requestBody = new PublishSweetRequest(sweetId.toString(), Highlight.PROMOTED, UUID.randomUUID().toString());
