@@ -144,8 +144,7 @@ class SpringSweetControllerIntegrationTest {
     void shouldNotPublishSweetIfSweetIdDoesNotExist() throws Exception {
         PublishSweetRequest body = new PublishSweetRequest(
                 UUID.randomUUID().toString(),
-                Highlight.PROMOTED,
-                UUID.randomUUID().toString());
+                Highlight.PROMOTED);
 
         when(sweetsEndPoints.publish(any())).thenReturn(ResponseEntity.notFound().build());
         mockMvc.perform(put("/sweets/publish")
@@ -168,7 +167,7 @@ class SpringSweetControllerIntegrationTest {
                 Flavor.SWEET
         );
         var sweet = new Sweet(new SweetId(sweetId.toString()), createSweetRequest);
-        var requestBody = new PublishSweetRequest(sweetId.toString(), Highlight.PROMOTED, UUID.randomUUID().toString());
+        var requestBody = new PublishSweetRequest(sweetId.toString(), Highlight.PROMOTED);
         var response = ResponseEntity.ok(sweet);
 
         when(sweetsEndPoints.publish(any())).thenReturn(response);
@@ -184,8 +183,7 @@ class SpringSweetControllerIntegrationTest {
     public static Stream<Sweets> provideSetOfSweets() {
         var mapper = new SweetMapper();
         var entity = new SweetEntity(
-                1L,
-                UUID.randomUUID().toString(),
+                UUID.randomUUID(),
                 "Sweet name",
                 "",
                 BigDecimal.ONE,

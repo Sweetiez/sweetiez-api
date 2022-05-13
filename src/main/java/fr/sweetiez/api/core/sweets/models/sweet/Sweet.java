@@ -2,6 +2,7 @@ package fr.sweetiez.api.core.sweets.models.sweet;
 
 import fr.sweetiez.api.core.ingredients.models.Ingredients;
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
+import fr.sweetiez.api.core.sweets.models.sweet.details.Description;
 import fr.sweetiez.api.core.sweets.models.sweet.details.Details;
 import fr.sweetiez.api.core.sweets.models.sweet.details.Name;
 import fr.sweetiez.api.core.sweets.models.sweet.details.Price;
@@ -24,7 +25,9 @@ public record Sweet(
                 new Name(request.name()),
                 new Price(request.price()),
                 new States(Highlight.COMMON, State.CREATED),
-                new Details(request.description(), request.flavor(),
+                new Details(
+                        new Description(request.description()),
+                        request.flavor(),
                         Set.of(),
                         new Ingredients(request.ingredients()),
                         5.

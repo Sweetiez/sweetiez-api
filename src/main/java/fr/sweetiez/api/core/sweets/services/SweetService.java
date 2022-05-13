@@ -1,7 +1,9 @@
 package fr.sweetiez.api.core.sweets.services;
 
+import fr.sweetiez.api.core.comments.services.CommentService;
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
+import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import fr.sweetiez.api.core.sweets.models.sweet.SweetId;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweets;
@@ -16,10 +18,12 @@ public class SweetService {
 
     private final SweetsWriter writer;
     private final SweetsReader reader;
+    private final CommentService commentService;
 
-    public SweetService(SweetsWriter writer, SweetsReader reader) {
+    public SweetService(SweetsWriter writer, SweetsReader reader, CommentService commentService) {
         this.writer = writer;
         this.reader = reader;
+        this.commentService = commentService;
     }
 
     public Sweet createSweet(CreateSweetRequest sweet) {
@@ -54,5 +58,12 @@ public class SweetService {
 
     public Sweets retrievePublishedSweets() {
         return reader.findAllPublished();
+    }
+
+    public DetailedSweetResponse retrieveSweetDetails(String id) {
+        var sweet = reader.findById(new SweetId(id)).orElseThrow();
+        var comments = commentService.retrieveCommentsBySubject(id);
+
+        return new DetailedSweetResponse(sweet, comments);
     }
 }

@@ -1,9 +1,9 @@
 package fr.sweetiez.api.adapter.delivery;
 
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
-import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
-import fr.sweetiez.api.core.sweets.models.sweet.Sweets;
 import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
+import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
+import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import fr.sweetiez.api.core.sweets.services.SweetService;
 import fr.sweetiez.api.core.sweets.services.exceptions.InvalidFieldsException;
@@ -56,5 +56,14 @@ public class SweetEndPoints {
                 .collect(Collectors.toSet());
 
         return ResponseEntity.ok(publishedSweets);
+    }
+
+    public ResponseEntity<DetailedSweetResponse> retrieveSweetDetails(String id) {
+        try {
+            return ResponseEntity.ok(sweetService.retrieveSweetDetails(id));
+        }
+        catch (NoSuchElementException exception) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

@@ -4,6 +4,6 @@ import fr.sweetiez.api.core.comments.models.Comment;
 
 import java.util.Collection;
 
-public interface CommentRepository {
+public interface CommentReader {
     Collection<Comment> findAllBySubjectId(String id);
 }
