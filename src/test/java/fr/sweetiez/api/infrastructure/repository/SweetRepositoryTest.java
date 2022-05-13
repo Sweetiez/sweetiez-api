@@ -3,7 +3,6 @@ package fr.sweetiez.api.infrastructure.repository;
 import fr.sweetiez.api.core.sweets.models.sweet.details.Flavor;
 import fr.sweetiez.api.core.sweets.models.sweet.states.Highlight;
 import fr.sweetiez.api.core.sweets.models.sweet.states.State;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -13,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -27,35 +25,6 @@ class SweetRepositoryTest {
 
     @Autowired
     private SweetRepository sut;
-
-    @Test
-    void shouldFindSweetEntityByDomainIdWhenExists() {
-        var id = UUID.randomUUID().toString();
-        var entity = new SweetEntity(
-                null,
-                id,
-                "Sweet name",
-                "",
-                BigDecimal.ONE,
-                Highlight.COMMON,
-                State.CREATED,
-                Flavor.SWEET,
-                ""
-        );
-
-        sut.save(entity);
-
-        Optional<SweetEntity> optionalEntity = sut.findById(id);
-
-        assertTrue(optionalEntity.isPresent());
-    }
-
-    @Test
-    void shouldReturnAnEmptyOptionalWhenSweetIdDoesNotExists() {
-        var id = UUID.randomUUID().toString();
-        Optional<SweetEntity> optionalEntity = sut.findById(id);
-        assertTrue(optionalEntity.isEmpty());
-    }
 
     @ParameterizedTest
     @MethodSource("provideAllEnumerationsOfState")
@@ -79,8 +48,7 @@ class SweetRepositoryTest {
     private static Set<SweetEntity> provideSweetEntityWithDifferentStates() {
         return Set.of(
                 new SweetEntity(
-                        null,
-                        UUID.randomUUID().toString(),
+                        UUID.randomUUID(),
                         "CREATED",
                         "",
                         BigDecimal.ONE,
@@ -90,8 +58,7 @@ class SweetRepositoryTest {
                         ""
                 ),
                 new SweetEntity(
-                        null,
-                        UUID.randomUUID().toString(),
+                        UUID.randomUUID(),
                         "PUBLISHED",
                         "",
                         BigDecimal.ONE,
@@ -100,8 +67,7 @@ class SweetRepositoryTest {
                         Flavor.SWEET,
                         ""
                 ),new SweetEntity(
-                        null,
-                        UUID.randomUUID().toString(),
+                        UUID.randomUUID(),
                         "NON_PUBLISHED",
                         "",
                         BigDecimal.ONE,
@@ -110,8 +76,7 @@ class SweetRepositoryTest {
                         Flavor.SWEET,
                         ""
                 ),new SweetEntity(
-                        null,
-                        UUID.randomUUID().toString(),
+                        UUID.randomUUID(),
                         "DELETED",
                         "",
                         BigDecimal.ONE,

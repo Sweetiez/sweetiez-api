@@ -7,10 +7,7 @@ import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import fr.sweetiez.api.core.sweets.models.sweet.SweetId;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweets;
-import fr.sweetiez.api.core.sweets.models.sweet.details.Details;
-import fr.sweetiez.api.core.sweets.models.sweet.details.Flavor;
-import fr.sweetiez.api.core.sweets.models.sweet.details.Name;
-import fr.sweetiez.api.core.sweets.models.sweet.details.Price;
+import fr.sweetiez.api.core.sweets.models.sweet.details.*;
 import fr.sweetiez.api.core.sweets.models.sweet.states.Highlight;
 import fr.sweetiez.api.core.sweets.models.sweet.states.State;
 import fr.sweetiez.api.core.sweets.models.sweet.states.States;
@@ -122,7 +119,7 @@ class SweetServiceTest {
         );
         var sweetId = new SweetId(UUID.randomUUID().toString());
         var sweet = new Sweet(sweetId, createRequest);
-        var publishRequest = new PublishSweetRequest(sweetId.value(), Highlight.PROMOTED, UUID.randomUUID().toString());
+        var publishRequest = new PublishSweetRequest(sweetId.value(), Highlight.PROMOTED);
 
         when(reader.findById(any())).thenReturn(Optional.of(sweet));
         when(writer.save(any())).thenReturn(sweet);
@@ -143,7 +140,7 @@ class SweetServiceTest {
     @Test
     void shouldNotPublishSweetWhenSweetIdDoesNotExist() {
         var sweetId = new SweetId(UUID.randomUUID().toString());
-        var request = new PublishSweetRequest(sweetId.value(), Highlight.PROMOTED, sweetId.value());
+        var request = new PublishSweetRequest(sweetId.value(), Highlight.PROMOTED);
 
         when(reader.findById(any())).thenReturn(Optional.empty());
 
@@ -180,7 +177,7 @@ class SweetServiceTest {
                         Highlight.PROMOTED,
                         State.PUBLISHED),
                 new Details(
-                        "",
+                        new Description(""),
                         Flavor.SWEET,
                         Set.of(),
                         new Ingredients(Set.of()),

@@ -18,12 +18,8 @@ public record SimpleSweetResponse(
                 sweet.id().value(),
                 sweet.name().value(),
                 sweet.price().value().doubleValue(),
-                getShortDescription(sweet.details().description()),
+                sweet.details().description().shortContent(),
                 sweet.details().images(),
                 sweet.details().score());
-    }
-
-    private static String getShortDescription(String description) {
-        return description.length() > 100 ? description.substring(0, 100) + "..." : description;
     }
 }

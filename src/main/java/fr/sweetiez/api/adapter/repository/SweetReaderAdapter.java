@@ -9,6 +9,7 @@ import fr.sweetiez.api.core.sweets.ports.SweetsReader;
 import fr.sweetiez.api.infrastructure.repository.SweetRepository;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class SweetReaderAdapter implements SweetsReader {
@@ -22,7 +23,7 @@ public class SweetReaderAdapter implements SweetsReader {
     }
 
     public Optional<Sweet> findById(SweetId id) {
-        return repository.findById(id.value()).map(sweetMapper::toDto);
+        return repository.findById(UUID.fromString(id.value())).map(sweetMapper::toDto);
     }
 
     public Sweets findAllPublished() {

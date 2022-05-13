@@ -3,10 +3,7 @@ package fr.sweetiez.api.adapter.shared;
 import fr.sweetiez.api.core.ingredients.models.Ingredients;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import fr.sweetiez.api.core.sweets.models.sweet.SweetId;
-import fr.sweetiez.api.core.sweets.models.sweet.details.Details;
-import fr.sweetiez.api.core.sweets.models.sweet.details.Flavor;
-import fr.sweetiez.api.core.sweets.models.sweet.details.Name;
-import fr.sweetiez.api.core.sweets.models.sweet.details.Price;
+import fr.sweetiez.api.core.sweets.models.sweet.details.*;
 import fr.sweetiez.api.core.sweets.models.sweet.states.Highlight;
 import fr.sweetiez.api.core.sweets.models.sweet.states.State;
 import fr.sweetiez.api.core.sweets.models.sweet.states.States;
@@ -26,14 +23,14 @@ class SweetMapperTest {
 
     @Test
     void shouldConvertModelToEntity() {
-        String sweetId = UUID.randomUUID().toString();
+        UUID sweetId = UUID.randomUUID();
         var sweet = new Sweet(
-                new SweetId(sweetId),
+                new SweetId(sweetId.toString()),
                 new Name("Sweet name"),
                 new Price(BigDecimal.valueOf(1.)),
                 new States(Highlight.COMMON, State.CREATED),
                 new Details(
-                        "Sweet description",
+                        new Description("Sweet description"),
                         Flavor.SWEET,
                         List.of("a", "b"),
                         new Ingredients(Set.of()),
@@ -41,7 +38,6 @@ class SweetMapperTest {
         );
 
         var expected = new SweetEntity(
-                null,
                 sweetId,
                 "Sweet name",
                 "Sweet description",
@@ -59,10 +55,9 @@ class SweetMapperTest {
 
     @Test
     void shouldConvertEntityToModel() {
-        String sweetId = UUID.randomUUID().toString();
+        UUID sweetId = UUID.randomUUID();
 
         var sweetEntity = new SweetEntity(
-                null,
                 sweetId,
                 "Sweet name",
                 "Sweet description",
@@ -74,12 +69,12 @@ class SweetMapperTest {
         );
 
         var expected = new Sweet(
-                new SweetId(sweetId),
+                new SweetId(sweetId.toString()),
                 new Name("Sweet name"),
                 new Price(BigDecimal.valueOf(1.)),
                 new States(Highlight.COMMON, State.CREATED),
                 new Details(
-                        "Sweet description",
+                        new Description("Sweet description"),
                         Flavor.SWEET,
                         List.of("a", "b"),
                         new Ingredients(Set.of()),
