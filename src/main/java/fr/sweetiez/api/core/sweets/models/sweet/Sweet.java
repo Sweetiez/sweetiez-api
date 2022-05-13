@@ -2,12 +2,15 @@ package fr.sweetiez.api.core.sweets.models.sweet;
 
 import fr.sweetiez.api.core.ingredients.models.Ingredients;
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
+import fr.sweetiez.api.core.sweets.models.sweet.details.Description;
 import fr.sweetiez.api.core.sweets.models.sweet.details.Details;
 import fr.sweetiez.api.core.sweets.models.sweet.details.Name;
 import fr.sweetiez.api.core.sweets.models.sweet.details.Price;
 import fr.sweetiez.api.core.sweets.models.sweet.states.Highlight;
 import fr.sweetiez.api.core.sweets.models.sweet.states.State;
 import fr.sweetiez.api.core.sweets.models.sweet.states.States;
+
+import java.util.Set;
 
 public record Sweet(
         SweetId id,
@@ -23,10 +26,11 @@ public record Sweet(
                 new Price(request.price()),
                 new States(Highlight.COMMON, State.CREATED),
                 new Details(
-                        request.description(),
+                        new Description(request.description()),
                         request.flavor(),
-                        "",
-                        new Ingredients(request.ingredients())
+                        Set.of(),
+                        new Ingredients(request.ingredients()),
+                        5.
                 )
         );
     }

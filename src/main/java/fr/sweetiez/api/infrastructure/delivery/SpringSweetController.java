@@ -3,10 +3,13 @@ package fr.sweetiez.api.infrastructure.delivery;
 import fr.sweetiez.api.adapter.delivery.SweetEndPoints;
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
+import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
+import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
-import fr.sweetiez.api.core.sweets.models.sweet.Sweets;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/sweets")
@@ -24,12 +27,17 @@ public class SpringSweetController {
     }
 
     @GetMapping("/published")
-    public ResponseEntity<Sweets> retrievePublishedSweets() {
+    public ResponseEntity<Collection<SimpleSweetResponse>> retrievePublishedSweets() {
         return sweetsEndPoints.retrievePublishedSweets();
     }
 
     @PutMapping("/publish")
     public ResponseEntity<Sweet> publishSweet(@RequestBody PublishSweetRequest request) {
         return sweetsEndPoints.publish(request);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DetailedSweetResponse> retrieveSweetDetails(@PathVariable("id") String id) {
+        return sweetsEndPoints.retrieveSweetDetails(id);
     }
 }

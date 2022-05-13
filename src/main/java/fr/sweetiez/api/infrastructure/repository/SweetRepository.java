@@ -5,10 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface SweetRepository extends JpaRepository<SweetEntity, Long> {
-    Optional<SweetEntity> findById(String id);
+public interface SweetRepository extends JpaRepository<SweetEntity, UUID> {
     List<SweetEntity> findAllByState(State state);
 }

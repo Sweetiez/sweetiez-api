@@ -9,6 +9,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name="sweet")
@@ -16,16 +17,13 @@ public class SweetEntity {
 
     @Id
     @GeneratedValue
-    private final Long dbId;
-
-    @Column(unique = true, nullable = false)
-    @NotEmpty
-    private final String id;
+    private final UUID id;
 
     @Column(unique = true, nullable = false)
     @NotEmpty
     private final String name;
 
+    @Column(columnDefinition = "text")
     private final String description;
 
     @Column(nullable = false)
@@ -44,10 +42,9 @@ public class SweetEntity {
     @Column(nullable = false)
     private final Flavor flavor;
 
-    private final String imageUrl;
+    private final String images;
 
     public SweetEntity() {
-        this.dbId = null;
         this.id = null;
         this.name = null;
         this.description = null;
@@ -55,11 +52,10 @@ public class SweetEntity {
         this.highlight = null;
         this.state = null;
         this.flavor = null;
-        this.imageUrl = null;
+        this.images = null;
     }
 
-    public SweetEntity(Long dbId, String id, String name, String description, BigDecimal price, Highlight highlight, State state, Flavor flavor, String imageUrl) {
-        this.dbId = dbId;
+    public SweetEntity(UUID id, String name, String description, BigDecimal price, Highlight highlight, State state, Flavor flavor, String images) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -67,10 +63,10 @@ public class SweetEntity {
         this.highlight = highlight;
         this.state = state;
         this.flavor = flavor;
-        this.imageUrl = imageUrl;
+        this.images = images;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -98,25 +94,23 @@ public class SweetEntity {
         return flavor;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImages() {
+        return images;
     }
 
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SweetEntity that = (SweetEntity) o;
-        return Objects.equals(dbId, that.dbId) && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(price, that.price) && highlight == that.highlight && state == that.state && flavor == that.flavor && Objects.equals(imageUrl, that.imageUrl);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(price, that.price) && highlight == that.highlight && state == that.state && flavor == that.flavor && Objects.equals(images, that.images);
     }
 
     public int hashCode() {
-        return Objects.hash(dbId, id, name, description, price, highlight, state, flavor, imageUrl);
+        return Objects.hash(id, name, description, price, highlight, state, flavor, images);
     }
 
-    @Override
     public String toString() {
         return "SweetEntity{" +
-                "dbId=" + dbId +
                 ", id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
@@ -124,7 +118,7 @@ public class SweetEntity {
                 ", highlight=" + highlight +
                 ", state=" + state +
                 ", flavor=" + flavor +
-                ", imageUrl='" + imageUrl + '\'' +
+                ", images='" + images + '\'' +
                 '}';
     }
 }

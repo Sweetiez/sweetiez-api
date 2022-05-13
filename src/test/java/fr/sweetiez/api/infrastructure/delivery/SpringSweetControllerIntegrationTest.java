@@ -6,6 +6,7 @@ import fr.sweetiez.api.adapter.shared.SweetMapper;
 import fr.sweetiez.api.core.ingredients.models.Ingredient;
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
+import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import fr.sweetiez.api.core.sweets.models.sweet.SweetId;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweets;
@@ -17,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -29,8 +29,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -121,10 +123,14 @@ class SpringSweetControllerIntegrationTest {
     @ParameterizedTest
     @MethodSource("provideSetOfSweets")
     void shouldFindAllSweetWithPublishedState(Sweets publishedSweets) throws Exception {
-        var jsonResponse = jsonMapper.writeValueAsString(publishedSweets);
-        var response = ResponseEntity.ok(publishedSweets);
-        when(sweetsEndPoints.retrievePublishedSweets()).thenReturn(response);
+        Collection<SimpleSweetResponse> responseBody = publishedSweets.content()
+                .stream()
+                .map(SimpleSweetResponse::new)
+                .collect(Collectors.toSet());
+        var response = ResponseEntity.ok(responseBody);
+        var jsonResponse = jsonMapper.writeValueAsString(responseBody);
 
+        when(sweetsEndPoints.retrievePublishedSweets()).thenReturn(response);
         mockMvc.perform(get("/sweets/published"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -138,8 +144,7 @@ class SpringSweetControllerIntegrationTest {
     void shouldNotPublishSweetIfSweetIdDoesNotExist() throws Exception {
         PublishSweetRequest body = new PublishSweetRequest(
                 UUID.randomUUID().toString(),
-                Highlight.PROMOTED,
-                UUID.randomUUID().toString());
+                Highlight.PROMOTED);
 
         when(sweetsEndPoints.publish(any())).thenReturn(ResponseEntity.notFound().build());
         mockMvc.perform(put("/sweets/publish")
@@ -162,7 +167,7 @@ class SpringSweetControllerIntegrationTest {
                 Flavor.SWEET
         );
         var sweet = new Sweet(new SweetId(sweetId.toString()), createSweetRequest);
-        var requestBody = new PublishSweetRequest(sweetId.toString(), Highlight.PROMOTED, UUID.randomUUID().toString());
+        var requestBody = new PublishSweetRequest(sweetId.toString(), Highlight.PROMOTED);
         var response = ResponseEntity.ok(sweet);
 
         when(sweetsEndPoints.publish(any())).thenReturn(response);
@@ -178,8 +183,7 @@ class SpringSweetControllerIntegrationTest {
     public static Stream<Sweets> provideSetOfSweets() {
         var mapper = new SweetMapper();
         var entity = new SweetEntity(
-                1L,
-                UUID.randomUUID().toString(),
+                UUID.randomUUID(),
                 "Sweet name",
                 "",
                 BigDecimal.ONE,
