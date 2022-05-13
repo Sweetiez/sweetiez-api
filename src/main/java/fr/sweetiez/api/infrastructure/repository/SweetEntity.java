@@ -44,7 +44,7 @@ public class SweetEntity {
     @Column(nullable = false)
     private final Flavor flavor;
 
-    private final String imageUrl;
+    private final String images;
 
     public SweetEntity() {
         this.dbId = null;
@@ -55,10 +55,10 @@ public class SweetEntity {
         this.highlight = null;
         this.state = null;
         this.flavor = null;
-        this.imageUrl = null;
+        this.images = null;
     }
 
-    public SweetEntity(Long dbId, String id, String name, String description, BigDecimal price, Highlight highlight, State state, Flavor flavor, String imageUrl) {
+    public SweetEntity(Long dbId, String id, String name, String description, BigDecimal price, Highlight highlight, State state, Flavor flavor, String images) {
         this.dbId = dbId;
         this.id = id;
         this.name = name;
@@ -67,7 +67,7 @@ public class SweetEntity {
         this.highlight = highlight;
         this.state = state;
         this.flavor = flavor;
-        this.imageUrl = imageUrl;
+        this.images = images;
     }
 
     public String getId() {
@@ -98,22 +98,21 @@ public class SweetEntity {
         return flavor;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImages() {
+        return images;
     }
 
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SweetEntity that = (SweetEntity) o;
-        return Objects.equals(dbId, that.dbId) && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(price, that.price) && highlight == that.highlight && state == that.state && flavor == that.flavor && Objects.equals(imageUrl, that.imageUrl);
+        return Objects.equals(dbId, that.dbId) && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(price, that.price) && highlight == that.highlight && state == that.state && flavor == that.flavor && Objects.equals(images, that.images);
     }
 
     public int hashCode() {
-        return Objects.hash(dbId, id, name, description, price, highlight, state, flavor, imageUrl);
+        return Objects.hash(dbId, id, name, description, price, highlight, state, flavor, images);
     }
 
-    @Override
     public String toString() {
         return "SweetEntity{" +
                 "dbId=" + dbId +
@@ -124,7 +123,7 @@ public class SweetEntity {
                 ", highlight=" + highlight +
                 ", state=" + state +
                 ", flavor=" + flavor +
-                ", imageUrl='" + imageUrl + '\'' +
+                ", images='" + images + '\'' +
                 '}';
     }
 }

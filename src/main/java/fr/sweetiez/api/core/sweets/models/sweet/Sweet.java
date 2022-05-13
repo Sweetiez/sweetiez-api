@@ -9,6 +9,8 @@ import fr.sweetiez.api.core.sweets.models.sweet.states.Highlight;
 import fr.sweetiez.api.core.sweets.models.sweet.states.State;
 import fr.sweetiez.api.core.sweets.models.sweet.states.States;
 
+import java.util.Set;
+
 public record Sweet(
         SweetId id,
         Name name,
@@ -25,7 +27,7 @@ public record Sweet(
                 new Details(
                         request.description(),
                         request.flavor(),
-                        "",
+                        Set.of(),
                         new Ingredients(request.ingredients())
                 )
         );

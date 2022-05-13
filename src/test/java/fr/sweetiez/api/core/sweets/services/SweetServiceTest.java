@@ -182,7 +182,7 @@ class SweetServiceTest {
                 new Details(
                         "",
                         Flavor.SWEET,
-                        "",
+                        Set.of(),
                         new Ingredients(Set.of()))
         );
 
