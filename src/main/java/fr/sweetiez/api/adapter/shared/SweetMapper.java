@@ -9,6 +9,7 @@ import fr.sweetiez.api.core.sweets.models.sweet.details.Price;
 import fr.sweetiez.api.core.sweets.models.sweet.states.States;
 import fr.sweetiez.api.infrastructure.repository.SweetEntity;
 
+import java.util.List;
 import java.util.Set;
 
 public class SweetMapper {
@@ -23,7 +24,10 @@ public class SweetMapper {
                 sweet.states().highlight(),
                 sweet.states().state(),
                 sweet.details().flavor(),
-                sweet.details().imageUrl()
+                sweet.details().images()
+                        .stream()
+                        .map(image -> image.concat(";"))
+                        .reduce("", String::concat)
         );
     }
 
@@ -36,7 +40,7 @@ public class SweetMapper {
                 new Details(
                         entity.getDescription(),
                         entity.getFlavor(),
-                        entity.getImageUrl(),
+                        List.of(entity.getImages().split(";")),
                         new Ingredients(Set.of())
                 )
         );
