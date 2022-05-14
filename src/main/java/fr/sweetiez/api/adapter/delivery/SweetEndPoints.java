@@ -8,8 +8,15 @@ import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import fr.sweetiez.api.core.sweets.services.SweetService;
 import fr.sweetiez.api.core.sweets.services.exceptions.InvalidFieldsException;
 import fr.sweetiez.api.core.sweets.services.exceptions.SweetAlreadyExistsException;
+import io.minio.GetPresignedObjectUrlArgs;
+import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
+import io.minio.http.Method;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.Collection;
@@ -18,6 +25,11 @@ import java.util.stream.Collectors;
 
 public class SweetEndPoints {
 
+    @Autowired
+    private MinioClient minioClient;
+
+    @Value("${minio.bucket.name}")
+    private String bucketName;
     private final SweetService sweetService;
 
     public SweetEndPoints(SweetService sweetService) {
@@ -65,5 +77,34 @@ public class SweetEndPoints {
         catch (NoSuchElementException exception) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    public ResponseEntity<String> addImage(MultipartFile image) {
+        // Store the image in the minio bucket
+        try {
+            minioClient.putObject(PutObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(image.getOriginalFilename())
+                    .stream(image.getInputStream(), image.getSize(), -1)
+                    .build());
+        } catch (Exception e) {
+            System.out.println("Error while uploading file");
+            throw new RuntimeException(e);
+        }
+        // Return the image URL
+        String url;
+        try {
+            url = minioClient.getPresignedObjectUrl(
+                    GetPresignedObjectUrlArgs.builder()
+                            .method(Method.DELETE)
+                            .bucket(bucketName)
+                            .object(image.getOriginalFilename())
+                            .build());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+//        url = url.substring(0, url.indexOf('?'));
+
+        return ResponseEntity.ok(url);
     }
 }

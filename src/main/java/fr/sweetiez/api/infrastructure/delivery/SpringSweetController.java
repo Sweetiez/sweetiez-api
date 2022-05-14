@@ -8,6 +8,7 @@ import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 
@@ -39,5 +40,12 @@ public class SpringSweetController {
     @GetMapping("/{id}")
     public ResponseEntity<DetailedSweetResponse> retrieveSweetDetails(@PathVariable("id") String id) {
         return sweetsEndPoints.retrieveSweetDetails(id);
+    }
+
+    @PostMapping("/image")
+//    @PostMapping("/{id}/image")
+    public ResponseEntity<String> addImage(@RequestParam MultipartFile image) {
+//    public ResponseEntity<Sweet> addImage(@PathVariable("id") String id, @RequestParam MultipartFile image) {
+        return sweetsEndPoints.addImage(image);
     }
 }
