@@ -103,7 +103,7 @@ public class SweetEndPoints {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-//        url = url.substring(0, url.indexOf('?'));
+        url = url.substring(0, url.indexOf('?'));
 
         return ResponseEntity.ok(url);
     }
