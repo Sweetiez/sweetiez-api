@@ -79,7 +79,7 @@ public class SweetEndPoints {
         }
     }
 
-    public ResponseEntity<String> addImage(MultipartFile image) {
+    public ResponseEntity<DetailedSweetResponse> addImage(String id, MultipartFile image) {
         // Store the image in the minio bucket
         try {
             minioClient.putObject(PutObjectArgs.builder()
@@ -105,6 +105,6 @@ public class SweetEndPoints {
         }
         url = url.substring(0, url.indexOf('?'));
 
-        return ResponseEntity.ok(url);
+        return ResponseEntity.ok(sweetService.addImageToSweet(id, url));
     }
 }

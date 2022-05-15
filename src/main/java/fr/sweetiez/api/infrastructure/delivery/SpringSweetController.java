@@ -42,10 +42,8 @@ public class SpringSweetController {
         return sweetsEndPoints.retrieveSweetDetails(id);
     }
 
-    @PostMapping("/image")
-//    @PostMapping("/{id}/image")
-    public ResponseEntity<String> addImage(@RequestParam MultipartFile image) {
-//    public ResponseEntity<Sweet> addImage(@PathVariable("id") String id, @RequestParam MultipartFile image) {
-        return sweetsEndPoints.addImage(image);
+    @PostMapping("/{id}/image")
+    public ResponseEntity<DetailedSweetResponse> addImage(@PathVariable("id") String id, @RequestParam MultipartFile image) {
+        return sweetsEndPoints.addImage(id, image);
     }
 }

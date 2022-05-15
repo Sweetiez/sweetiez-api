@@ -51,4 +51,9 @@ public record Sweet(
                 && states.isValid()
                 && details.isValid();
     }
+
+    public Sweet addImage(String imageUrl) {
+        var newDetails = details.addImage(imageUrl);
+        return new Sweet(id, name, price, states, newDetails);
+    }
 }

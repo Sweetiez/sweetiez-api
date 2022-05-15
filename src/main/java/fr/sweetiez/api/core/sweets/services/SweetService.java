@@ -66,4 +66,14 @@ public class SweetService {
 
         return new DetailedSweetResponse(sweet, comments);
     }
+
+    public DetailedSweetResponse addImageToSweet(String id, String imageUrl) {
+        var sweet = reader.findById(new SweetId(id)).orElseThrow();
+        var comments = commentService.retrieveCommentsBySubject(id);
+
+        var updatedSweet = sweet.addImage(imageUrl);
+        var aa = writer.save(updatedSweet);
+        System.out.println(aa);
+        return new DetailedSweetResponse(aa, comments);
+    }
 }

@@ -42,7 +42,7 @@ public class SweetEntity {
     @Column(nullable = false)
     private final Flavor flavor;
 
-    private final String images;
+    private String images;
 
     public SweetEntity() {
         this.id = null;
@@ -103,6 +103,10 @@ public class SweetEntity {
         if (o == null || getClass() != o.getClass()) return false;
         SweetEntity that = (SweetEntity) o;
         return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(price, that.price) && highlight == that.highlight && state == that.state && flavor == that.flavor && Objects.equals(images, that.images);
+    }
+
+    public void addImage(String imageUrl) {
+        this.images += String.format("%s;", imageUrl);
     }
 
     public int hashCode() {
