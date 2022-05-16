@@ -7,11 +7,13 @@ import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import fr.sweetiez.api.core.sweets.models.sweet.SweetId;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweets;
+import fr.sweetiez.api.core.sweets.models.sweet.states.Highlight;
 import fr.sweetiez.api.core.sweets.ports.SweetsReader;
 import fr.sweetiez.api.core.sweets.ports.SweetsWriter;
 import fr.sweetiez.api.core.sweets.services.exceptions.InvalidFieldsException;
 import fr.sweetiez.api.core.sweets.services.exceptions.SweetAlreadyExistsException;
 
+import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 public class SweetService {
@@ -57,7 +59,25 @@ public class SweetService {
     }
 
     public Sweets retrievePublishedSweets() {
-        return reader.findAllPublished();
+        var sweets = reader.findAllPublished();
+
+        var banner = sweets.content().stream()
+                .filter(sweet -> sweet.states().highlight().equals(Highlight.BANNER))
+                .toList();
+
+        var promoted = sweets.content().stream()
+                .filter(sweet -> sweet.states().highlight().equals(Highlight.PROMOTED))
+                .toList();
+
+        var common = sweets.content().stream()
+                .filter(sweet -> sweet.states().highlight().equals(Highlight.COMMON))
+                .toList();
+
+        var content = new LinkedList<>(banner);
+        content.addAll(promoted);
+        content.addAll(common);
+
+        return new Sweets(content);
     }
 
     public DetailedSweetResponse retrieveSweetDetails(String id) {
