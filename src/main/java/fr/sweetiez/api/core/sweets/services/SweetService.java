@@ -56,6 +56,10 @@ public class SweetService {
         return writer.save(sweetToPublish);
     }
 
+    public Sweets retrieveAllSweets() {
+        return reader.findAll();
+    }
+
     public Sweets retrievePublishedSweets() {
         return reader.findAllPublished();
     }

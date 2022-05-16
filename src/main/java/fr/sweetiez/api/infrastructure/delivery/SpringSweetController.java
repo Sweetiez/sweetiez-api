@@ -3,6 +3,7 @@ package fr.sweetiez.api.infrastructure.delivery;
 import fr.sweetiez.api.adapter.delivery.SweetEndPoints;
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
+import fr.sweetiez.api.core.sweets.models.responses.AdminSweetSimpleResponse;
 import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
@@ -25,6 +26,11 @@ public class SpringSweetController {
     @PostMapping
     public ResponseEntity<Object> createSweet(@RequestBody CreateSweetRequest request) {
         return sweetsEndPoints.create(request);
+    }
+
+    @GetMapping()
+    public ResponseEntity<Collection<AdminSweetSimpleResponse>> retrieveAllSweets() {
+        return sweetsEndPoints.retrieveAllSweets();
     }
 
     @GetMapping("/published")

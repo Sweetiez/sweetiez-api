@@ -2,6 +2,7 @@ package fr.sweetiez.api.adapter.delivery;
 
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
+import fr.sweetiez.api.core.sweets.models.responses.AdminSweetSimpleResponse;
 import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
@@ -59,6 +60,15 @@ public class SweetEndPoints {
         catch (NoSuchElementException exception) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    public ResponseEntity<Collection<AdminSweetSimpleResponse>> retrieveAllSweets() {
+        var allSweets = sweetService.retrieveAllSweets().content()
+                .stream()
+                .map(AdminSweetSimpleResponse::new)
+                .collect(Collectors.toSet());
+
+        return ResponseEntity.ok(allSweets);
     }
 
     public ResponseEntity<Collection<SimpleSweetResponse>> retrievePublishedSweets() {
