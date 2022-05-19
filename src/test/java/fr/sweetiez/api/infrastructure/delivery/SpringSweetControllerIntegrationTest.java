@@ -13,7 +13,7 @@ import fr.sweetiez.api.core.sweets.models.sweet.Sweets;
 import fr.sweetiez.api.core.sweets.models.sweet.details.Flavor;
 import fr.sweetiez.api.core.sweets.models.sweet.states.Highlight;
 import fr.sweetiez.api.core.sweets.models.sweet.states.State;
-import fr.sweetiez.api.infrastructure.repository.SweetEntity;
+import fr.sweetiez.api.infrastructure.repository.sweets.SweetEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
