@@ -2,6 +2,8 @@ package fr.sweetiez.api.adapter.delivery;
 
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
+import fr.sweetiez.api.core.sweets.models.requests.UpdateSweetRequest;
+import fr.sweetiez.api.core.sweets.models.responses.AdminDetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.AdminSweetSimpleResponse;
 import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
@@ -89,6 +91,15 @@ public class SweetEndPoints {
         }
     }
 
+    public ResponseEntity<AdminDetailedSweetResponse> adminRetrieveSweetDetails(String id) {
+        try {
+            return ResponseEntity.ok(sweetService.adminRetrieveSweetDetails(id));
+        }
+        catch (NoSuchElementException exception) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     public ResponseEntity<DetailedSweetResponse> addImage(String id, MultipartFile image) {
         // Store the image in the minio bucket
         try {
@@ -116,5 +127,14 @@ public class SweetEndPoints {
         url = url.substring(0, url.indexOf('?'));
 
         return ResponseEntity.ok(sweetService.addImageToSweet(id, url));
+    }
+
+    public ResponseEntity<AdminDetailedSweetResponse> adminUpdateSweetDetails(UpdateSweetRequest request) {
+        try {
+            return ResponseEntity.ok(sweetService.adminUpdateSweetDetails(request));
+        }
+        catch (NoSuchElementException exception) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

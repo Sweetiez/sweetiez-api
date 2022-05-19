@@ -3,6 +3,9 @@ package fr.sweetiez.api.core.sweets.services;
 import fr.sweetiez.api.core.comments.services.CommentService;
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
+import fr.sweetiez.api.core.sweets.models.requests.UpdateSweetRequest;
+import fr.sweetiez.api.core.sweets.models.responses.AdminDetailedSweetResponse;
+import fr.sweetiez.api.core.sweets.models.responses.AdminSweetSimpleResponse;
 import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import fr.sweetiez.api.core.sweets.models.sweet.SweetId;
@@ -71,13 +74,27 @@ public class SweetService {
         return new DetailedSweetResponse(sweet, comments);
     }
 
+    public AdminDetailedSweetResponse adminRetrieveSweetDetails(String id) {
+        var sweet = reader.findById(new SweetId(id)).orElseThrow();
+
+        return new AdminDetailedSweetResponse(sweet);
+    }
+
     public DetailedSweetResponse addImageToSweet(String id, String imageUrl) {
         var sweet = reader.findById(new SweetId(id)).orElseThrow();
         var comments = commentService.retrieveCommentsBySubject(id);
 
         var updatedSweet = sweet.addImage(imageUrl);
-        var aa = writer.save(updatedSweet);
-        System.out.println(aa);
-        return new DetailedSweetResponse(aa, comments);
+        var updated = writer.save(updatedSweet);
+
+        return new DetailedSweetResponse(updated, comments);
+    }
+
+    public AdminDetailedSweetResponse adminUpdateSweetDetails(UpdateSweetRequest request) {
+        var sweet = reader.findById(new SweetId(request.id())).orElseThrow();
+        var updatedSweet = new Sweet(sweet.id(), request);
+        var updated = writer.save(updatedSweet);
+
+        return new AdminDetailedSweetResponse(updated);
     }
 }
