@@ -1,6 +1,7 @@
 package fr.sweetiez.api.infrastructure.delivery;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.sweetiez.api.adapter.delivery.AdminSweetEndPoints;
 import fr.sweetiez.api.adapter.delivery.SweetEndPoints;
 import fr.sweetiez.api.adapter.shared.SweetMapper;
 import fr.sweetiez.api.core.ingredients.models.Ingredient;
@@ -46,7 +47,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class SpringSweetControllerIntegrationTest {
 
     @MockBean
-    private SweetEndPoints sweetsEndPoints;
+    private AdminSweetEndPoints adminSweetEndPoints;
+
+    @MockBean
+    private SweetEndPoints sweetEndPoints;
 
     @Autowired
     private MockMvc mockMvc;
@@ -65,7 +69,7 @@ class SpringSweetControllerIntegrationTest {
                 Flavor.SWEET
         );
 
-        when(sweetsEndPoints.create(any())).thenReturn(response);
+        when(adminSweetEndPoints.create(any())).thenReturn(response);
         mockMvc.perform(post("/sweets")
                         .content(jsonMapper.writeValueAsString(requestBody))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -73,8 +77,8 @@ class SpringSweetControllerIntegrationTest {
                 .andExpect(header().exists("Location"))
                 .andExpect(header().string("Location", "/sweets/" + sweetId));
 
-        verify(sweetsEndPoints).create(any());
-        verifyNoMoreInteractions(sweetsEndPoints);
+        verify(adminSweetEndPoints).create(any());
+        verifyNoMoreInteractions(adminSweetEndPoints);
     }
 
     @Test
@@ -88,14 +92,15 @@ class SpringSweetControllerIntegrationTest {
                 Flavor.SWEET
         );
 
-        when(sweetsEndPoints.create(any())).thenReturn(response);
+        when(adminSweetEndPoints.create(any())).thenReturn(response);
         mockMvc.perform(post("/sweets")
                         .content(jsonMapper.writeValueAsString(requestBody))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict());
 
-        verify(sweetsEndPoints).create(any());
-        verifyNoMoreInteractions(sweetsEndPoints);
+        verify(adminSweetEndPoints).create(any());
+        verifyNoMoreInteractions(adminSweetEndPoints);
+        System.out.println("coucou");
     }
 
     @Test
@@ -109,15 +114,15 @@ class SpringSweetControllerIntegrationTest {
                 Flavor.SWEET
         );
 
-        when(sweetsEndPoints.create(any())).thenReturn(response);
+        when(adminSweetEndPoints.create(any())).thenReturn(response);
 
         mockMvc.perform(post("/sweets")
                         .content(jsonMapper.writeValueAsString(requestBody))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
 
-        verify(sweetsEndPoints).create(any());
-        verifyNoMoreInteractions(sweetsEndPoints);
+        verify(adminSweetEndPoints).create(any());
+        verifyNoMoreInteractions(adminSweetEndPoints);
     }
 
     @ParameterizedTest
@@ -130,14 +135,14 @@ class SpringSweetControllerIntegrationTest {
         var response = ResponseEntity.ok(responseBody);
         var jsonResponse = jsonMapper.writeValueAsString(responseBody);
 
-        when(sweetsEndPoints.retrievePublishedSweets()).thenReturn(response);
+        when(sweetEndPoints.retrievePublishedSweets()).thenReturn(response);
         mockMvc.perform(get("/sweets/published"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().string(jsonResponse));
 
-        verify(sweetsEndPoints).retrievePublishedSweets();
-        verifyNoMoreInteractions(sweetsEndPoints);
+        verify(sweetEndPoints).retrievePublishedSweets();
+        verifyNoMoreInteractions(sweetEndPoints);
     }
 
     @Test
@@ -146,14 +151,14 @@ class SpringSweetControllerIntegrationTest {
                 UUID.randomUUID().toString(),
                 Highlight.PROMOTED);
 
-        when(sweetsEndPoints.publish(any())).thenReturn(ResponseEntity.notFound().build());
+        when(adminSweetEndPoints.publish(any())).thenReturn(ResponseEntity.notFound().build());
         mockMvc.perform(put("/sweets/publish")
                         .content(jsonMapper.writeValueAsString(body))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
 
-        verify(sweetsEndPoints).publish(any());
-        verifyNoMoreInteractions(sweetsEndPoints);
+        verify(adminSweetEndPoints).publish(any());
+        verifyNoMoreInteractions(adminSweetEndPoints);
     }
 
     @Test
@@ -170,14 +175,14 @@ class SpringSweetControllerIntegrationTest {
         var requestBody = new PublishSweetRequest(sweetId.toString(), Highlight.PROMOTED);
         var response = ResponseEntity.ok(sweet);
 
-        when(sweetsEndPoints.publish(any())).thenReturn(response);
+        when(adminSweetEndPoints.publish(any())).thenReturn(response);
         mockMvc.perform(put("/sweets/publish")
                         .content(jsonMapper.writeValueAsString(requestBody))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        verify(sweetsEndPoints).publish(any());
-        verifyNoMoreInteractions(sweetsEndPoints);
+        verify(adminSweetEndPoints).publish(any());
+        verifyNoMoreInteractions(adminSweetEndPoints);
     }
 
     public static Stream<Sweets> provideSetOfSweets() {

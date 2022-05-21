@@ -1,5 +1,6 @@
 package fr.sweetiez.api.infrastructure.delivery;
 
+import fr.sweetiez.api.adapter.delivery.AdminSweetEndPoints;
 import fr.sweetiez.api.adapter.delivery.SweetEndPoints;
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
@@ -18,9 +19,9 @@ import java.util.Collection;
 @RequestMapping("/admin/sweets")
 public class SpringAdminSweetController {
 
-    private final SweetEndPoints sweetsEndPoints;
+    private final AdminSweetEndPoints sweetsEndPoints;
 
-    public SpringAdminSweetController(SweetEndPoints sweetsEndPoints) {
+    public SpringAdminSweetController(AdminSweetEndPoints sweetsEndPoints) {
         this.sweetsEndPoints = sweetsEndPoints;
     }
 

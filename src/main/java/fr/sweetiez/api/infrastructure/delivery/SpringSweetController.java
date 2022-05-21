@@ -1,16 +1,13 @@
 package fr.sweetiez.api.infrastructure.delivery;
 
 import fr.sweetiez.api.adapter.delivery.SweetEndPoints;
-import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
-import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
-import fr.sweetiez.api.core.sweets.models.responses.AdminDetailedSweetResponse;
-import fr.sweetiez.api.core.sweets.models.responses.AdminSweetSimpleResponse;
 import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
-import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
