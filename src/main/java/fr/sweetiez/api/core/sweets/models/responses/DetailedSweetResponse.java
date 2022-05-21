@@ -1,6 +1,6 @@
 package fr.sweetiez.api.core.sweets.models.responses;
 
-import fr.sweetiez.api.core.comments.models.Comment;
+import fr.sweetiez.api.core.evaluations.models.EvaluationResponse;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 
 import java.util.Collection;
@@ -11,18 +11,18 @@ public record DetailedSweetResponse(
         double price,
         String description,
         Collection<String> images,
-        double rating,
-        Collection<Comment> comments
+        Evaluation evaluation,
+        Collection<EvaluationResponse> comments
 )
 {
-    public DetailedSweetResponse(Sweet sweet, Collection<Comment> comments) {
+    public DetailedSweetResponse(Sweet sweet, Evaluation evaluation, Collection<EvaluationResponse> comments) {
         this(
                 sweet.id().value(),
                 sweet.name().value(),
                 sweet.price().value().doubleValue(),
                 sweet.details().description().content(),
                 sweet.details().images(),
-                sweet.details().score(),
+                evaluation,
                 comments
         );
     }

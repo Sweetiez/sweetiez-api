@@ -3,7 +3,7 @@ package fr.sweetiez.api.adapter.repository;
 import fr.sweetiez.api.adapter.shared.SweetMapper;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import fr.sweetiez.api.core.sweets.ports.SweetsWriter;
-import fr.sweetiez.api.infrastructure.repository.SweetRepository;
+import fr.sweetiez.api.infrastructure.repository.sweets.SweetRepository;
 
 public class SweetWriterAdapter implements SweetsWriter {
 

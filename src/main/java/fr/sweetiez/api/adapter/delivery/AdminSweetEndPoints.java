@@ -6,6 +6,7 @@ import fr.sweetiez.api.core.sweets.models.requests.UpdateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.responses.AdminDetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.AdminSweetSimpleResponse;
 import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
+import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import fr.sweetiez.api.core.sweets.services.SweetService;
 import fr.sweetiez.api.core.sweets.services.exceptions.InvalidFieldsException;
@@ -80,7 +81,7 @@ public class AdminSweetEndPoints {
         }
     }
 
-    public ResponseEntity<DetailedSweetResponse> addImage(String id, MultipartFile image) {
+    public ResponseEntity<SimpleSweetResponse> addImage(String id, MultipartFile image) {
         // Store the image in the minio bucket
         try {
             minioClient.putObject(PutObjectArgs.builder()

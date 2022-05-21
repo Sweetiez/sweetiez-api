@@ -6,7 +6,7 @@ import fr.sweetiez.api.core.sweets.models.sweet.SweetId;
 import fr.sweetiez.api.core.sweets.models.sweet.states.State;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweets;
 import fr.sweetiez.api.core.sweets.ports.SweetsReader;
-import fr.sweetiez.api.infrastructure.repository.SweetRepository;
+import fr.sweetiez.api.infrastructure.repository.sweets.SweetRepository;
 
 import java.util.Optional;
 import java.util.UUID;

@@ -8,6 +8,7 @@ import fr.sweetiez.api.core.sweets.models.requests.UpdateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.responses.AdminDetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.AdminSweetSimpleResponse;
 import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
+import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class SpringAdminSweetController {
     }
 
     @PostMapping("/{id}/image")
-    public ResponseEntity<DetailedSweetResponse> addImage(@PathVariable("id") String id, @RequestParam MultipartFile image) {
+    public ResponseEntity<SimpleSweetResponse> addImage(@PathVariable("id") String id, @RequestParam MultipartFile image) {
         return sweetsEndPoints.addImage(id, image);
     }
 
