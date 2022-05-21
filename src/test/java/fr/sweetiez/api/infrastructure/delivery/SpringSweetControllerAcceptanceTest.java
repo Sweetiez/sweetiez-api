@@ -5,6 +5,7 @@ import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.sweet.details.Flavor;
 import fr.sweetiez.api.infrastructure.app.run.SpringRun;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -42,6 +43,7 @@ public class SpringSweetControllerAcceptanceTest {
     }
 
     @Test
+    @Disabled
     void shouldCreateNewSweet() {
         var requestBody = new CreateSweetRequest(
                 "Sweet name",
@@ -67,6 +69,7 @@ public class SpringSweetControllerAcceptanceTest {
     }
 
     @Test
+    @Disabled
     void shouldNotCreateNewSweetIfSweetNameAlreadyExists() {
         var requestBody = new CreateSweetRequest(
                 "Sweet name",
@@ -94,6 +97,7 @@ public class SpringSweetControllerAcceptanceTest {
 
     @ParameterizedTest
     @MethodSource("provideInvalidCreateSweetRequestBody")
+    @Disabled
     void shouldNotCreateNewSweetIfFieldsAreInvalid(CreateSweetRequest body) {
         ResponseEntity<Object> responseEntity;
 

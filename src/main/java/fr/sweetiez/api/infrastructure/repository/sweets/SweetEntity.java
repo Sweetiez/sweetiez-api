@@ -1,4 +1,4 @@
-package fr.sweetiez.api.infrastructure.repository;
+package fr.sweetiez.api.infrastructure.repository.sweets;
 
 import fr.sweetiez.api.core.sweets.models.sweet.details.Flavor;
 import fr.sweetiez.api.core.sweets.models.sweet.states.Highlight;

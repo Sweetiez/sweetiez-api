@@ -8,7 +8,7 @@ import fr.sweetiez.api.core.sweets.models.sweet.details.Details;
 import fr.sweetiez.api.core.sweets.models.sweet.details.Name;
 import fr.sweetiez.api.core.sweets.models.sweet.details.Price;
 import fr.sweetiez.api.core.sweets.models.sweet.states.States;
-import fr.sweetiez.api.infrastructure.repository.SweetEntity;
+import fr.sweetiez.api.infrastructure.repository.sweets.SweetEntity;
 
 import java.util.List;
 import java.util.Set;

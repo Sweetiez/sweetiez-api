@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Collection;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 public class SweetEndPoints {
 
@@ -21,7 +20,7 @@ public class SweetEndPoints {
         var publishedSweets = sweetService.retrievePublishedSweets().content()
                 .stream()
                 .map(SimpleSweetResponse::new)
-                .collect(Collectors.toSet());
+                .toList();
 
         return ResponseEntity.ok(publishedSweets);
     }

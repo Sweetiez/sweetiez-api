@@ -3,6 +3,8 @@ package fr.sweetiez.api.infrastructure.repository;
 import fr.sweetiez.api.core.sweets.models.sweet.details.Flavor;
 import fr.sweetiez.api.core.sweets.models.sweet.states.Highlight;
 import fr.sweetiez.api.core.sweets.models.sweet.states.State;
+import fr.sweetiez.api.infrastructure.repository.sweets.SweetEntity;
+import fr.sweetiez.api.infrastructure.repository.sweets.SweetRepository;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
