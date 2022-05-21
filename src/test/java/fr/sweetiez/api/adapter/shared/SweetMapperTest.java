@@ -7,7 +7,7 @@ import fr.sweetiez.api.core.sweets.models.sweet.details.*;
 import fr.sweetiez.api.core.sweets.models.sweet.states.Highlight;
 import fr.sweetiez.api.core.sweets.models.sweet.states.State;
 import fr.sweetiez.api.core.sweets.models.sweet.states.States;
-import fr.sweetiez.api.infrastructure.repository.SweetEntity;
+import fr.sweetiez.api.infrastructure.repository.sweets.SweetEntity;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

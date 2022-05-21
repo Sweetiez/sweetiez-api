@@ -1,29 +1,34 @@
 package fr.sweetiez.api.core.sweets.services;
 
-import fr.sweetiez.api.core.comments.services.CommentService;
+import fr.sweetiez.api.core.evaluations.models.EvaluationResponse;
+import fr.sweetiez.api.core.evaluations.services.EvaluationService;
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
 import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
+import fr.sweetiez.api.core.sweets.models.responses.Evaluation;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import fr.sweetiez.api.core.sweets.models.sweet.SweetId;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweets;
+import fr.sweetiez.api.core.sweets.models.sweet.states.Highlight;
 import fr.sweetiez.api.core.sweets.ports.SweetsReader;
 import fr.sweetiez.api.core.sweets.ports.SweetsWriter;
 import fr.sweetiez.api.core.sweets.services.exceptions.InvalidFieldsException;
 import fr.sweetiez.api.core.sweets.services.exceptions.SweetAlreadyExistsException;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 public class SweetService {
 
     private final SweetsWriter writer;
     private final SweetsReader reader;
-    private final CommentService commentService;
+    private final EvaluationService evaluationService;
 
-    public SweetService(SweetsWriter writer, SweetsReader reader, CommentService commentService) {
+    public SweetService(SweetsWriter writer, SweetsReader reader, EvaluationService evaluationService) {
         this.writer = writer;
         this.reader = reader;
-        this.commentService = commentService;
+        this.evaluationService = evaluationService;
     }
 
     public Sweet createSweet(CreateSweetRequest sweet) {
@@ -57,13 +62,54 @@ public class SweetService {
     }
 
     public Sweets retrievePublishedSweets() {
-        return reader.findAllPublished();
+        var sweets = reader.findAllPublished();
+
+        var banner = sweets.content().stream()
+                .filter(sweet -> sweet.states().highlight().equals(Highlight.BANNER))
+                .toList();
+
+        var promoted = sweets.content().stream()
+                .filter(sweet -> sweet.states().highlight().equals(Highlight.PROMOTED))
+                .toList();
+
+        var common = sweets.content().stream()
+                .filter(sweet -> sweet.states().highlight().equals(Highlight.COMMON))
+                .toList();
+
+        var content = new LinkedList<>(banner);
+        content.addAll(promoted);
+        content.addAll(common);
+
+        return new Sweets(content);
     }
 
     public DetailedSweetResponse retrieveSweetDetails(String id) {
         var sweet = reader.findById(new SweetId(id)).orElseThrow();
-        var comments = commentService.retrieveCommentsBySubject(id);
+        var evaluations = evaluationService.retrieveAllBySubject(id);
+        var mark = evaluationService.computeTotalScore(evaluations);
+        var votes = new HashMap<Integer, Integer>();
 
-        return new DetailedSweetResponse(sweet, comments);
+        for(int i = 5; i >= 1; i--) {
+            var stars = i;
+            var voters =  evaluations.stream()
+                    .filter(evaluation -> evaluation.mark() == stars)
+                    .toList()
+                    .size();
+            var ratio = voters != 0 ? evaluations.size() / voters : 0;
+
+            votes.put(stars, ratio);
+        }
+
+        var evaluation = new Evaluation(mark, evaluations.size(), votes);
+        var comments = evaluations
+                .stream()
+                .map(eval -> new EvaluationResponse(
+                        eval.comment(),
+                        eval.voter().toString(),
+                        eval.subject(),
+                        eval.mark()))
+                .toList();
+
+        return new DetailedSweetResponse(sweet, evaluation, comments);
     }
 }

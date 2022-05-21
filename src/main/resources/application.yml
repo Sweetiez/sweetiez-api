@@ -25,3 +25,7 @@ logging:
     org:
       springframework:
         security: error
+
+security:
+  token:
+    secret: ${JWT_SECRET_TOKEN}
