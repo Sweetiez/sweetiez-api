@@ -11,3 +11,7 @@ spring:
     username: "sa"
     password: "sa"
     driver-class-name: org.h2.Driver
+
+security:
+  token:
+    secret: secret_jwt_token_test
