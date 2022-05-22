@@ -44,6 +44,8 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
         configuration.setAllowCredentials(false);
 
+        configuration.setExposedHeaders(List.of("Authorization"));
+
         configuration.addAllowedOrigin("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");

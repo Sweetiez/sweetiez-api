@@ -2,6 +2,7 @@ package fr.sweetiez.api.adapter.delivery;
 
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
+import fr.sweetiez.api.core.sweets.models.requests.UnPublishSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.UpdateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.responses.AdminDetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.AdminSweetSimpleResponse;
@@ -56,6 +57,16 @@ public class AdminSweetEndPoints {
     public ResponseEntity<Sweet> publish(PublishSweetRequest request) {
         try {
             var sweet = sweetService.publishSweet(request);
+            return ResponseEntity.ok(sweet);
+        }
+        catch (NoSuchElementException exception) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public ResponseEntity<Sweet> unPublish(UnPublishSweetRequest request) {
+        try {
+            var sweet = sweetService.unPublishSweet(request);
             return ResponseEntity.ok(sweet);
         }
         catch (NoSuchElementException exception) {

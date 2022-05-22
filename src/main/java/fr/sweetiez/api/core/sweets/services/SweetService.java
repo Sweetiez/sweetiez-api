@@ -4,6 +4,7 @@ import fr.sweetiez.api.core.evaluations.models.EvaluationResponse;
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
+import fr.sweetiez.api.core.sweets.models.requests.UnPublishSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.UpdateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.responses.*;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
@@ -57,6 +58,14 @@ public class SweetService {
         var sweetToPublish = reader.findById(new SweetId(request.id()))
                 .orElseThrow()
                 .publish(request.highlight());
+
+        return writer.save(sweetToPublish);
+    }
+
+    public Sweet unPublishSweet(UnPublishSweetRequest request) {
+        var sweetToPublish = reader.findById(new SweetId(request.id()))
+                .orElseThrow()
+                .unPublish();
 
         return writer.save(sweetToPublish);
     }

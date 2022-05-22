@@ -4,6 +4,7 @@ import fr.sweetiez.api.adapter.delivery.AdminSweetEndPoints;
 import fr.sweetiez.api.adapter.delivery.SweetEndPoints;
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
+import fr.sweetiez.api.core.sweets.models.requests.UnPublishSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.UpdateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.responses.AdminDetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.AdminSweetSimpleResponse;
@@ -39,6 +40,11 @@ public class SpringAdminSweetController {
     @PutMapping("/publish")
     public ResponseEntity<Sweet> publishSweet(@RequestBody PublishSweetRequest request) {
         return sweetsEndPoints.publish(request);
+    }
+
+    @DeleteMapping("/publish")
+    public ResponseEntity<Sweet> unPublishSweet(@RequestBody UnPublishSweetRequest request) {
+        return sweetsEndPoints.unPublish(request);
     }
 
     @PostMapping("/{id}/image")
