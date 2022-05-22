@@ -58,6 +58,14 @@ public record Sweet(
         return this;
     }
 
+    public Sweet unPublish() {
+        if (isValid()) {
+            var states = new States(this.states.highlight(), State.NON_PUBLISHED);
+            return new Sweet(id, name, price, states, details);
+        }
+        return this;
+    }
+
     public boolean isValid() {
         return id.isValid()
                 && name.isValid()

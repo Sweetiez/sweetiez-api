@@ -4,6 +4,7 @@ import fr.sweetiez.api.core.ingredients.models.Ingredient;
 import fr.sweetiez.api.core.ingredients.models.Ingredients;
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
+import fr.sweetiez.api.core.sweets.models.requests.UnPublishSweetRequest;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import fr.sweetiez.api.core.sweets.models.sweet.SweetId;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweets;
@@ -147,6 +148,51 @@ class SweetServiceTest {
         assertThrowsExactly(
                 NoSuchElementException.class,
                 () -> sut.publishSweet(request));
+
+        verify(reader).findById(any());
+        verifyNoMoreInteractions(reader);
+        verifyNoInteractions(writer);
+    }
+
+    @Test
+    void shouldUnPublishSweetWhenSweetIdExists() {
+        var createRequest = new CreateSweetRequest(
+                "Sweet name",
+                BigDecimal.valueOf(1.99),
+                Set.of(new Ingredient("Ingredient name", Set.of())),
+                "Sweet description",
+                Flavor.SWEET
+        );
+        var sweetId = new SweetId(UUID.randomUUID().toString());
+        var sweet = new Sweet(sweetId, createRequest);
+        var publishRequest = new UnPublishSweetRequest(sweetId.value());
+
+        when(reader.findById(any())).thenReturn(Optional.of(sweet));
+        when(writer.save(any())).thenReturn(sweet);
+
+        sut.unPublishSweet(publishRequest);
+        var sweetArgumentCaptor = ArgumentCaptor.forClass(Sweet.class);
+
+        verify(reader).findById(any());
+        verifyNoMoreInteractions(reader);
+        verify(writer).save(sweetArgumentCaptor.capture());
+        verifyNoMoreInteractions(writer);
+
+        var capturedSweet = sweetArgumentCaptor.getValue();
+
+        assertEquals(State.NON_PUBLISHED, capturedSweet.states().state());
+    }
+
+    @Test
+    void shouldNotUnPublishSweetWhenSweetIdDoesNotExist() {
+        var sweetId = new SweetId(UUID.randomUUID().toString());
+        var request = new UnPublishSweetRequest(sweetId.value());
+
+        when(reader.findById(any())).thenReturn(Optional.empty());
+
+        assertThrowsExactly(
+                NoSuchElementException.class,
+                () -> sut.unPublishSweet(request));
 
         verify(reader).findById(any());
         verifyNoMoreInteractions(reader);
