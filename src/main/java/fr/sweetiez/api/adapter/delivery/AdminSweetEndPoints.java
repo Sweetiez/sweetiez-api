@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.net.URI;
 import java.util.Collection;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class AdminSweetEndPoints {
@@ -93,11 +94,12 @@ public class AdminSweetEndPoints {
     }
 
     public ResponseEntity<SimpleSweetResponse> addImage(String id, MultipartFile image) {
+        var imageName = String.format("sweet_%s_%s", image.getOriginalFilename(), UUID.randomUUID());
         // Store the image in the minio bucket
         try {
             minioClient.putObject(PutObjectArgs.builder()
                     .bucket(bucketName)
-                    .object(image.getOriginalFilename())
+                    .object(imageName)
                     .stream(image.getInputStream(), image.getSize(), -1)
                     .build());
         } catch (Exception e) {
@@ -110,7 +112,7 @@ public class AdminSweetEndPoints {
                     GetPresignedObjectUrlArgs.builder()
                             .method(Method.DELETE)
                             .bucket(bucketName)
-                            .object(image.getOriginalFilename())
+                            .object(imageName)
                             .build());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("Error", "Error retrieving file").build();
