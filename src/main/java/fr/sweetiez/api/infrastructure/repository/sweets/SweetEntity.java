@@ -42,6 +42,7 @@ public class SweetEntity {
     @Column(nullable = false)
     private final Flavor flavor;
 
+    @Column(columnDefinition = "text")
     private String images;
 
     public SweetEntity() {
