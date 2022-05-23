@@ -9,6 +9,7 @@ import fr.sweetiez.api.core.sweets.models.sweet.states.State;
 import fr.sweetiez.api.core.sweets.models.sweet.states.States;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public record Sweet(
         SweetId id,
@@ -76,6 +77,11 @@ public record Sweet(
 
     public Sweet addImage(String imageUrl) {
         var newDetails = details.addImage(imageUrl);
+        return new Sweet(id, name, price, states, newDetails);
+    }
+
+    public Sweet deleteImage(String imageUrl) {
+        var newDetails = details.deleteImage(imageUrl);
         return new Sweet(id, name, price, states, newDetails);
     }
 }

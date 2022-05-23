@@ -4,6 +4,7 @@ import fr.sweetiez.api.core.ingredients.models.Ingredients;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public record Details(Description description, Flavor flavor, Collection<String> images, Ingredients ingredients, double score) {
     public boolean isValid() {
@@ -17,5 +18,13 @@ public record Details(Description description, Flavor flavor, Collection<String>
         }
         imageList.add(imageUrl);
         return new Details(this.description, this.flavor, imageList, this.ingredients, this.score);
+    }
+
+    public Details deleteImage(String imageUrl) {
+        var updatedImages = images.stream()
+                .filter(image -> !image.equals(imageUrl))
+                .collect(Collectors.toSet());
+
+        return new Details(this.description, this.flavor, updatedImages, this.ingredients, this.score);
     }
 }

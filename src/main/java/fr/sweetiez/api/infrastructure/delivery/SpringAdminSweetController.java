@@ -2,10 +2,7 @@ package fr.sweetiez.api.infrastructure.delivery;
 
 import fr.sweetiez.api.adapter.delivery.AdminSweetEndPoints;
 import fr.sweetiez.api.adapter.delivery.SweetEndPoints;
-import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
-import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
-import fr.sweetiez.api.core.sweets.models.requests.UnPublishSweetRequest;
-import fr.sweetiez.api.core.sweets.models.requests.UpdateSweetRequest;
+import fr.sweetiez.api.core.sweets.models.requests.*;
 import fr.sweetiez.api.core.sweets.models.responses.AdminDetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.AdminSweetSimpleResponse;
 import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
@@ -50,6 +47,11 @@ public class SpringAdminSweetController {
     @PostMapping("/{id}/image")
     public ResponseEntity<SimpleSweetResponse> addImage(@PathVariable("id") String id, @RequestParam MultipartFile image) {
         return sweetsEndPoints.addImage(id, image);
+    }
+
+    @DeleteMapping("/{id}/image")
+    public ResponseEntity<SimpleSweetResponse> deleteImage(@PathVariable("id") String id, @RequestBody DeleteImageRequest request) {
+        return sweetsEndPoints.deleteImage(id, request);
     }
 
     @GetMapping("/{id}")
