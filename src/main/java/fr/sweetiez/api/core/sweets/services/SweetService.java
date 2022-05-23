@@ -2,10 +2,7 @@ package fr.sweetiez.api.core.sweets.services;
 
 import fr.sweetiez.api.core.evaluations.models.EvaluationResponse;
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
-import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
-import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
-import fr.sweetiez.api.core.sweets.models.requests.UnPublishSweetRequest;
-import fr.sweetiez.api.core.sweets.models.requests.UpdateSweetRequest;
+import fr.sweetiez.api.core.sweets.models.requests.*;
 import fr.sweetiez.api.core.sweets.models.responses.*;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import fr.sweetiez.api.core.sweets.models.sweet.SweetId;
@@ -144,5 +141,11 @@ public class SweetService {
         var updated = writer.save(updatedSweet);
 
         return new AdminDetailedSweetResponse(updated);
+    }
+
+    public SimpleSweetResponse adminDeleteImageFromSweet(String id, DeleteImageRequest request) {
+        var sweet = reader.findById(new SweetId(id)).orElseThrow();
+
+        return new SimpleSweetResponse(writer.save(sweet.deleteImage(request.imageUrl())));
     }
 }

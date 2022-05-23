@@ -1,12 +1,8 @@
 package fr.sweetiez.api.adapter.delivery;
 
-import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
-import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
-import fr.sweetiez.api.core.sweets.models.requests.UnPublishSweetRequest;
-import fr.sweetiez.api.core.sweets.models.requests.UpdateSweetRequest;
+import fr.sweetiez.api.core.sweets.models.requests.*;
 import fr.sweetiez.api.core.sweets.models.responses.AdminDetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.AdminSweetSimpleResponse;
-import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import fr.sweetiez.api.core.sweets.services.SweetService;
@@ -15,6 +11,7 @@ import fr.sweetiez.api.core.sweets.services.exceptions.SweetAlreadyExistsExcepti
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.RemoveObjectArgs;
 import io.minio.http.Method;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -131,4 +128,22 @@ public class AdminSweetEndPoints {
         }
     }
 
+    public ResponseEntity<SimpleSweetResponse> deleteImage(String id, DeleteImageRequest request) {
+
+        try {
+            var objectName = request.imageUrl().substring(request.imageUrl().lastIndexOf('/') + 1);
+            System.out.println(objectName);
+            minioClient.removeObject(
+                    RemoveObjectArgs.builder()
+                            .bucket(bucketName)
+                            .object(objectName)
+                            .build());
+
+            return ResponseEntity.ok(sweetService.adminDeleteImageFromSweet(id, request));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().header("Error", "Error while deleting file").build();
+        }
+
+
+    }
 }
