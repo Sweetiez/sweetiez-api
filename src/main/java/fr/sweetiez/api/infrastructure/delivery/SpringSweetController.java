@@ -1,6 +1,7 @@
 package fr.sweetiez.api.infrastructure.delivery;
 
 import fr.sweetiez.api.adapter.delivery.SweetEndPoints;
+import fr.sweetiez.api.core.sweets.models.responses.BannerSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,11 @@ public class SpringSweetController {
     @GetMapping("/published")
     public ResponseEntity<Collection<SimpleSweetResponse>> retrievePublishedSweets() {
         return sweetsEndPoints.retrievePublishedSweets();
+    }
+
+    @GetMapping("/banner")
+    public ResponseEntity<Collection<BannerSweetResponse>> retrieveBannerSweets() {
+        return sweetsEndPoints.retrieveBannerSweets();
     }
 
     @GetMapping("/{id}")

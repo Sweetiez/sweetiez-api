@@ -1,7 +1,9 @@
 package fr.sweetiez.api.adapter.delivery;
 
+import fr.sweetiez.api.core.sweets.models.responses.BannerSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
+import fr.sweetiez.api.core.sweets.models.sweet.states.Highlight;
 import fr.sweetiez.api.core.sweets.services.SweetService;
 import org.springframework.http.ResponseEntity;
 
@@ -34,4 +36,13 @@ public class SweetEndPoints {
         }
     }
 
+    public ResponseEntity<Collection<BannerSweetResponse>> retrieveBannerSweets() {
+        var bannerSweets = sweetService.retrievePublishedSweets().content()
+                .stream()
+                .filter(sweet -> sweet.states().highlight() == Highlight.BANNER)
+                .map(BannerSweetResponse::new)
+                .toList();
+
+        return ResponseEntity.ok(bannerSweets);
+    }
 }
