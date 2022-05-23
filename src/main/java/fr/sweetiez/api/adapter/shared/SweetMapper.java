@@ -27,7 +27,7 @@ public class SweetMapper {
                 sweet.details().flavor(),
                 sweet.details().images()
                         .stream()
-                        .map(image -> image.concat(";"))
+                        .map(image -> image.isEmpty() ? image : image.concat(";"))
                         .reduce("", String::concat)
         );
     }

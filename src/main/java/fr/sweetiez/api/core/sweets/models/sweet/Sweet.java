@@ -9,7 +9,6 @@ import fr.sweetiez.api.core.sweets.models.sweet.states.State;
 import fr.sweetiez.api.core.sweets.models.sweet.states.States;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public record Sweet(
         SweetId id,
