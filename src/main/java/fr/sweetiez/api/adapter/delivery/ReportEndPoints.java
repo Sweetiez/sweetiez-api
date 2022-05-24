@@ -1,12 +1,14 @@
 package fr.sweetiez.api.adapter.delivery;
 
 import fr.sweetiez.api.core.customers.services.exceptions.CustomerDoesNotExistException;
+import fr.sweetiez.api.core.evaluations.models.Report;
 import fr.sweetiez.api.core.evaluations.models.ReportEvaluationRequest;
 import fr.sweetiez.api.core.evaluations.services.EvaluationDoesNotExistException;
 import fr.sweetiez.api.core.reports.services.ReportService;
 import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
+import java.util.Collection;
 
 public class ReportEndPoints {
 
@@ -27,5 +29,9 @@ public class ReportEndPoints {
             exception.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    public ResponseEntity<Collection<Report>> retrieveAll() {
+        return ResponseEntity.ok(service.retrieveAll());
     }
 }

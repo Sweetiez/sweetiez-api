@@ -11,6 +11,7 @@ import fr.sweetiez.api.core.evaluations.services.EvaluationService;
 import fr.sweetiez.api.core.reports.ports.ReportRepository;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.UUID;
 
 public class ReportService {
@@ -42,5 +43,9 @@ public class ReportService {
                 LocalDateTime.now());
 
         return reportRepository.save(reportedEvaluation);
+    }
+
+    public Collection<Report> retrieveAll() {
+        return reportRepository.retrieveAll();
     }
 }

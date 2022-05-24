@@ -4,6 +4,8 @@ import fr.sweetiez.api.adapter.shared.ReportMapper;
 import fr.sweetiez.api.core.evaluations.models.Report;
 import fr.sweetiez.api.core.reports.ports.ReportRepository;
 
+import java.util.Collection;
+
 public class ReportRepositoryAdapter implements ReportRepository {
 
     private final fr.sweetiez.api.infrastructure.repository.reports.ReportRepository reportRepository;
@@ -17,5 +19,12 @@ public class ReportRepositoryAdapter implements ReportRepository {
     public Report save(Report report) {
         var entity = reportRepository.save(reportMapper.toEntity(report));
         return reportMapper.toDto(entity);
+    }
+
+    public Collection<Report> retrieveAll() {
+        return reportRepository.findAll()
+                .stream()
+                .map(reportMapper::toDto)
+                .toList();
     }
 }
