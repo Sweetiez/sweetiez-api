@@ -39,4 +39,8 @@ public class AuthenticationService {
 
         return customerService.save(customer);
     }
+
+    public Account findByUsername(String username) {
+        return repository.findByUsername(username).orElseThrow();
+    }
 }
