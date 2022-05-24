@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -35,9 +36,11 @@ public class AuthenticationEndPoints {
 
             Authentication authentication = authenticationManager.getObject().authenticate(authenticationToken);
 
-            String token = tokenProvider.createToken(authentication);
+            String accessToken = tokenProvider.createAccessToken(authentication);
+            String refreshToken = tokenProvider.createRefreshToken(authentication);
             HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.add(AUTHORIZATION, "Bearer " + token);
+            httpHeaders.add(AUTHORIZATION, "Bearer " + accessToken);
+            httpHeaders.add("refresh-token", "Bearer " + refreshToken);
 
             return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
         }
@@ -52,6 +55,25 @@ public class AuthenticationEndPoints {
             return ResponseEntity.created(URI.create("/customers/" + customer.id().value())).build();
         }
         catch (AccountAlreadyExistsException exception) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    public ResponseEntity<Object> refreshToken(HttpServletRequest request) {
+        try {
+            var refreshToken = request.getHeader(AUTHORIZATION).substring("Bearer ".length());
+            var claims = tokenProvider.parseToken(refreshToken);
+            var username = claims.getBody().getSubject();
+            var account = authenticationService.findByUsername(username);
+
+            String accessToken = tokenProvider.createAccessToken(account);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(AUTHORIZATION, "Bearer " + accessToken);
+            httpHeaders.add("refresh-token", "Bearer " + refreshToken);
+
+            return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
+        }
+        catch (Exception exception) {
             return ResponseEntity.badRequest().build();
         }
     }
