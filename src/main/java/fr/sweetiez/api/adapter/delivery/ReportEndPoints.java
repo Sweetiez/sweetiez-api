@@ -27,7 +27,6 @@ public class ReportEndPoints {
                     .build();
         }
         catch (CustomerDoesNotExistException | EvaluationDoesNotExistException exception) {
-            exception.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
