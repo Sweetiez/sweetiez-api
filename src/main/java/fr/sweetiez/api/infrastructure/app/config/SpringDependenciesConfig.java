@@ -139,7 +139,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public AuthenticationService authenticationService() {
-        return new AuthenticationService(authenticationRepository(), customerService());
+        return new AuthenticationService(authenticationRepository(), customerService(), tokenProvider, authenticationManager);
     }
 
     @Bean
@@ -170,7 +170,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public AuthenticationEndPoints authenticationEndPoints() {
-        return new AuthenticationEndPoints(tokenProvider, authenticationManager, authenticationService());
+        return new AuthenticationEndPoints(authenticationService());
     }
 
     @Bean
