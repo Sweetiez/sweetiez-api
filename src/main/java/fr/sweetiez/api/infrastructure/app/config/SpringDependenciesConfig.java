@@ -25,6 +25,7 @@ import fr.sweetiez.api.infrastructure.repository.accounts.AccountRepository;
 import fr.sweetiez.api.infrastructure.repository.accounts.RoleRepository;
 import fr.sweetiez.api.infrastructure.repository.customers.CustomerRepository;
 import fr.sweetiez.api.infrastructure.repository.evaluations.EvaluationRepository;
+import fr.sweetiez.api.infrastructure.repository.evaluations.ReportRepository;
 import fr.sweetiez.api.infrastructure.repository.sweets.SweetRepository;
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,6 +46,7 @@ public class SpringDependenciesConfig {
 
     private final SweetRepository sweetRepository;
     private final EvaluationRepository evaluationRepository;
+    private final ReportRepository reportRepository;
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
@@ -53,12 +55,13 @@ public class SpringDependenciesConfig {
     private final AuthenticationManagerBuilder authenticationManager;
 
     public SpringDependenciesConfig(SweetRepository sweetRepository, EvaluationRepository evaluationRepository,
-                                    CustomerRepository customerRepository, AccountRepository accountRepository,
-                                    RoleRepository roleRepository, TokenProvider tokenProvider,
-                                    AuthenticationManagerBuilder authenticationManager)
+                                    ReportRepository reportRepository, CustomerRepository customerRepository,
+                                    AccountRepository accountRepository, RoleRepository roleRepository,
+                                    TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManager)
     {
         this.sweetRepository = sweetRepository;
         this.evaluationRepository = evaluationRepository;
+        this.reportRepository = reportRepository;
         this.customerRepository = customerRepository;
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
@@ -78,7 +81,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public EvaluationWriter evaluationWriter() {
-        return new EvaluationWriterAdapter(evaluationRepository, evaluationMapper());
+        return new EvaluationWriterAdapter(evaluationRepository, reportRepository, evaluationMapper());
     }
 
     @Bean
