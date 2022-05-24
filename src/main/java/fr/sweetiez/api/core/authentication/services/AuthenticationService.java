@@ -1,23 +1,58 @@
 package fr.sweetiez.api.core.authentication.services;
 
 import fr.sweetiez.api.core.authentication.models.Account;
+import fr.sweetiez.api.core.authentication.models.LoginRequest;
 import fr.sweetiez.api.core.authentication.models.SubscriptionRequest;
 import fr.sweetiez.api.core.authentication.ports.AuthenticationRepository;
 import fr.sweetiez.api.core.customers.models.Customer;
 import fr.sweetiez.api.core.customers.services.CustomerService;
+import fr.sweetiez.api.infrastructure.app.security.TokenProvider;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 public class AuthenticationService {
 
     private final AuthenticationRepository repository;
     private final CustomerService customerService;
 
-    public AuthenticationService(AuthenticationRepository repository, CustomerService customerService) {
+    private final TokenProvider tokenProvider;
+    private final AuthenticationManagerBuilder authenticationManager;
+
+    public AuthenticationService(AuthenticationRepository repository, CustomerService customerService,
+                                 TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManager) {
         this.repository = repository;
         this.customerService = customerService;
+        this.tokenProvider = tokenProvider;
+        this.authenticationManager = authenticationManager;
+    }
+
+    public HttpHeaders login(LoginRequest request) {
+        var authenticationToken = new UsernamePasswordAuthenticationToken(request.username(), request.password());
+        Authentication authentication = authenticationManager.getObject().authenticate(authenticationToken);
+
+        var account = repository.findByUsername(request.username())
+                .orElseThrow(() -> new AuthenticationServiceException("Account not found"));
+
+        var customer = customerService.findByAccountId(account.id());
+
+        String accessToken = tokenProvider.createAccessToken(authentication, customer.firstName());
+        String refreshToken = tokenProvider.createRefreshToken(authentication, customer.firstName());
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(AUTHORIZATION, "Bearer " + accessToken);
+        httpHeaders.add("refresh-token", "Bearer " + refreshToken);
+
+        return httpHeaders;
     }
 
     public Customer register(SubscriptionRequest request) {
@@ -38,5 +73,23 @@ public class AuthenticationService {
                 Optional.of(createdAccount));
 
         return customerService.save(customer);
+    }
+
+    public HttpHeaders refreshToken(HttpServletRequest request) {
+        var refreshToken = request.getHeader(AUTHORIZATION).substring("Bearer ".length());
+        var claims = tokenProvider.parseToken(refreshToken);
+        var username = claims.getBody().getSubject();
+
+        var account = repository.findByUsername(username)
+                .orElseThrow(() -> new AuthenticationServiceException("Account not found"));
+
+        var user = customerService.findByAccountId(account.id());
+        String accessToken = tokenProvider.createAccessToken(account, user.firstName());
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(AUTHORIZATION, "Bearer " + accessToken);
+        httpHeaders.add("refresh-token", "Bearer " + refreshToken);
+
+        return httpHeaders;
     }
 }

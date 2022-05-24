@@ -5,6 +5,8 @@ import fr.sweetiez.api.core.customers.models.CustomerId;
 import fr.sweetiez.api.core.customers.ports.CustomerReader;
 import fr.sweetiez.api.core.customers.ports.CustomerWriter;
 
+import java.util.UUID;
+
 public class CustomerService {
 
     private final CustomerReader reader;
@@ -21,5 +23,9 @@ public class CustomerService {
 
     public Customer save(Customer customer) {
         return writer.save(customer);
+    }
+
+    public Customer findByAccountId(UUID accountId) {
+        return reader.findByAccountId(accountId).orElseThrow();
     }
 }

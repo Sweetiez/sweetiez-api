@@ -1,5 +1,6 @@
 package fr.sweetiez.api.infrastructure.app.security;
 
+import fr.sweetiez.api.core.authentication.models.Account;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class TokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
+    private static final String NAME_KEY = "name";
     private final long tokenValidityInMilliseconds = Duration.ofHours(5).getSeconds() * 1000;
     private final byte[] secret;
 
@@ -28,17 +30,52 @@ public class TokenProvider {
         this.secret = secret.toString().getBytes();
     }
 
-    public String createToken(Authentication authentication) {
+    public String createAccessToken(Authentication authentication, String name) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
         long now = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        Date validity = new Date(now + this.tokenValidityInMilliseconds);
+        Date validity = new Date(now + tokenValidityInMilliseconds);
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
+                .claim(NAME_KEY, name)
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .setExpiration(validity)
+                .compact();
+    }
+
+    public String createAccessToken(Account account, String name) {
+        String authorities = account.roles().stream()
+                .map(role -> "ROLE_" + role.name().toUpperCase())
+                .collect(Collectors.joining(","));
+
+        long now = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        Date validity = new Date(now + tokenValidityInMilliseconds);
+
+        return Jwts.builder()
+                .setSubject(account.username())
+                .claim(AUTHORITIES_KEY, authorities)
+                .claim(NAME_KEY, name)
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .setExpiration(validity)
+                .compact();
+    }
+
+    public String createRefreshToken(Authentication authentication, String name) {
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        long now = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        Date validity = new Date(now + Duration.ofDays(20).getSeconds() * 1000);
+
+        return Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .claim(NAME_KEY, name)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .setExpiration(validity)
                 .compact();
@@ -67,7 +104,7 @@ public class TokenProvider {
         }
     }
 
-    private Jws<Claims> parseToken(String authToken) {
+    public Jws<Claims> parseToken(String authToken) {
         return Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(authToken);

@@ -22,4 +22,8 @@ public class CustomerReaderAdapter implements CustomerReader {
         return repository.findById(UUID.fromString(customerId.value()))
                 .map(mapper::toDto);
     }
+
+    public Optional<Customer> findByAccountId(UUID accountId) {
+        return repository.findByAccountId(accountId).map(mapper::toDto);
+    }
 }
