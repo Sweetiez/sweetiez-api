@@ -1,5 +1,6 @@
 package fr.sweetiez.api.infrastructure.app.security;
 
+import fr.sweetiez.api.core.authentication.models.Account;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,13 +29,45 @@ public class TokenProvider {
         this.secret = secret.toString().getBytes();
     }
 
-    public String createToken(Authentication authentication) {
+    public String createAccessToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
         long now = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        Date validity = new Date(now + this.tokenValidityInMilliseconds);
+        Date validity = new Date(now + tokenValidityInMilliseconds);
+
+        return Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .setExpiration(validity)
+                .compact();
+    }
+
+    public String createAccessToken(Account account) {
+        String authorities = account.roles().stream()
+                .map(role -> "ROLE_" + role.name().toUpperCase())
+                .collect(Collectors.joining(","));
+
+        long now = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        Date validity = new Date(now + tokenValidityInMilliseconds);
+
+        return Jwts.builder()
+                .setSubject(account.username())
+                .claim(AUTHORITIES_KEY, authorities)
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .setExpiration(validity)
+                .compact();
+    }
+
+    public String createRefreshToken(Authentication authentication) {
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        long now = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        Date validity = new Date(now + Duration.ofDays(20).getSeconds() * 1000);
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
@@ -67,7 +100,7 @@ public class TokenProvider {
         }
     }
 
-    private Jws<Claims> parseToken(String authToken) {
+    public Jws<Claims> parseToken(String authToken) {
         return Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(authToken);
