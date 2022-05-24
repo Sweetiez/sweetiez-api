@@ -1,4 +1,4 @@
-package fr.sweetiez.api.infrastructure.repository.evaluations;
+package fr.sweetiez.api.infrastructure.repository.reports;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

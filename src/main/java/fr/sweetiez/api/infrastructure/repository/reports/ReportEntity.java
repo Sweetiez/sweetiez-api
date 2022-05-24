@@ -1,4 +1,4 @@
-package fr.sweetiez.api.infrastructure.repository.evaluations;
+package fr.sweetiez.api.infrastructure.repository.reports;
 
 import org.hibernate.annotations.CreationTimestamp;
 

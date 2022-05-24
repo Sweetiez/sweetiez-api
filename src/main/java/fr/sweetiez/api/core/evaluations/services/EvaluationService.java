@@ -3,15 +3,12 @@ package fr.sweetiez.api.core.evaluations.services;
 import fr.sweetiez.api.core.customers.models.CustomerId;
 import fr.sweetiez.api.core.customers.services.CustomerService;
 import fr.sweetiez.api.core.customers.services.exceptions.CustomerDoesNotExistException;
-import fr.sweetiez.api.core.evaluations.models.Report;
 import fr.sweetiez.api.core.evaluations.models.CreateEvaluationRequest;
 import fr.sweetiez.api.core.evaluations.models.Evaluation;
 import fr.sweetiez.api.core.evaluations.models.EvaluationId;
-import fr.sweetiez.api.core.evaluations.models.ReportEvaluationRequest;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationReader;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationWriter;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -57,22 +54,7 @@ public class EvaluationService {
         return sum / evaluations.size();
     }
 
-    public Report report(ReportEvaluationRequest request) {
-        if (!customerService.exists(new CustomerId(request.reporterId()))) {
-            throw new CustomerDoesNotExistException();
-        }
-
-        if (!reader.exists(new EvaluationId(request.evaluationId()))) {
-            throw new EvaluationDoesNotExistException();
-        }
-
-        var reportedEvaluation = new Report(
-                null,
-                UUID.fromString(request.reporterId()),
-                UUID.fromString(request.evaluationId()),
-                request.reason(),
-                LocalDateTime.now());
-
-        return writer.save(reportedEvaluation);
+    public boolean exists(EvaluationId id) {
+        return reader.exists(id);
     }
 }
