@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class TokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
+    private static final String NAME_KEY = "name";
     private final long tokenValidityInMilliseconds = Duration.ofHours(5).getSeconds() * 1000;
     private final byte[] secret;
 
@@ -29,7 +30,7 @@ public class TokenProvider {
         this.secret = secret.toString().getBytes();
     }
 
-    public String createAccessToken(Authentication authentication) {
+    public String createAccessToken(Authentication authentication, String name) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -40,12 +41,13 @@ public class TokenProvider {
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
+                .claim(NAME_KEY, name)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .setExpiration(validity)
                 .compact();
     }
 
-    public String createAccessToken(Account account) {
+    public String createAccessToken(Account account, String name) {
         String authorities = account.roles().stream()
                 .map(role -> "ROLE_" + role.name().toUpperCase())
                 .collect(Collectors.joining(","));
@@ -56,12 +58,13 @@ public class TokenProvider {
         return Jwts.builder()
                 .setSubject(account.username())
                 .claim(AUTHORITIES_KEY, authorities)
+                .claim(NAME_KEY, name)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .setExpiration(validity)
                 .compact();
     }
 
-    public String createRefreshToken(Authentication authentication) {
+    public String createRefreshToken(Authentication authentication, String name) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -72,6 +75,7 @@ public class TokenProvider {
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
+                .claim(NAME_KEY, name)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .setExpiration(validity)
                 .compact();
