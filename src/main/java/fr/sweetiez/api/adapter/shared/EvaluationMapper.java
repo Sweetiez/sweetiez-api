@@ -1,8 +1,10 @@
 package fr.sweetiez.api.adapter.shared;
 
+import fr.sweetiez.api.core.evaluations.models.Report;
 import fr.sweetiez.api.core.evaluations.models.Evaluation;
 import fr.sweetiez.api.core.evaluations.models.EvaluationId;
 import fr.sweetiez.api.infrastructure.repository.evaluations.EvaluationEntity;
+import fr.sweetiez.api.infrastructure.repository.evaluations.ReportEntity;
 
 import java.util.UUID;
 
@@ -26,6 +28,26 @@ public class EvaluationMapper {
                 entity.getAuthor(),
                 entity.getSubject(),
                 entity.getMark().doubleValue()
+        );
+    }
+
+    public ReportEntity toEntity(Report report) {
+        return new ReportEntity(
+                report.id(),
+                report.reporterId(),
+                report.evaluationId(),
+                report.reason(),
+                report.creationDate()
+        );
+    }
+
+    public Report toDto(ReportEntity entity) {
+        return new Report(
+                entity.getId(),
+                entity.getReporterId(),
+                entity.getEvaluationId(),
+                entity.getReason(),
+                entity.getCreated()
         );
     }
 }
