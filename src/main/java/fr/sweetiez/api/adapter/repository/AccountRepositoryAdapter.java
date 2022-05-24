@@ -7,6 +7,8 @@ import fr.sweetiez.api.core.authentication.ports.AuthenticationRepository;
 import fr.sweetiez.api.infrastructure.repository.accounts.AccountRepository;
 import fr.sweetiez.api.infrastructure.repository.accounts.RoleRepository;
 
+import java.util.Optional;
+
 public class AccountRepositoryAdapter implements AuthenticationRepository {
 
     private final AccountRepository accountRepository;
@@ -30,5 +32,10 @@ public class AccountRepositoryAdapter implements AuthenticationRepository {
 
     public Role getUserRole() {
         return mapper.toDto(roleRepository.findByName("USER"));
+    }
+
+    public Optional<Account> findByUsername(String username) {
+        return accountRepository.findByUsername(username)
+                .map(mapper::toDto);
     }
 }
