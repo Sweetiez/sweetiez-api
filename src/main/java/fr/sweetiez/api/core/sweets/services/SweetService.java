@@ -17,6 +17,7 @@ import fr.sweetiez.api.core.sweets.services.exceptions.SweetAlreadyExistsExcepti
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class SweetService {
@@ -108,6 +109,7 @@ public class SweetService {
         var comments = evaluations
                 .stream()
                 .map(eval -> new EvaluationResponse(
+                        UUID.fromString(eval.id().value()),
                         eval.comment(),
                         eval.voter().toString(),
                         eval.subject(),
