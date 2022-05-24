@@ -7,6 +7,6 @@ import java.util.Collection;
 import java.util.UUID;
 
 @Repository
-public interface EvaluationRepository extends JpaRepository<EvaluationEntity, Long> {
+public interface EvaluationRepository extends JpaRepository<EvaluationEntity, UUID> {
     Collection<EvaluationEntity> findAllBySubject(UUID subject);
 }

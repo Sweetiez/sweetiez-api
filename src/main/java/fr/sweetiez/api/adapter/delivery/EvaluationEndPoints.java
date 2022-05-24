@@ -1,8 +1,8 @@
 package fr.sweetiez.api.adapter.delivery;
 
+import fr.sweetiez.api.core.customers.services.exceptions.CustomerDoesNotExistException;
 import fr.sweetiez.api.core.evaluations.models.CreateEvaluationRequest;
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
-import fr.sweetiez.api.core.customers.services.exceptions.CustomerDoesNotExistException;
 import org.springframework.http.ResponseEntity;
 
 import java.net.URI;

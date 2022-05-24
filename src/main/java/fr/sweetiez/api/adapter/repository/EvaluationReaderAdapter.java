@@ -2,6 +2,7 @@ package fr.sweetiez.api.adapter.repository;
 
 import fr.sweetiez.api.adapter.shared.EvaluationMapper;
 import fr.sweetiez.api.core.evaluations.models.Evaluation;
+import fr.sweetiez.api.core.evaluations.models.EvaluationId;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationReader;
 import fr.sweetiez.api.infrastructure.repository.evaluations.EvaluationRepository;
 
@@ -24,5 +25,9 @@ public class EvaluationReaderAdapter implements EvaluationReader {
                 .stream()
                 .map(evaluationMapper::toDto)
                 .collect(Collectors.toSet());
+    }
+
+    public boolean exists(EvaluationId evaluationId) {
+        return repository.existsById(UUID.fromString(evaluationId.value()));
     }
 }

@@ -5,6 +5,7 @@ import fr.sweetiez.api.core.customers.services.CustomerService;
 import fr.sweetiez.api.core.customers.services.exceptions.CustomerDoesNotExistException;
 import fr.sweetiez.api.core.evaluations.models.CreateEvaluationRequest;
 import fr.sweetiez.api.core.evaluations.models.Evaluation;
+import fr.sweetiez.api.core.evaluations.models.EvaluationId;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationReader;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationWriter;
 
@@ -51,5 +52,13 @@ public class EvaluationService {
                 .reduce(0., Double::sum);
 
         return sum / evaluations.size();
+    }
+
+    public boolean exists(EvaluationId id) {
+        return reader.exists(id);
+    }
+
+    public void delete(EvaluationId id) {
+        writer.delete(id);
     }
 }
