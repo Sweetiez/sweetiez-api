@@ -57,4 +57,8 @@ public class EvaluationService {
     public boolean exists(EvaluationId id) {
         return reader.exists(id);
     }
+
+    public void delete(EvaluationId id) {
+        writer.delete(id);
+    }
 }

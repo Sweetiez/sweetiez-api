@@ -1,13 +1,10 @@
 package fr.sweetiez.api.infrastructure.delivery;
 
 import fr.sweetiez.api.adapter.delivery.ReportEndPoints;
-import fr.sweetiez.api.core.evaluations.models.Report;
-import fr.sweetiez.api.core.evaluations.models.ReportEvaluationRequest;
+import fr.sweetiez.api.core.reports.models.Report;
+import fr.sweetiez.api.core.reports.models.ReportEvaluationRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -28,5 +25,10 @@ public class SpringReportController {
     @GetMapping("/admin/reports")
     public ResponseEntity<Collection<Report>> retrieveAll() {
         return reportEndPoints.retrieveAll();
+    }
+
+    @DeleteMapping("/admin/reports/{id}")
+    public ResponseEntity<Object> deleteReportedEvaluation(@PathVariable("id") String id) {
+        return reportEndPoints.deleteReportedEvaluation(id);
     }
 }

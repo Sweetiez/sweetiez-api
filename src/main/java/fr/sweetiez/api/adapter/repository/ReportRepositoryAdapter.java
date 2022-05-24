@@ -1,10 +1,12 @@
 package fr.sweetiez.api.adapter.repository;
 
 import fr.sweetiez.api.adapter.shared.ReportMapper;
-import fr.sweetiez.api.core.evaluations.models.Report;
+import fr.sweetiez.api.core.reports.models.Report;
 import fr.sweetiez.api.core.reports.ports.ReportRepository;
 
 import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
 public class ReportRepositoryAdapter implements ReportRepository {
 
@@ -26,5 +28,13 @@ public class ReportRepositoryAdapter implements ReportRepository {
                 .stream()
                 .map(reportMapper::toDto)
                 .toList();
+    }
+
+    public Optional<Report> findById(UUID reportId) {
+        return reportRepository.findById(reportId).map(reportMapper::toDto);
+    }
+
+    public void delete(UUID id) {
+        reportRepository.deleteById(id);
     }
 }

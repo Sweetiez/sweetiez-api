@@ -1,6 +1,6 @@
 package fr.sweetiez.api.adapter.shared;
 
-import fr.sweetiez.api.core.evaluations.models.Report;
+import fr.sweetiez.api.core.reports.models.Report;
 import fr.sweetiez.api.infrastructure.repository.reports.ReportEntity;
 
 public class ReportMapper {

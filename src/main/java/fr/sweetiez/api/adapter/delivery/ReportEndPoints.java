@@ -1,14 +1,15 @@
 package fr.sweetiez.api.adapter.delivery;
 
 import fr.sweetiez.api.core.customers.services.exceptions.CustomerDoesNotExistException;
-import fr.sweetiez.api.core.evaluations.models.Report;
-import fr.sweetiez.api.core.evaluations.models.ReportEvaluationRequest;
+import fr.sweetiez.api.core.reports.models.Report;
+import fr.sweetiez.api.core.reports.models.ReportEvaluationRequest;
 import fr.sweetiez.api.core.evaluations.services.EvaluationDoesNotExistException;
 import fr.sweetiez.api.core.reports.services.ReportService;
 import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 public class ReportEndPoints {
 
@@ -33,5 +34,15 @@ public class ReportEndPoints {
 
     public ResponseEntity<Collection<Report>> retrieveAll() {
         return ResponseEntity.ok(service.retrieveAll());
+    }
+
+    public ResponseEntity<Object> deleteReportedEvaluation(String id) {
+        try {
+            service.deleteReportedEvaluationWithReport(id);
+            return ResponseEntity.ok().build();
+        }
+        catch (NoSuchElementException exception) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

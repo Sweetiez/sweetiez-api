@@ -4,8 +4,8 @@ import fr.sweetiez.api.core.customers.models.CustomerId;
 import fr.sweetiez.api.core.customers.services.CustomerService;
 import fr.sweetiez.api.core.customers.services.exceptions.CustomerDoesNotExistException;
 import fr.sweetiez.api.core.evaluations.models.EvaluationId;
-import fr.sweetiez.api.core.evaluations.models.Report;
-import fr.sweetiez.api.core.evaluations.models.ReportEvaluationRequest;
+import fr.sweetiez.api.core.reports.models.Report;
+import fr.sweetiez.api.core.reports.models.ReportEvaluationRequest;
 import fr.sweetiez.api.core.evaluations.services.EvaluationDoesNotExistException;
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
 import fr.sweetiez.api.core.reports.ports.ReportRepository;
@@ -47,5 +47,11 @@ public class ReportService {
 
     public Collection<Report> retrieveAll() {
         return reportRepository.retrieveAll();
+    }
+
+    public void deleteReportedEvaluationWithReport(String id) {
+        var report = reportRepository.findById(UUID.fromString(id)).orElseThrow();
+        reportRepository.delete(report.id());
+        evaluationService.delete(new EvaluationId(report.evaluationId().toString()));
     }
 }

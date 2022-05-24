@@ -12,7 +12,7 @@ public class ReportEntity {
 
     @Id
     @GeneratedValue
-    private final Long id;
+    private final UUID id;
 
     @Column(name = "reporter_id")
     private final UUID reporterId;
@@ -33,7 +33,7 @@ public class ReportEntity {
         created = null;
     }
 
-    public ReportEntity(Long id, UUID reporterId, UUID evaluationId, String reason, LocalDateTime created) {
+    public ReportEntity(UUID id, UUID reporterId, UUID evaluationId, String reason, LocalDateTime created) {
         this.id = id;
         this.reporterId = reporterId;
         this.evaluationId = evaluationId;
@@ -41,7 +41,7 @@ public class ReportEntity {
         this.created = created;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
