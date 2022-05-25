@@ -45,8 +45,8 @@ public class AuthenticationService {
 
         var customer = customerService.findByAccountId(account.id());
 
-        String accessToken = tokenProvider.createAccessToken(authentication, customer.firstName());
-        String refreshToken = tokenProvider.createRefreshToken(authentication, customer.firstName());
+        String accessToken = tokenProvider.createAccessToken(authentication, customer);
+        String refreshToken = tokenProvider.createRefreshToken(authentication, customer);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(AUTHORIZATION, "Bearer " + accessToken);
@@ -84,7 +84,7 @@ public class AuthenticationService {
                 .orElseThrow(() -> new AuthenticationServiceException("Account not found"));
 
         var user = customerService.findByAccountId(account.id());
-        String accessToken = tokenProvider.createAccessToken(account, user.firstName());
+        String accessToken = tokenProvider.createAccessToken(account, user);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(AUTHORIZATION, "Bearer " + accessToken);
