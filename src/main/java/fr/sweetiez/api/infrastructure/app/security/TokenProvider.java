@@ -1,6 +1,7 @@
 package fr.sweetiez.api.infrastructure.app.security;
 
 import fr.sweetiez.api.core.authentication.models.Account;
+import fr.sweetiez.api.core.customers.models.Customer;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +24,7 @@ public class TokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
     private static final String NAME_KEY = "name";
+    private static final String CUSTOMER_ID_KEY = "customer_id";
     private final long tokenValidityInMilliseconds = Duration.ofHours(5).getSeconds() * 1000;
     private final byte[] secret;
 
@@ -30,7 +32,7 @@ public class TokenProvider {
         this.secret = secret.toString().getBytes();
     }
 
-    public String createAccessToken(Authentication authentication, String name) {
+    public String createAccessToken(Authentication authentication, Customer customer) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -41,13 +43,14 @@ public class TokenProvider {
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
-                .claim(NAME_KEY, name)
+                .claim(NAME_KEY, customer.firstName())
+                .claim(CUSTOMER_ID_KEY, customer.id().value())
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .setExpiration(validity)
                 .compact();
     }
 
-    public String createAccessToken(Account account, String name) {
+    public String createAccessToken(Account account, Customer customer) {
         String authorities = account.roles().stream()
                 .map(role -> "ROLE_" + role.name().toUpperCase())
                 .collect(Collectors.joining(","));
@@ -58,13 +61,14 @@ public class TokenProvider {
         return Jwts.builder()
                 .setSubject(account.username())
                 .claim(AUTHORITIES_KEY, authorities)
-                .claim(NAME_KEY, name)
+                .claim(NAME_KEY, customer.firstName())
+                .claim(CUSTOMER_ID_KEY, customer.id().value())
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .setExpiration(validity)
                 .compact();
     }
 
-    public String createRefreshToken(Authentication authentication, String name) {
+    public String createRefreshToken(Authentication authentication, Customer customer) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -75,7 +79,8 @@ public class TokenProvider {
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
-                .claim(NAME_KEY, name)
+                .claim(NAME_KEY, customer.firstName())
+                .claim(CUSTOMER_ID_KEY, customer.id().value())
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .setExpiration(validity)
                 .compact();
