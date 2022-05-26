@@ -123,7 +123,8 @@ public class SweetService {
                         eval.voter().toString(),
                         customerService.findById(eval.voter().toString()).firstName(),
                         eval.subject(),
-                        eval.mark()))
+                        eval.mark(),
+                        eval.date()))
                 .toList();
 
         return new DetailedSweetResponse(sweet, evaluation, comments);
