@@ -1,11 +1,14 @@
 package fr.sweetiez.api.adapter.repository;
 
 import fr.sweetiez.api.adapter.shared.OrderMapper;
+import fr.sweetiez.api.core.orders.models.orders.Order;
 import fr.sweetiez.api.core.orders.models.orders.Orders;
 import fr.sweetiez.api.core.orders.ports.OrdersReader;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderDetailRepository;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderRepository;
 
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class OrderReaderAdapter implements OrdersReader {
@@ -34,5 +37,15 @@ public class OrderReaderAdapter implements OrdersReader {
                                             .toList()))
                 .collect(Collectors.toList()));
 
+    }
+
+    @Override
+    public Optional<Order> findById(String id) {
+        var orderDetails = this.detailRepository.findAllByOrderId(UUID.fromString(id));
+        //TODO: Debug to find why orderDetails is empty
+        System.out.println(orderDetails);
+        return this.repository.findById(UUID.fromString(id))
+                .stream().map(entity -> this.mapper.toDto(entity, orderDetails))
+                .findFirst();
     }
 }

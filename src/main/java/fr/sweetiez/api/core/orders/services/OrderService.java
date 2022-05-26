@@ -6,11 +6,14 @@ import fr.sweetiez.api.core.orders.models.orders.Order;
 import fr.sweetiez.api.core.orders.models.orders.products.Product;
 import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
 import fr.sweetiez.api.core.orders.models.requests.CreateOrderRequest;
+import fr.sweetiez.api.core.orders.models.responses.AdminDetailedOrderResponse;
+import fr.sweetiez.api.core.orders.models.responses.AdminProductOrderResponse;
 import fr.sweetiez.api.core.orders.models.responses.AdminSimpleOrderResponse;
 import fr.sweetiez.api.core.orders.models.responses.OrderCreatedResponse;
 import fr.sweetiez.api.core.orders.ports.OrdersReader;
 import fr.sweetiez.api.core.orders.ports.OrdersWriter;
 import fr.sweetiez.api.core.orders.services.exceptions.InvalidOrderException;
+import fr.sweetiez.api.core.orders.services.exceptions.OrderNotFoundException;
 import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.services.SweetService;
 
@@ -68,6 +71,28 @@ public class OrderService {
                         order.status(),
                         order.createdAt()))
                 .toList();
+    }
+
+    public AdminDetailedOrderResponse getById(String id) throws OrderNotFoundException {
+        return this.reader.findById(id).stream()
+                .map(order -> new AdminDetailedOrderResponse(
+                        order.id().value().toString(),
+                        order.customerInfo().firstName(),
+                        order.customerInfo().lastName(),
+                        order.customerInfo().email(),
+                        order.customerInfo().phone(),
+                        order.status(),
+                        order.pickupDate(),
+                        order.createdAt(),
+                        order.totalPrice(),
+                        order.products().stream()
+                                .map(product -> new AdminProductOrderResponse(
+                                        product.name(),
+                                        product.quantity().value()
+                                ))
+                                .toList()
+                ))
+                .findFirst().orElseThrow(OrderNotFoundException::new);
     }
 
     private List<Product> getSweetProducts(CreateOrderRequest request) {
