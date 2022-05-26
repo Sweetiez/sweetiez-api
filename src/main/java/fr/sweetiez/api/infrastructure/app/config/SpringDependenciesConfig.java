@@ -149,7 +149,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public SweetService sweetService() {
-        return new SweetService(sweetWriter(), sweetReader(), evaluationService());
+        return new SweetService(sweetWriter(), sweetReader(), evaluationService(), customerService());
     }
 
     @Bean
