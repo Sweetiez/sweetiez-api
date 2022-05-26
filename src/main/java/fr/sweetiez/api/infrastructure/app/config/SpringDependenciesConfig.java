@@ -149,7 +149,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public OrdersReader orderReader() {
-        return new OrderReaderAdapter(orderRepository, orderMapper());
+        return new OrderReaderAdapter(orderRepository, orderDetailRepository, orderMapper());
     }
 
     @Bean

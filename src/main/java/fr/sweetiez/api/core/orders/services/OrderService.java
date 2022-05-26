@@ -6,6 +6,7 @@ import fr.sweetiez.api.core.orders.models.orders.Order;
 import fr.sweetiez.api.core.orders.models.orders.products.Product;
 import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
 import fr.sweetiez.api.core.orders.models.requests.CreateOrderRequest;
+import fr.sweetiez.api.core.orders.models.responses.AdminSimpleOrderResponse;
 import fr.sweetiez.api.core.orders.models.responses.OrderCreatedResponse;
 import fr.sweetiez.api.core.orders.ports.OrdersReader;
 import fr.sweetiez.api.core.orders.ports.OrdersWriter;
@@ -13,6 +14,7 @@ import fr.sweetiez.api.core.orders.services.exceptions.InvalidOrderException;
 import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.services.SweetService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +46,7 @@ public class OrderService {
         var sweetProducts = getSweetProducts(request);
         var totalPrice = computeTotalPrice(sweetProducts);
         // Create the order
-        var order = new Order(request, sweetProducts, customerId, totalPrice);
+        var order = new Order(request, sweetProducts, customerId, totalPrice, LocalDate.now());
 
         // Check if the order is valid
         if (!order.isValid()) {
@@ -53,6 +55,19 @@ public class OrderService {
 
         // Save the order
         return new OrderCreatedResponse(this.writer.save(order));
+    }
+
+    public List<AdminSimpleOrderResponse> getAll() {
+        var orders = this.reader.findAll();
+        return orders.orders().stream()
+                .map(order -> new AdminSimpleOrderResponse(
+                        order.id().value().toString(),
+                        order.customerInfo().firstName(),
+                        order.customerInfo().lastName(),
+                        order.pickupDate(),
+                        order.status(),
+                        order.createdAt()))
+                .toList();
     }
 
     private List<Product> getSweetProducts(CreateOrderRequest request) {

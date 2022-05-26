@@ -1,4 +1,4 @@
-package fr.sweetiez.api.infrastructure.delivery;
+package fr.sweetiez.api.infrastructure.delivery.order;
 
 import fr.sweetiez.api.adapter.delivery.OrderEndPoints;
 import fr.sweetiez.api.core.orders.models.requests.CreateOrderRequest;

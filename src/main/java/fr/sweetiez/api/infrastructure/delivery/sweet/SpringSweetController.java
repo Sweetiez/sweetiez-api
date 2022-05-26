@@ -1,4 +1,4 @@
-package fr.sweetiez.api.infrastructure.delivery;
+package fr.sweetiez.api.infrastructure.delivery.sweet;
 
 import fr.sweetiez.api.adapter.delivery.SweetEndPoints;
 import fr.sweetiez.api.core.sweets.models.responses.BannerSweetResponse;

@@ -1,4 +1,4 @@
-package fr.sweetiez.api.infrastructure.delivery;
+package fr.sweetiez.api.infrastructure.delivery.auth;
 
 import fr.sweetiez.api.adapter.delivery.AuthenticationEndPoints;
 import fr.sweetiez.api.core.authentication.models.LoginRequest;

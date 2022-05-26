@@ -50,7 +50,8 @@ public class OrderMapper {
                         .map(this::toDto)
                         .toList(),
                 Optional.of(new CustomerId(entity.getCustomerId())),
-                entity.getTotalPrice()
+                entity.getTotalPrice(),
+                entity.getCreatedAt()
         );
     }
 
@@ -64,7 +65,8 @@ public class OrderMapper {
                 order.totalPrice(),
                 order.status(),
                 order.customerId().orElse(new CustomerId("")).value(),
-                order.pickupDate()
+                order.pickupDate(),
+                order.createdAt()
         );
     }
 

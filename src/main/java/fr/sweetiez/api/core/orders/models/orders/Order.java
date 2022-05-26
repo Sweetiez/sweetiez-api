@@ -15,10 +15,12 @@ public record Order(OrderId id,
                     Collection<Product> products,
 
                     Optional<CustomerId> customerId,
-                    double totalPrice
+                    double totalPrice,
+
+                    LocalDate createdAt
 ) {
 
-    public Order(CreateOrderRequest request, Collection<Product> products, Optional<CustomerId> optionalCustomerId, double totalPrice) {
+    public Order(CreateOrderRequest request, Collection<Product> products, Optional<CustomerId> optionalCustomerId, double totalPrice, LocalDate createdAt) {
         this(
                 new OrderId(),
                 new CustomerInfo(
@@ -31,7 +33,8 @@ public record Order(OrderId id,
                 OrderStatus.CREATED,
                 products,
                 optionalCustomerId,
-                totalPrice
+                totalPrice,
+                createdAt
         );
     }
 
