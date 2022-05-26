@@ -11,6 +11,9 @@ import fr.sweetiez.api.core.customers.services.CustomerService;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationReader;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationWriter;
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
+import fr.sweetiez.api.core.orders.ports.OrdersReader;
+import fr.sweetiez.api.core.orders.ports.OrdersWriter;
+import fr.sweetiez.api.core.orders.services.OrderService;
 import fr.sweetiez.api.core.reports.services.ReportService;
 import fr.sweetiez.api.core.sweets.ports.SweetsReader;
 import fr.sweetiez.api.core.sweets.ports.SweetsWriter;
@@ -20,6 +23,8 @@ import fr.sweetiez.api.infrastructure.repository.accounts.AccountRepository;
 import fr.sweetiez.api.infrastructure.repository.accounts.RoleRepository;
 import fr.sweetiez.api.infrastructure.repository.customers.CustomerRepository;
 import fr.sweetiez.api.infrastructure.repository.evaluations.EvaluationRepository;
+import fr.sweetiez.api.infrastructure.repository.orders.OrderDetailRepository;
+import fr.sweetiez.api.infrastructure.repository.orders.OrderRepository;
 import fr.sweetiez.api.infrastructure.repository.reports.ReportRepository;
 import fr.sweetiez.api.infrastructure.repository.sweets.SweetRepository;
 import io.minio.MinioClient;
@@ -45,6 +50,9 @@ public class SpringDependenciesConfig {
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
+    private final OrderRepository orderRepository;
+
+    private final OrderDetailRepository orderDetailRepository;
 
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManager;
@@ -52,6 +60,7 @@ public class SpringDependenciesConfig {
     public SpringDependenciesConfig(SweetRepository sweetRepository, EvaluationRepository evaluationRepository,
                                     ReportRepository reportRepository, CustomerRepository customerRepository,
                                     AccountRepository accountRepository, RoleRepository roleRepository,
+                                    OrderRepository orderRepository, OrderDetailRepository orderDetailRepository,
                                     TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManager)
     {
         this.sweetRepository = sweetRepository;
@@ -62,6 +71,8 @@ public class SpringDependenciesConfig {
         this.roleRepository = roleRepository;
         this.tokenProvider = tokenProvider;
         this.authenticationManager = authenticationManager;
+        this.orderRepository = orderRepository;
+        this.orderDetailRepository = orderDetailRepository;
     }
 
     // MAPPERS
@@ -88,6 +99,11 @@ public class SpringDependenciesConfig {
     @Bean
     public ReportMapper reportMapper() {
         return new ReportMapper();
+    }
+
+    @Bean
+    public OrderMapper orderMapper() {
+        return new OrderMapper();
     }
 
     // ADAPTERS
@@ -131,6 +147,16 @@ public class SpringDependenciesConfig {
         return new ReportRepositoryAdapter(reportRepository, reportMapper());
     }
 
+    @Bean
+    public OrdersReader orderReader() {
+        return new OrderReaderAdapter(orderRepository, orderMapper());
+    }
+
+    @Bean
+    public OrdersWriter orderWriter() {
+        return new OrderWriterAdapter(orderRepository, orderDetailRepository, orderMapper());
+    }
+
     // SERVICES
     @Bean
     public EvaluationService evaluationService() {
@@ -157,6 +183,11 @@ public class SpringDependenciesConfig {
         return new ReportService(customerService(), evaluationService(), reportRepositoryPort());
     }
 
+    @Bean
+    public OrderService orderService() {
+        return new OrderService(orderWriter(), orderReader(), sweetService(), customerService());
+    }
+
     // END POINTS
     @Bean
     public EvaluationEndPoints evaluationEndPoints() {
@@ -181,6 +212,11 @@ public class SpringDependenciesConfig {
     @Bean
     public ReportEndPoints reportEndPoints() {
         return new ReportEndPoints(reportService());
+    }
+
+    @Bean
+    public OrderEndPoints orderEndPoints() {
+        return new OrderEndPoints(orderService());
     }
 
     // MINIO

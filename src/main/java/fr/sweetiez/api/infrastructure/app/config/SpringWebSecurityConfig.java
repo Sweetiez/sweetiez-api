@@ -70,6 +70,7 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 ).hasRole("ADMIN")
                 .antMatchers(
                         "/auth/**",
+                        "/order/**",
                         "/sweets/published",
                         "/sweets/{\\d+}"
                 ).permitAll()
