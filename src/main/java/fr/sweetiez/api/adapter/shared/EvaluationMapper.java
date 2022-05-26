@@ -15,7 +15,8 @@ public class EvaluationMapper {
                 evaluation.comment(),
                 evaluation.voter(),
                 evaluation.subject(),
-                evaluation.mark().intValue()
+                evaluation.mark().intValue(),
+                evaluation.date()
         );
     }
 
@@ -25,7 +26,8 @@ public class EvaluationMapper {
                 entity.getComment(),
                 entity.getAuthor(),
                 entity.getSubject(),
-                entity.getMark().doubleValue()
+                entity.getMark().doubleValue(),
+                entity.getDate()
         );
     }
 }

@@ -1,6 +1,7 @@
 package fr.sweetiez.api.infrastructure.repository.evaluations;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -23,20 +24,25 @@ public class EvaluationEntity {
     @Column(nullable = false)
     private final Integer mark;
 
+    @Column
+    private final LocalDate date;
+
     public EvaluationEntity() {
         id = null;
         comment = null;
         author = null;
         subject = null;
         mark = null;
+        date = LocalDate.now();
     }
 
-    public EvaluationEntity(UUID id, String content, UUID author, UUID sweetId, Integer mark) {
+    public EvaluationEntity(UUID id, String content, UUID author, UUID sweetId, Integer mark, LocalDate date) {
         this.id = id;
         this.comment = content;
         this.author = author;
         this.subject = sweetId;
         this.mark = mark;
+        this.date = date;
     }
 
     public UUID getId() {
@@ -57,5 +63,8 @@ public class EvaluationEntity {
 
     public Integer getMark() {
         return mark;
+    }
+    public LocalDate getDate() {
+        return date;
     }
 }
