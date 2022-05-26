@@ -11,6 +11,7 @@ public class ReportMapper {
                 report.reporterId(),
                 report.evaluationId(),
                 report.reason(),
+                report.content(),
                 report.creationDate()
         );
     }
@@ -21,6 +22,7 @@ public class ReportMapper {
                 entity.getReporterId(),
                 entity.getEvaluationId(),
                 entity.getReason(),
+                entity.getContent(),
                 entity.getCreated()
         );
     }

@@ -40,6 +40,7 @@ public class ReportService {
                 UUID.fromString(request.reporterId()),
                 UUID.fromString(request.evaluationId()),
                 request.reason(),
+                request.content(),
                 LocalDateTime.now());
 
         return reportRepository.save(reportedEvaluation);
