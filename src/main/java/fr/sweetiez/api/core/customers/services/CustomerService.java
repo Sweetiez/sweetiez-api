@@ -28,4 +28,8 @@ public class CustomerService {
     public Customer findByAccountId(UUID accountId) {
         return reader.findByAccountId(accountId).orElseThrow();
     }
+
+    public Customer findById(String customerId) {
+        return reader.findById(new CustomerId(customerId)).orElseThrow();
+    }
 }
