@@ -22,6 +22,9 @@ public class ReportEntity {
 
     private final String reason;
 
+    @Column(columnDefinition = "text")
+    private final String content;
+
     @CreationTimestamp
     private final LocalDateTime created;
 
@@ -30,14 +33,16 @@ public class ReportEntity {
         reporterId = null;
         evaluationId = null;
         reason = null;
+        content = null;
         created = null;
     }
 
-    public ReportEntity(UUID id, UUID reporterId, UUID evaluationId, String reason, LocalDateTime created) {
+    public ReportEntity(UUID id, UUID reporterId, UUID evaluationId, String reason, String content, LocalDateTime created) {
         this.id = id;
         this.reporterId = reporterId;
         this.evaluationId = evaluationId;
         this.reason = reason;
+        this.content = content;
         this.created = created;
     }
 
@@ -59,5 +64,8 @@ public class ReportEntity {
 
     public LocalDateTime getCreated() {
         return created;
+    }
+    public String getContent() {
+        return content;
     }
 }
