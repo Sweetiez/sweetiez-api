@@ -31,4 +31,9 @@ public class SpringReportController {
     public ResponseEntity<Object> deleteReportedEvaluation(@PathVariable("id") String id) {
         return reportEndPoints.deleteReportedEvaluation(id);
     }
+
+    @DeleteMapping("/admin/reports/{id}/spam")
+    public ResponseEntity<Object> deleteSpamReport(@PathVariable("id") String id) {
+        return reportEndPoints.deleteSpamReport(id);
+    }
 }
