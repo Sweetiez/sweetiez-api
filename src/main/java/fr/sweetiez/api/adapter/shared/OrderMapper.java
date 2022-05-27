@@ -10,6 +10,7 @@ import fr.sweetiez.api.infrastructure.repository.orders.OrderEntity;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.UUID;
 
 public class OrderMapper {
 
@@ -23,10 +24,10 @@ public class OrderMapper {
         );
     }
 
-    public OrderDetailEntity toEntity(Product product, Order order) {
+    public OrderDetailEntity toEntity(Product product, UUID orderId) {
         return new OrderDetailEntity(
                 product.id(),
-                order.id().value(),
+                orderId,
                 product.productId(),
                 product.name(),
                 product.quantity().value(),

@@ -42,8 +42,6 @@ public class OrderReaderAdapter implements OrdersReader {
     @Override
     public Optional<Order> findById(String id) {
         var orderDetails = this.detailRepository.findAllByOrderId(UUID.fromString(id));
-        //TODO: Debug to find why orderDetails is empty
-        System.out.println(orderDetails);
         return this.repository.findById(UUID.fromString(id))
                 .stream().map(entity -> this.mapper.toDto(entity, orderDetails))
                 .findFirst();

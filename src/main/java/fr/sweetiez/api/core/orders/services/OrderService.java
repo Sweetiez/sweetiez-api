@@ -56,6 +56,9 @@ public class OrderService {
             throw new InvalidOrderException();
         }
 
+        // Save order details
+
+
         // Save the order
         return new OrderCreatedResponse(this.writer.save(order));
     }

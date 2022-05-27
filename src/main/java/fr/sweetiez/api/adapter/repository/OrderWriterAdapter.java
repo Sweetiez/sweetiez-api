@@ -22,10 +22,11 @@ public class OrderWriterAdapter implements OrdersWriter {
 
     @Override
     public Order save(Order order) {
+        var orderEntity = repository.save(mapper.toEntity(order));
         var list = order.products().stream()
-                .map(product -> mapper.toEntity(product, order))
+                .map(product -> mapper.toEntity(product, orderEntity.getId()))
                 .map(detailRepository::save)
                 .toList();
-        return mapper.toDto(repository.save(mapper.toEntity(order)), list);
+        return mapper.toDto(orderEntity, list);
     }
 }
