@@ -1,12 +1,12 @@
 package fr.sweetiez.api.adapter.delivery;
 
+import fr.sweetiez.api.core.orders.models.orders.OrderStatus;
 import fr.sweetiez.api.core.orders.models.requests.CreateOrderRequest;
-import fr.sweetiez.api.core.orders.models.responses.AdminDetailedOrderResponse;
-import fr.sweetiez.api.core.orders.models.responses.AdminSimpleOrderResponse;
-import fr.sweetiez.api.core.orders.models.responses.OrderCreatedResponse;
+import fr.sweetiez.api.core.orders.models.responses.*;
 import fr.sweetiez.api.core.orders.services.OrderService;
 import fr.sweetiez.api.core.orders.services.exceptions.InvalidOrderException;
 import fr.sweetiez.api.core.orders.services.exceptions.OrderNotFoundException;
+import fr.sweetiez.api.core.orders.services.exceptions.PaymentIntentException;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -34,6 +34,26 @@ public class OrderEndPoints {
     public ResponseEntity<AdminDetailedOrderResponse> getOrder(String id) {
         try {
             return ResponseEntity.ok().body(orderService.getById(id));
+        } catch (OrderNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public ResponseEntity<PaymentIntentResponse> payOrder(String orderId) {
+        try {
+            var paymentIntent = orderService.paymentIntent(orderId);
+            return ResponseEntity.ok().body(paymentIntent);
+        } catch (OrderNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (PaymentIntentException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    public ResponseEntity<OrderStatusUpdatedResponse> orderPaidSuccessfully(String orderId) {
+        try {
+            var orderStatus = orderService.updateOrderStatus(orderId, OrderStatus.PAID);
+            return ResponseEntity.ok().body(orderStatus);
         } catch (OrderNotFoundException e) {
             return ResponseEntity.notFound().build();
         }

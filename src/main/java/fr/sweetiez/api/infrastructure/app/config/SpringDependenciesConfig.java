@@ -19,6 +19,7 @@ import fr.sweetiez.api.core.sweets.ports.SweetsReader;
 import fr.sweetiez.api.core.sweets.ports.SweetsWriter;
 import fr.sweetiez.api.core.sweets.services.SweetService;
 import fr.sweetiez.api.infrastructure.app.security.TokenProvider;
+import fr.sweetiez.api.infrastructure.payements.StripePaymentService;
 import fr.sweetiez.api.infrastructure.repository.accounts.AccountRepository;
 import fr.sweetiez.api.infrastructure.repository.accounts.RoleRepository;
 import fr.sweetiez.api.infrastructure.repository.customers.CustomerRepository;
@@ -43,6 +44,9 @@ public class SpringDependenciesConfig {
 
     @Value("${minio.url}")
     private String minioUrl;
+
+    @Value("${stripe.secret-key}")
+    private String stripeSecretKey;
 
     private final SweetRepository sweetRepository;
     private final EvaluationRepository evaluationRepository;
@@ -185,7 +189,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public OrderService orderService() {
-        return new OrderService(orderWriter(), orderReader(), sweetService(), customerService());
+        return new OrderService(orderWriter(), orderReader(), sweetService(), customerService(), stripeService());
     }
 
     // END POINTS
@@ -226,5 +230,11 @@ public class SpringDependenciesConfig {
                 .credentials(accessKey, secretKey)
                 .endpoint(minioUrl)
                 .build();
+    }
+
+    // STRIPE
+    @Bean
+    public StripePaymentService stripeService() {
+        return new StripePaymentService(stripeSecretKey);
     }
 }

@@ -3,17 +3,17 @@ package fr.sweetiez.api.core.orders.services;
 import fr.sweetiez.api.core.customers.models.CustomerId;
 import fr.sweetiez.api.core.customers.services.CustomerService;
 import fr.sweetiez.api.core.orders.models.orders.Order;
+import fr.sweetiez.api.core.orders.models.orders.OrderStatus;
+import fr.sweetiez.api.core.orders.models.orders.PaymentService;
 import fr.sweetiez.api.core.orders.models.orders.products.Product;
 import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
 import fr.sweetiez.api.core.orders.models.requests.CreateOrderRequest;
-import fr.sweetiez.api.core.orders.models.responses.AdminDetailedOrderResponse;
-import fr.sweetiez.api.core.orders.models.responses.AdminProductOrderResponse;
-import fr.sweetiez.api.core.orders.models.responses.AdminSimpleOrderResponse;
-import fr.sweetiez.api.core.orders.models.responses.OrderCreatedResponse;
+import fr.sweetiez.api.core.orders.models.responses.*;
 import fr.sweetiez.api.core.orders.ports.OrdersReader;
 import fr.sweetiez.api.core.orders.ports.OrdersWriter;
 import fr.sweetiez.api.core.orders.services.exceptions.InvalidOrderException;
 import fr.sweetiez.api.core.orders.services.exceptions.OrderNotFoundException;
+import fr.sweetiez.api.core.orders.services.exceptions.PaymentIntentException;
 import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.services.SweetService;
 
@@ -31,11 +31,14 @@ public class OrderService {
 
     private final CustomerService customerService;
 
-    public OrderService(OrdersWriter writer, OrdersReader reader, SweetService sweetService, CustomerService customerService) {
+    private final PaymentService paymentService;
+
+    public OrderService(OrdersWriter writer, OrdersReader reader, SweetService sweetService, CustomerService customerService, PaymentService paymentService) {
         this.writer = writer;
         this.reader = reader;
         this.sweetService = sweetService;
         this.customerService = customerService;
+        this.paymentService = paymentService;
     }
 
     public OrderCreatedResponse create(CreateOrderRequest request) throws InvalidOrderException {
@@ -113,6 +116,36 @@ public class OrderService {
                 )
                 .toList();
     }
+
+    public PaymentIntentResponse paymentIntent(String orderId) throws OrderNotFoundException, PaymentIntentException {
+        var order = this.reader.findById(orderId).orElseThrow(OrderNotFoundException::new);
+        return this.paymentService.createPaymentIntent(order);
+
+    }
+
+    public OrderStatusUpdatedResponse updateOrderStatus(String orderId, OrderStatus status) throws OrderNotFoundException {
+        var order = this.reader.findById(orderId).orElseThrow(OrderNotFoundException::new);
+
+        Optional<CustomerId> customerId = Optional.empty();
+        try {
+            customerId = Optional.of(customerService.findByEmail(order.customerInfo().email()).id());
+        } catch (Exception e) {
+            System.out.println("Customer not found");
+        }
+
+        var updatedOrder = new Order(
+                order.id(),
+                order.customerInfo(),
+                order.pickupDate(),
+                status,
+                order.createdAt(),
+                order.totalPrice(),
+                order.products(),
+                customerId
+        );
+        return new OrderStatusUpdatedResponse(this.writer.save(updatedOrder));
+    }
+
 
     /**
      * Computation of the total price of the order

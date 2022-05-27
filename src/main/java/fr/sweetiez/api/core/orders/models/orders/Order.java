@@ -38,6 +38,10 @@ public record Order(OrderId id,
         );
     }
 
+    public Order(OrderId id, CustomerInfo customerInfo, LocalDate pickupDate, OrderStatus status, LocalDate createdAt, double totalPrice, Collection<Product> products, Optional<CustomerId> optionalCustomerId) {
+        this(id, customerInfo, pickupDate, status, products, optionalCustomerId, totalPrice, createdAt);
+    }
+
 
     public boolean isValid() {
         return this.id.value() != null
