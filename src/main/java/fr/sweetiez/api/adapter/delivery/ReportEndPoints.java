@@ -4,7 +4,9 @@ import fr.sweetiez.api.core.customers.services.exceptions.CustomerDoesNotExistEx
 import fr.sweetiez.api.core.reports.models.Report;
 import fr.sweetiez.api.core.reports.models.ReportEvaluationRequest;
 import fr.sweetiez.api.core.evaluations.services.EvaluationDoesNotExistException;
+import fr.sweetiez.api.core.reports.services.ReportAlreadyCreatedByUserException;
 import fr.sweetiez.api.core.reports.services.ReportService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
@@ -28,6 +30,9 @@ public class ReportEndPoints {
         }
         catch (CustomerDoesNotExistException | EvaluationDoesNotExistException exception) {
             return ResponseEntity.badRequest().build();
+        }
+        catch (ReportAlreadyCreatedByUserException exception) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
 
