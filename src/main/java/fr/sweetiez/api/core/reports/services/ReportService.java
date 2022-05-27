@@ -55,4 +55,9 @@ public class ReportService {
         reportRepository.delete(report.id());
         evaluationService.delete(new EvaluationId(report.evaluationId().toString()));
     }
+
+    public void deleteReport(String id) {
+        var report = reportRepository.findById(UUID.fromString(id)).orElseThrow();
+        reportRepository.delete(report.id());
+    }
 }

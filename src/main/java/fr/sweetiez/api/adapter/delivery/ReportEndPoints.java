@@ -44,4 +44,14 @@ public class ReportEndPoints {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    public ResponseEntity<Object> deleteSpamReport(String id) {
+        try {
+            service.deleteReport(id);
+            return ResponseEntity.ok().build();
+        }
+        catch (NoSuchElementException exception) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
