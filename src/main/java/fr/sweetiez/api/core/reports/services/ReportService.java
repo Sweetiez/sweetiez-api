@@ -35,6 +35,13 @@ public class ReportService {
             throw new EvaluationDoesNotExistException();
         }
 
+        reportRepository.retrieveAll().stream()
+                .filter(report -> report.reporterId().toString().equals(request.reporterId()))
+                .filter(report -> report.evaluationId().toString().equals(request.evaluationId()))
+                .findAny()
+                .ifPresent(report -> { throw new ReportAlreadyCreatedByUserException(); });
+
+
         var reportedEvaluation = new Report(
                 null,
                 UUID.fromString(request.reporterId()),
@@ -54,5 +61,10 @@ public class ReportService {
         var report = reportRepository.findById(UUID.fromString(id)).orElseThrow();
         reportRepository.delete(report.id());
         evaluationService.delete(new EvaluationId(report.evaluationId().toString()));
+    }
+
+    public void deleteReport(String id) {
+        var report = reportRepository.findById(UUID.fromString(id)).orElseThrow();
+        reportRepository.delete(report.id());
     }
 }
