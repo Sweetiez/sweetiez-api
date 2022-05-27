@@ -4,7 +4,6 @@ import fr.sweetiez.api.core.orders.models.orders.OrderStatus;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
 

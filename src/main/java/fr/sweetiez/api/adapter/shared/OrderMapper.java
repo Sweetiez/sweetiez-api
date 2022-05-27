@@ -5,7 +5,6 @@ import fr.sweetiez.api.core.orders.models.orders.CustomerInfo;
 import fr.sweetiez.api.core.orders.models.orders.Order;
 import fr.sweetiez.api.core.orders.models.orders.OrderId;
 import fr.sweetiez.api.core.orders.models.orders.products.Product;
-import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderDetailEntity;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderEntity;
 
@@ -18,7 +17,7 @@ public class OrderMapper {
         return new Product(
                 entity.getProductId().toString(),
                 entity.getName(),
-                ProductType.SWEET,
+                entity.getProductType(),
                 entity.getQuantity(),
                 entity.getUnitPrice()
         );
@@ -31,7 +30,8 @@ public class OrderMapper {
                 product.productId(),
                 product.name(),
                 product.quantity().value(),
-                product.unitPrice().value().doubleValue()
+                product.unitPrice().value().doubleValue(),
+                product.type()
         );
     }
 
