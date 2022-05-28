@@ -23,13 +23,4 @@ public class SpringOrderController {
         return orderEndPoints.createOrder(request);
     }
 
-    @PostMapping("/payment-intent/{orderId}")
-    public ResponseEntity<PaymentIntentResponse> payOrder(@PathVariable String orderId) {
-        return orderEndPoints.payOrder(orderId);
-    }
-    @PostMapping("/payment-success/{orderId}")
-    public ResponseEntity<OrderStatusUpdatedResponse> paidSuccessful(@PathVariable String orderId) {
-        return orderEndPoints.orderPaidSuccessfully(orderId);
-    }
-
 }

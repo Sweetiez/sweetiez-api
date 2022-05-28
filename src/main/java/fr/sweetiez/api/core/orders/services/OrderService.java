@@ -119,8 +119,39 @@ public class OrderService {
 
     public PaymentIntentResponse paymentIntent(String orderId) throws OrderNotFoundException, PaymentIntentException {
         var order = this.reader.findById(orderId).orElseThrow(OrderNotFoundException::new);
-        return this.paymentService.createPaymentIntent(order);
+        var paymentIntent = this.paymentService.createPaymentIntent(order);
 
+        var updatedOrder = new Order(
+                order.id(),
+                order.customerInfo(),
+                order.pickupDate(),
+                order.status(),
+                order.createdAt(),
+                order.totalPrice(),
+                order.products(),
+                order.customerId(),
+                removeClientSecretFromPaymentIntent(paymentIntent.clientSecret())
+        );
+        this.writer.save(updatedOrder);
+        return  paymentIntent;
+    }
+
+    public OrderStatusUpdatedResponse confirmPayment(String paymentIntent) throws OrderNotFoundException {
+        var order = this.reader.findByPaymentIntent(paymentIntent).orElseThrow(OrderNotFoundException::new);
+
+        var updatedOrder = new Order(
+                order.id(),
+                order.customerInfo(),
+                order.pickupDate(),
+                OrderStatus.PAID,
+                order.createdAt(),
+                order.totalPrice(),
+                order.products(),
+                order.customerId(),
+                order.paymentIntent()
+        );
+
+        return new OrderStatusUpdatedResponse(this.writer.save(updatedOrder));
     }
 
     public OrderStatusUpdatedResponse updateOrderStatus(String orderId, OrderStatus status) throws OrderNotFoundException {
@@ -141,9 +172,14 @@ public class OrderService {
                 order.createdAt(),
                 order.totalPrice(),
                 order.products(),
-                customerId
+                customerId,
+                order.paymentIntent()
         );
         return new OrderStatusUpdatedResponse(this.writer.save(updatedOrder));
+    }
+
+    private String removeClientSecretFromPaymentIntent(String paymentIntent){
+        return paymentIntent.substring(0, 27);
     }
 
 

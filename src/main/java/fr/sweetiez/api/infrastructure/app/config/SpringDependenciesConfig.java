@@ -48,6 +48,9 @@ public class SpringDependenciesConfig {
     @Value("${stripe.secret-key}")
     private String stripeSecretKey;
 
+    @Value("${stripe.secret-endpoint}")
+    private String stripeEndpointSecret;
+
     private final SweetRepository sweetRepository;
     private final EvaluationRepository evaluationRepository;
     private final ReportRepository reportRepository;
@@ -223,6 +226,11 @@ public class SpringDependenciesConfig {
         return new OrderEndPoints(orderService());
     }
 
+    @Bean
+    public PaymentWebhookEndpoint paymentWebhookEndpoint() {
+        return new PaymentWebhookEndpoint(orderService(), stripeService());
+    }
+
     // MINIO
     @Bean
     public MinioClient minioClient() {
@@ -235,6 +243,6 @@ public class SpringDependenciesConfig {
     // STRIPE
     @Bean
     public StripePaymentService stripeService() {
-        return new StripePaymentService(stripeSecretKey);
+        return new StripePaymentService(stripeEndpointSecret, stripeSecretKey);
     }
 }

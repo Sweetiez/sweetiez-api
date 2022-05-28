@@ -17,7 +17,9 @@ public record Order(OrderId id,
                     Optional<CustomerId> customerId,
                     double totalPrice,
 
-                    LocalDate createdAt
+                    LocalDate createdAt,
+
+                    String paymentIntent
 ) {
 
     public Order(CreateOrderRequest request, Collection<Product> products, Optional<CustomerId> optionalCustomerId, double totalPrice, LocalDate createdAt) {
@@ -34,12 +36,16 @@ public record Order(OrderId id,
                 products,
                 optionalCustomerId,
                 totalPrice,
-                createdAt
+                createdAt,
+                ""
         );
     }
 
-    public Order(OrderId id, CustomerInfo customerInfo, LocalDate pickupDate, OrderStatus status, LocalDate createdAt, double totalPrice, Collection<Product> products, Optional<CustomerId> optionalCustomerId) {
-        this(id, customerInfo, pickupDate, status, products, optionalCustomerId, totalPrice, createdAt);
+    public Order(OrderId id, CustomerInfo customerInfo, LocalDate pickupDate,
+                 OrderStatus status, LocalDate createdAt, double totalPrice,
+                 Collection<Product> products, Optional<CustomerId> optionalCustomerId,
+                 String paymentIntent) {
+        this(id, customerInfo, pickupDate, status, products, optionalCustomerId, totalPrice, createdAt, paymentIntent);
     }
 
 

@@ -46,4 +46,11 @@ public class OrderReaderAdapter implements OrdersReader {
                 .stream().map(entity -> this.mapper.toDto(entity, orderDetails))
                 .findFirst();
     }
+
+    @Override
+    public Optional<Order> findByPaymentIntent(String paymentIntent) {
+        var entity = this.repository.findByPaymentIntent(paymentIntent).orElseThrow();
+        var orderDetails = this.detailRepository.findAllByOrderId(UUID.fromString(entity.getId().toString()));
+        return Optional.of(this.mapper.toDto(entity, orderDetails));
+    }
 }

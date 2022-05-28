@@ -42,6 +42,9 @@ public class OrderEntity {
     @Column(nullable = false)
     private final LocalDate createdAt;
 
+    @Column(columnDefinition = "text")
+    private final String paymentIntent;
+
     public OrderEntity() {
         this.id = null;
         this.firstName = null;
@@ -53,13 +56,15 @@ public class OrderEntity {
         this.customerId = null;
         this.pickupDate = null;
         this.createdAt = null;
+        this.paymentIntent = null;
     }
 
     public OrderEntity(UUID id, String firstName,
                        String lastName, String email,
                        String phone, double totalPrice,
                        OrderStatus status, String customerId,
-                       LocalDate pickupDate, LocalDate createdAt) {
+                       LocalDate pickupDate, LocalDate createdAt,
+                       String paymentIntent) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -70,6 +75,7 @@ public class OrderEntity {
         this.customerId = customerId;
         this.pickupDate = pickupDate;
         this.createdAt = createdAt;
+        this.paymentIntent = paymentIntent;
     }
 
     public UUID getId() {
@@ -112,17 +118,21 @@ public class OrderEntity {
         return createdAt;
     }
 
+    public String getPaymentIntent() {
+        return paymentIntent;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderEntity that = (OrderEntity) o;
-        return Double.compare(that.totalPrice, totalPrice) == 0 && Objects.equals(id, that.id) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(email, that.email) && Objects.equals(phone, that.phone) && status == that.status && Objects.equals(customerId, that.customerId) && Objects.equals(pickupDate, that.pickupDate) && Objects.equals(createdAt, that.createdAt);
+        return Double.compare(that.totalPrice, totalPrice) == 0 && Objects.equals(id, that.id) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(email, that.email) && Objects.equals(phone, that.phone) && status == that.status && Objects.equals(customerId, that.customerId) && Objects.equals(pickupDate, that.pickupDate) && Objects.equals(createdAt, that.createdAt) && Objects.equals(paymentIntent, that.paymentIntent);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, email, phone, totalPrice, status, customerId, pickupDate, createdAt);
+        return Objects.hash(id, firstName, lastName, email, phone, totalPrice, status, customerId, pickupDate, createdAt, paymentIntent);
     }
 
     @Override
@@ -138,6 +148,7 @@ public class OrderEntity {
                 ", customerId='" + customerId + '\'' +
                 ", pickupDate=" + pickupDate +
                 ", createdAt=" + createdAt +
+                ", paymentIntent='" + paymentIntent + '\'' +
                 '}';
     }
 }

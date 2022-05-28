@@ -71,6 +71,7 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/auth/**",
                         "/order/**",
+                        "/payment/**",
                         "/sweets/published",
                         "/sweets/{\\d+}"
                 ).permitAll()

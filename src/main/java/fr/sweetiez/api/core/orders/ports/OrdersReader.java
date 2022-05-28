@@ -9,4 +9,7 @@ import java.util.Optional;
 public interface OrdersReader {
     Orders findAll();
     Optional<Order> findById(String id);
+
+    Optional<Order> findByPaymentIntent(String paymentIntent);
+
 }

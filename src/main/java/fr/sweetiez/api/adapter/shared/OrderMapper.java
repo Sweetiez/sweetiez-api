@@ -52,7 +52,8 @@ public class OrderMapper {
                         .toList(),
                 Optional.of(new CustomerId(entity.getCustomerId())),
                 entity.getTotalPrice(),
-                entity.getCreatedAt()
+                entity.getCreatedAt(),
+                entity.getPaymentIntent()
         );
     }
 
@@ -67,7 +68,8 @@ public class OrderMapper {
                 order.status(),
                 order.customerId().orElse(new CustomerId("")).value(),
                 order.pickupDate(),
-                order.createdAt()
+                order.createdAt(),
+                order.paymentIntent()
         );
     }
 
