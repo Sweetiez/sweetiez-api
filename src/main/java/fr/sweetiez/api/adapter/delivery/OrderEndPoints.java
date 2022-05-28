@@ -2,6 +2,7 @@ package fr.sweetiez.api.adapter.delivery;
 
 import fr.sweetiez.api.core.orders.models.orders.OrderStatus;
 import fr.sweetiez.api.core.orders.models.requests.CreateOrderRequest;
+import fr.sweetiez.api.core.orders.models.requests.UpdateOrderStatus;
 import fr.sweetiez.api.core.orders.models.responses.*;
 import fr.sweetiez.api.core.orders.services.OrderService;
 import fr.sweetiez.api.core.orders.services.exceptions.InvalidOrderException;
@@ -51,6 +52,14 @@ public class OrderEndPoints {
             return ResponseEntity.notFound().build();
         } catch (PaymentIntentException e) {
             return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    public ResponseEntity<OrderStatusUpdatedResponse> updateOrderStatus(String id, UpdateOrderStatus request) {
+        try {
+            return ResponseEntity.ok().body(this.orderService.updateOrderStatus(id, request.status()));
+        } catch (OrderNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 
