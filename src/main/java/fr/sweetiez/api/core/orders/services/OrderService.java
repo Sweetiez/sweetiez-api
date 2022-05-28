@@ -66,10 +66,10 @@ public class OrderService {
         return new OrderCreatedResponse(this.writer.save(order));
     }
 
-    public List<AdminSimpleOrderResponse> getAll() {
+    public List<SimpleOrderResponse> getAll() {
         var orders = this.reader.findAll();
         return orders.orders().stream()
-                .map(order -> new AdminSimpleOrderResponse(
+                .map(order -> new SimpleOrderResponse(
                         order.id().value().toString(),
                         order.customerInfo().firstName(),
                         order.customerInfo().lastName(),
@@ -79,25 +79,9 @@ public class OrderService {
                 .toList();
     }
 
-    public AdminDetailedOrderResponse getById(String id) throws OrderNotFoundException {
+    public DetailedOrderResponse getById(String id) throws OrderNotFoundException {
         return this.reader.findById(id).stream()
-                .map(order -> new AdminDetailedOrderResponse(
-                        order.id().value().toString(),
-                        order.customerInfo().firstName(),
-                        order.customerInfo().lastName(),
-                        order.customerInfo().email(),
-                        order.customerInfo().phone(),
-                        order.status(),
-                        order.pickupDate(),
-                        order.createdAt(),
-                        order.totalPrice(),
-                        order.products().stream()
-                                .map(product -> new AdminProductOrderResponse(
-                                        product.name(),
-                                        product.quantity().value()
-                                ))
-                                .toList()
-                ))
+                .map(DetailedOrderResponse::new)
                 .findFirst().orElseThrow(OrderNotFoundException::new);
     }
 
@@ -176,6 +160,13 @@ public class OrderService {
                 order.paymentIntent()
         );
         return new OrderStatusUpdatedResponse(this.writer.save(updatedOrder));
+    }
+
+    public List<DetailedOrderResponse> retrieveClientOrders(String clientEmail) {
+        var orders = this.reader.findByEmail(clientEmail);
+        return orders.orders().stream()
+                .map(DetailedOrderResponse::new)
+                .toList();
     }
 
     private String removeClientSecretFromPaymentIntent(String paymentIntent){

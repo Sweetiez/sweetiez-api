@@ -27,11 +27,15 @@ public class OrderEndPoints {
         }
     }
 
-    public ResponseEntity<List<AdminSimpleOrderResponse>> getOrders() {
+    public ResponseEntity<List<DetailedOrderResponse>> retrieveClientOrder(String clientEmail) {
+        return ResponseEntity.ok().body(orderService.retrieveClientOrders(clientEmail));
+    }
+
+    public ResponseEntity<List<SimpleOrderResponse>> getOrders() {
         return ResponseEntity.ok().body(orderService.getAll());
     }
 
-    public ResponseEntity<AdminDetailedOrderResponse> getOrder(String id) {
+    public ResponseEntity<DetailedOrderResponse> getOrder(String id) {
         try {
             return ResponseEntity.ok().body(orderService.getById(id));
         } catch (OrderNotFoundException e) {
@@ -50,6 +54,12 @@ public class OrderEndPoints {
         }
     }
 
+    /**
+     * Deprecated since payment confirmation is managed by webhooks
+     * @param orderId order id
+     * @return the new status and the order id
+     */
+    @Deprecated
     public ResponseEntity<OrderStatusUpdatedResponse> orderPaidSuccessfully(String orderId) {
         try {
             var orderStatus = orderService.updateOrderStatus(orderId, OrderStatus.PAID);

@@ -53,4 +53,12 @@ public class OrderReaderAdapter implements OrdersReader {
         var orderDetails = this.detailRepository.findAllByOrderId(UUID.fromString(entity.getId().toString()));
         return Optional.of(this.mapper.toDto(entity, orderDetails));
     }
+
+    @Override
+    public Orders findByEmail(String clientEmail) {
+        var entityOrders = this.repository.findByEmail(clientEmail);
+        return new Orders(entityOrders.stream()
+                .map(entity -> this.mapper.toDto(entity, this.detailRepository.findAllByOrderId(entity.getId())))
+                .toList());
+    }
 }

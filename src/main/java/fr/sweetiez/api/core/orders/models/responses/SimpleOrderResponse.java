@@ -4,7 +4,7 @@ import fr.sweetiez.api.core.orders.models.orders.OrderStatus;
 
 import java.time.LocalDate;
 
-public record AdminSimpleOrderResponse(
+public record SimpleOrderResponse(
         String id,
         String firstName,
         String lastName,

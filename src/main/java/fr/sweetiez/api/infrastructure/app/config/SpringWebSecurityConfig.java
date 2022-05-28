@@ -64,7 +64,9 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.cors().configurationSource(corsConfigurationSource());
 
         httpSecurity.authorizeRequests()
-                .antMatchers("/evaluations").hasRole("USER")
+                .antMatchers("/evaluations",
+                        "/order/me"
+                        ).hasRole("USER")
                 .antMatchers(
                         "/admin/**"
                 ).hasRole("ADMIN")

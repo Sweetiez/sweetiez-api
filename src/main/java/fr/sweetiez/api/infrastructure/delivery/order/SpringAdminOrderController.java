@@ -1,8 +1,8 @@
 package fr.sweetiez.api.infrastructure.delivery.order;
 
 import fr.sweetiez.api.adapter.delivery.OrderEndPoints;
-import fr.sweetiez.api.core.orders.models.responses.AdminDetailedOrderResponse;
-import fr.sweetiez.api.core.orders.models.responses.AdminSimpleOrderResponse;
+import fr.sweetiez.api.core.orders.models.responses.DetailedOrderResponse;
+import fr.sweetiez.api.core.orders.models.responses.SimpleOrderResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,12 +22,12 @@ public class SpringAdminOrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AdminSimpleOrderResponse>> getOrders() {
+    public ResponseEntity<List<SimpleOrderResponse>> getOrders() {
         return this.orderEndPoints.getOrders();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AdminDetailedOrderResponse> getOrderById(@PathVariable("id") String id) {
+    public ResponseEntity<DetailedOrderResponse> getOrderById(@PathVariable("id") String id) {
         return this.orderEndPoints.getOrder(id);
     }
 }
