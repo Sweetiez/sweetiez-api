@@ -231,6 +231,11 @@ public class SpringDependenciesConfig {
         return new PaymentWebhookEndpoint(orderService(), stripeService());
     }
 
+    @Bean
+    public UserEndPoints userEndPoints() {
+        return new UserEndPoints(customerService());
+    }
+
     // MINIO
     @Bean
     public MinioClient minioClient() {
