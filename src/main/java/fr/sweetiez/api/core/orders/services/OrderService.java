@@ -20,6 +20,7 @@ import fr.sweetiez.api.core.sweets.services.SweetService;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class OrderService {
 
@@ -61,6 +62,8 @@ public class OrderService {
 
         // Save order details
 
+        System.out.println(order);
+        System.out.println(order.products().size());
 
         // Save the order
         return new OrderCreatedResponse(this.writer.save(order));
@@ -102,7 +105,7 @@ public class OrderService {
     }
 
     public PaymentIntentResponse paymentIntent(String orderId) throws OrderNotFoundException, PaymentIntentException {
-        var order = this.reader.findById(orderId).orElseThrow(OrderNotFoundException::new);
+        var order = new Order(this.reader.findById(orderId).orElseThrow(OrderNotFoundException::new), Set.of());
         var paymentIntent = this.paymentService.createPaymentIntent(order);
 
         var updatedOrder = new Order(
@@ -121,7 +124,7 @@ public class OrderService {
     }
 
     public OrderStatusUpdatedResponse confirmPayment(String paymentIntent) throws OrderNotFoundException {
-        var order = this.reader.findByPaymentIntent(paymentIntent).orElseThrow(OrderNotFoundException::new);
+        var order = new Order(this.reader.findByPaymentIntent(paymentIntent).orElseThrow(OrderNotFoundException::new), Set.of());
 
         var updatedOrder = new Order(
                 order.id(),
@@ -139,7 +142,7 @@ public class OrderService {
     }
 
     public OrderStatusUpdatedResponse updateOrderStatus(String orderId, OrderStatus status) throws OrderNotFoundException {
-        var order = this.reader.findById(orderId).orElseThrow(OrderNotFoundException::new);
+        var order = new Order(this.reader.findById(orderId).orElseThrow(OrderNotFoundException::new), Set.of());
 
         Optional<CustomerId> customerId = Optional.empty();
         try {

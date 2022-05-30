@@ -7,6 +7,7 @@ import fr.sweetiez.api.core.orders.models.requests.CreateOrderRequest;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
 public record Order(OrderId id,
                     CustomerInfo customerInfo,
@@ -46,6 +47,10 @@ public record Order(OrderId id,
                  Collection<Product> products, Optional<CustomerId> optionalCustomerId,
                  String paymentIntent) {
         this(id, customerInfo, pickupDate, status, products, optionalCustomerId, totalPrice, createdAt, paymentIntent);
+    }
+
+    public Order(Order order, Collection<Product> products) {
+        this(order.id, order.customerInfo, order.pickupDate, order.status, products, order.customerId, order.totalPrice, order.createdAt, order.paymentIntent);
     }
 
 

@@ -23,6 +23,7 @@ public class SpringOrderController {
 
     @PostMapping
     public ResponseEntity<OrderCreatedResponse> createOrder(@RequestBody CreateOrderRequest request) {
+        System.out.println(request);
         return orderEndPoints.createOrder(request);
     }
 
