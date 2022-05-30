@@ -10,6 +10,7 @@ import fr.sweetiez.api.core.evaluations.ports.EvaluationReader;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationWriter;
 
 import java.util.Collection;
+import java.time.LocalDate;
 import java.util.UUID;
 
 public class EvaluationService {
@@ -38,7 +39,9 @@ public class EvaluationService {
                 request.content(),
                 request.author(),
                 request.subject(),
-                request.mark().doubleValue());
+                request.mark().doubleValue(),
+                LocalDate.now()
+        );
 
         return writer.save(evaluation);
     }

@@ -9,6 +9,7 @@ public record SimpleSweetResponse(
         String name,
         double price,
         String description,
+        String flavor,
         Collection<String> images,
         double rating
 )
@@ -19,6 +20,7 @@ public record SimpleSweetResponse(
                 sweet.name().value(),
                 sweet.price().value().doubleValue(),
                 sweet.details().description().shortContent(),
+                sweet.details().flavor().name(),
                 sweet.details().images(),
                 sweet.details().score());
     }
