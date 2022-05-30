@@ -8,5 +8,6 @@ public record Report(
         UUID reporterId,
         UUID evaluationId,
         String reason,
+        String content,
         LocalDateTime creationDate
 ) {}

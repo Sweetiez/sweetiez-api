@@ -1,5 +1,6 @@
 package fr.sweetiez.api.core.sweets.services;
 
+import fr.sweetiez.api.core.customers.services.CustomerService;
 import fr.sweetiez.api.core.evaluations.models.EvaluationResponse;
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
 import fr.sweetiez.api.core.sweets.models.requests.*;
@@ -23,11 +24,13 @@ public class SweetService {
     private final SweetsWriter writer;
     private final SweetsReader reader;
     private final EvaluationService evaluationService;
+    private final CustomerService customerService;
 
-    public SweetService(SweetsWriter writer, SweetsReader reader, EvaluationService evaluationService) {
+    public SweetService(SweetsWriter writer, SweetsReader reader, EvaluationService evaluationService, CustomerService customerService) {
         this.writer = writer;
         this.reader = reader;
         this.evaluationService = evaluationService;
+        this.customerService = customerService;
     }
 
     public Sweet createSweet(CreateSweetRequest sweet) {
@@ -118,8 +121,10 @@ public class SweetService {
                         UUID.fromString(eval.id().value()),
                         eval.comment(),
                         eval.voter().toString(),
+                        customerService.findById(eval.voter().toString()).firstName(),
                         eval.subject(),
-                        eval.mark()))
+                        eval.mark(),
+                        eval.date()))
                 .toList();
 
         return new DetailedSweetResponse(sweet, evaluation, comments);
