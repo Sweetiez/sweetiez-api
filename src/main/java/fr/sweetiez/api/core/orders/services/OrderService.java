@@ -69,16 +69,10 @@ public class OrderService {
         return new OrderCreatedResponse(this.writer.save(order));
     }
 
-    public List<SimpleOrderResponse> getAll() {
+    public List<DetailedOrderResponse> getAll() {
         var orders = this.reader.findAll();
         return orders.orders().stream()
-                .map(order -> new SimpleOrderResponse(
-                        order.id().value().toString(),
-                        order.customerInfo().firstName(),
-                        order.customerInfo().lastName(),
-                        order.pickupDate(),
-                        order.status(),
-                        order.createdAt()))
+                .map(DetailedOrderResponse::new)
                 .toList();
     }
 

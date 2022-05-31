@@ -32,7 +32,7 @@ public class OrderEndPoints {
         return ResponseEntity.ok().body(orderService.retrieveClientOrders(clientEmail));
     }
 
-    public ResponseEntity<List<SimpleOrderResponse>> getOrders() {
+    public ResponseEntity<List<DetailedOrderResponse>> getOrders() {
         return ResponseEntity.ok().body(orderService.getAll());
     }
 
