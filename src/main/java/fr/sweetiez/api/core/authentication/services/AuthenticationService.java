@@ -70,6 +70,7 @@ public class AuthenticationService {
                 request.firstName(),
                 request.lastName(),
                 request.email(),
+                request.phone(),
                 Optional.of(createdAccount));
 
         return customerService.save(customer);
