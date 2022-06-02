@@ -22,6 +22,9 @@ public class CustomerEntity {
     @Column(nullable = false)
     private final String email;
 
+    @Column()
+    private final String phone;
+
     @OneToOne(fetch = FetchType.EAGER)
     private final AccountEntity account;
 
@@ -30,14 +33,16 @@ public class CustomerEntity {
         firstName = null;
         lastName = null;
         email = null;
+        phone = null;
         account = null;
     }
 
-    public CustomerEntity(UUID id, String firstName, String lastName, String email, AccountEntity account) {
+    public CustomerEntity(UUID id, String firstName, String lastName, String email, String phone, AccountEntity account) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.phone = phone;
         this.account = account;
     }
 
@@ -55,6 +60,9 @@ public class CustomerEntity {
 
     public String getEmail() {
         return email;
+    }
+    public String getPhone() {
+        return phone;
     }
 
     public AccountEntity getAccount() {

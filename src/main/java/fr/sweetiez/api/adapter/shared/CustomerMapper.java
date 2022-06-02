@@ -24,6 +24,7 @@ public class CustomerMapper {
                 customer.firstName(),
                 customer.lastName(),
                 customer.email(),
+                customer.phone(),
                 account
         );
     }
@@ -34,6 +35,7 @@ public class CustomerMapper {
                 entity.getFirstName(),
                 entity.getLastName(),
                 entity.getEmail(),
+                entity.getPhone(),
                 Optional.of(accountMapper.toDto(entity.getAccount()))
         );
     }
