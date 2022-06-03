@@ -2,6 +2,8 @@ package fr.sweetiez.api.core.customers.services;
 
 import fr.sweetiez.api.core.customers.models.Customer;
 import fr.sweetiez.api.core.customers.models.CustomerId;
+import fr.sweetiez.api.core.customers.models.UpdateCustomerRequest;
+import fr.sweetiez.api.core.customers.models.responses.UpdateCustomerProfileResponse;
 import fr.sweetiez.api.core.customers.ports.CustomerReader;
 import fr.sweetiez.api.core.customers.ports.CustomerWriter;
 
@@ -35,5 +37,13 @@ public class CustomerService {
 
     public Customer findById(String customerId) {
         return reader.findById(new CustomerId(customerId)).orElseThrow();
+    }
+
+    public UpdateCustomerProfileResponse updateCustomerDetails(UpdateCustomerRequest request) {
+        var customer = reader.findById(new CustomerId(request.id())).orElseThrow();
+        var updatedCustomer = new Customer(customer.id(), customer.account(), request);
+        var updated = writer.save(updatedCustomer);
+
+        return new UpdateCustomerProfileResponse(updated);
     }
 }
