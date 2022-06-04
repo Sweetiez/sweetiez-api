@@ -14,6 +14,7 @@ import fr.sweetiez.api.core.sweets.models.sweet.Sweets;
 import fr.sweetiez.api.core.sweets.models.sweet.details.Flavor;
 import fr.sweetiez.api.core.sweets.models.sweet.states.Highlight;
 import fr.sweetiez.api.core.sweets.models.sweet.states.State;
+import fr.sweetiez.api.infrastructure.delivery.sweet.SpringSweetController;
 import fr.sweetiez.api.infrastructure.repository.sweets.SweetEntity;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

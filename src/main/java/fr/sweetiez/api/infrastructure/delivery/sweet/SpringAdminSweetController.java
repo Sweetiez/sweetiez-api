@@ -1,4 +1,4 @@
-package fr.sweetiez.api.infrastructure.delivery;
+package fr.sweetiez.api.infrastructure.delivery.sweet;
 
 import fr.sweetiez.api.adapter.delivery.AdminSweetEndPoints;
 import fr.sweetiez.api.adapter.delivery.SweetEndPoints;

@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface CustomerReader {
     Optional<Customer> findById(CustomerId customerId);
     Optional<Customer> findByAccountId(UUID accountId);
+
+    Optional<Customer> findByEmail(String email);
 }

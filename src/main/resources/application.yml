@@ -32,6 +32,10 @@ minio:
     key: ${MINIO_ACCESS_KEY}
     secret: ${MINIO_SECRET_KEY}
 
+stripe:
+  secret-key: ${STRIPE_SECRET_KEY}
+  secret-endpoint: ${STRIPE_SECRET_ENDPOINT}
+
 logging:
   level:
     org:
