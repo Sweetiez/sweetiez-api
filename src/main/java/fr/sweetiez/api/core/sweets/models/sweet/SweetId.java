@@ -9,22 +9,8 @@ public record SweetId(String value) {
         try {
             UUID.fromString(value);
             return true;
-        }
-        catch (IllegalArgumentException exception) {
+        } catch (IllegalArgumentException exception) {
             return false;
         }
-    }
-
-    public static SweetId generate(Sweets sweets) {
-        var ids = sweets.content()
-                .stream()
-                .map(sweet -> sweet.id().value())
-                .collect(Collectors.toSet());
-
-        String id;
-
-        do { id = UUID.randomUUID().toString(); } while (ids.contains(id));
-
-        return new SweetId(id);
     }
 }

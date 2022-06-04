@@ -35,8 +35,7 @@ public class SweetService {
 
     public Sweet createSweet(CreateSweetRequest sweet) {
         var sweets = reader.findAll();
-        var sweetId = SweetId.generate(sweets);
-        var sweetToCreate = new Sweet(sweetId, sweet);
+        var sweetToCreate = new Sweet(new SweetId(UUID.randomUUID().toString()), sweet);
 
         if (!sweetToCreate.isValid()) {
             throw new InvalidFieldsException();
