@@ -1,9 +1,10 @@
 package fr.sweetiez.api.core.ingredients.models;
 
 import java.util.Collection;
+import java.util.UUID;
 
-public record Ingredient(String name, Collection<String> allergens) {
+public record Ingredient(UUID id, String name, Collection<HealthProperty> healthProperties) {
     public boolean isValid() {
-        return allergens != null && name != null && !name.isEmpty() && !name.isBlank();
+        return healthProperties != null && name != null && !name.isEmpty() && !name.isBlank();
     }
 }

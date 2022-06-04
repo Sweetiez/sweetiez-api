@@ -45,3 +45,8 @@ logging:
 security:
   token:
     secret: ${JWT_SECRET_TOKEN}
+
+apis:
+  edamam:
+    app-id: ${EDAMAM_APP_ID}
+    app-key: ${EDAMAM_APP_KEY}
