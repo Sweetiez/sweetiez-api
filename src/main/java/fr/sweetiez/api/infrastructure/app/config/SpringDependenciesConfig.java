@@ -84,9 +84,8 @@ public class SpringDependenciesConfig {
                                     ReportRepository reportRepository, CustomerRepository customerRepository,
                                     AccountRepository accountRepository, RoleRepository roleRepository,
                                     OrderRepository orderRepository, OrderDetailRepository orderDetailRepository,
-                                    TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManager,
                                     IngredientRepository ingredientRepository,
-                                    HealthPropertyRepository healthPropertyRepository)
+                                    HealthPropertyRepository healthPropertyRepository,
                                     TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManager)
     {
         this.sweetRepository = sweetRepository;
