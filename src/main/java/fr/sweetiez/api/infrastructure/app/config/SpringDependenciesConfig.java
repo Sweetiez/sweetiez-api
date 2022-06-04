@@ -1,6 +1,8 @@
 package fr.sweetiez.api.infrastructure.app.config;
 
 import fr.sweetiez.api.adapter.delivery.*;
+import fr.sweetiez.api.adapter.gateways.allergen.EdamamApi;
+import fr.sweetiez.api.adapter.gateways.translator.LibreTranslateApi;
 import fr.sweetiez.api.adapter.repository.*;
 import fr.sweetiez.api.adapter.shared.*;
 import fr.sweetiez.api.core.authentication.ports.AuthenticationRepository;
@@ -11,6 +13,10 @@ import fr.sweetiez.api.core.customers.services.CustomerService;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationReader;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationWriter;
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
+import fr.sweetiez.api.core.ingredients.ports.IngredientApi;
+import fr.sweetiez.api.core.ingredients.ports.Ingredients;
+import fr.sweetiez.api.core.ingredients.ports.TranslatorApi;
+import fr.sweetiez.api.core.ingredients.services.IngredientService;
 import fr.sweetiez.api.core.reports.services.ReportService;
 import fr.sweetiez.api.core.sweets.ports.SweetsReader;
 import fr.sweetiez.api.core.sweets.ports.SweetsWriter;
@@ -20,6 +26,7 @@ import fr.sweetiez.api.infrastructure.repository.accounts.AccountRepository;
 import fr.sweetiez.api.infrastructure.repository.accounts.RoleRepository;
 import fr.sweetiez.api.infrastructure.repository.customers.CustomerRepository;
 import fr.sweetiez.api.infrastructure.repository.evaluations.EvaluationRepository;
+import fr.sweetiez.api.infrastructure.repository.ingredients.HealthPropertyRepository;
 import fr.sweetiez.api.infrastructure.repository.reports.ReportRepository;
 import fr.sweetiez.api.infrastructure.repository.sweets.SweetRepository;
 import io.minio.MinioClient;
@@ -27,6 +34,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class SpringDependenciesConfig {
@@ -39,12 +47,20 @@ public class SpringDependenciesConfig {
     @Value("${minio.url}")
     private String minioUrl;
 
+    @Value("${apis.edamam.app-id}")
+    private String edamamAppId;
+
+    @Value("${apis.edamam.app-key}")
+    private String edamamAppKey;
+
     private final SweetRepository sweetRepository;
     private final EvaluationRepository evaluationRepository;
     private final ReportRepository reportRepository;
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
+    private final fr.sweetiez.api.infrastructure.repository.ingredients.IngredientRepository ingredientRepository;
+    private final HealthPropertyRepository healthPropertyRepository;
 
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManager;
@@ -52,7 +68,9 @@ public class SpringDependenciesConfig {
     public SpringDependenciesConfig(SweetRepository sweetRepository, EvaluationRepository evaluationRepository,
                                     ReportRepository reportRepository, CustomerRepository customerRepository,
                                     AccountRepository accountRepository, RoleRepository roleRepository,
-                                    TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManager)
+                                    TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManager,
+                                    fr.sweetiez.api.infrastructure.repository.ingredients.IngredientRepository ingredientRepository,
+                                    HealthPropertyRepository healthPropertyRepository)
     {
         this.sweetRepository = sweetRepository;
         this.evaluationRepository = evaluationRepository;
@@ -62,6 +80,13 @@ public class SpringDependenciesConfig {
         this.roleRepository = roleRepository;
         this.tokenProvider = tokenProvider;
         this.authenticationManager = authenticationManager;
+        this.ingredientRepository = ingredientRepository;
+        this.healthPropertyRepository = healthPropertyRepository;
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
     // MAPPERS
@@ -90,7 +115,12 @@ public class SpringDependenciesConfig {
         return new ReportMapper();
     }
 
-    // ADAPTERS
+    @Bean
+    public IngredientMapper ingredientMapper() {
+        return new IngredientMapper();
+    }
+
+    // REPOSITORY ADAPTERS
     @Bean
     public EvaluationReader evaluationReader() {
         return new EvaluationReaderAdapter(evaluationRepository, evaluationMapper());
@@ -131,6 +161,22 @@ public class SpringDependenciesConfig {
         return new ReportRepositoryAdapter(reportRepository, reportMapper());
     }
 
+    @Bean
+    public Ingredients ingredientRepositoryPort() {
+        return new IngredientRepositoryAdapter(ingredientRepository, healthPropertyRepository, ingredientMapper());
+    }
+
+    // GATEWAY ADAPTERS
+    @Bean
+    public TranslatorApi translatorGateway() {
+        return new LibreTranslateApi(restTemplate());
+    }
+
+    @Bean
+    public IngredientApi ingredientGateway() {
+        return new EdamamApi(edamamAppId, edamamAppKey, restTemplate());
+    }
+
     // SERVICES
     @Bean
     public EvaluationService evaluationService() {
@@ -157,6 +203,11 @@ public class SpringDependenciesConfig {
         return new ReportService(customerService(), evaluationService(), reportRepositoryPort());
     }
 
+    @Bean
+    public IngredientService ingredientService() {
+        return new IngredientService(translatorGateway(), ingredientGateway(), ingredientRepositoryPort());
+    }
+
     // END POINTS
     @Bean
     public EvaluationEndPoints evaluationEndPoints() {
@@ -181,6 +232,11 @@ public class SpringDependenciesConfig {
     @Bean
     public ReportEndPoints reportEndPoints() {
         return new ReportEndPoints(reportService());
+    }
+
+    @Bean
+    public IngredientEndPoints ingredientEndPoints() {
+        return new IngredientEndPoints(ingredientService());
     }
 
     // MINIO
