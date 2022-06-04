@@ -27,6 +27,7 @@ import fr.sweetiez.api.infrastructure.repository.accounts.RoleRepository;
 import fr.sweetiez.api.infrastructure.repository.customers.CustomerRepository;
 import fr.sweetiez.api.infrastructure.repository.evaluations.EvaluationRepository;
 import fr.sweetiez.api.infrastructure.repository.ingredients.HealthPropertyRepository;
+import fr.sweetiez.api.infrastructure.repository.ingredients.IngredientRepository;
 import fr.sweetiez.api.infrastructure.repository.reports.ReportRepository;
 import fr.sweetiez.api.infrastructure.repository.sweets.SweetRepository;
 import io.minio.MinioClient;
@@ -59,7 +60,7 @@ public class SpringDependenciesConfig {
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
-    private final fr.sweetiez.api.infrastructure.repository.ingredients.IngredientRepository ingredientRepository;
+    private final IngredientRepository ingredientRepository;
     private final HealthPropertyRepository healthPropertyRepository;
 
     private final TokenProvider tokenProvider;
@@ -69,7 +70,7 @@ public class SpringDependenciesConfig {
                                     ReportRepository reportRepository, CustomerRepository customerRepository,
                                     AccountRepository accountRepository, RoleRepository roleRepository,
                                     TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManager,
-                                    fr.sweetiez.api.infrastructure.repository.ingredients.IngredientRepository ingredientRepository,
+                                    IngredientRepository ingredientRepository,
                                     HealthPropertyRepository healthPropertyRepository)
     {
         this.sweetRepository = sweetRepository;
