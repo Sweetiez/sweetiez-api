@@ -6,7 +6,6 @@ import fr.sweetiez.api.adapter.gateways.allergen.models.requests.IngredientNutri
 import fr.sweetiez.api.adapter.gateways.allergen.models.responses.EdamamNutrientsResponse;
 import fr.sweetiez.api.adapter.gateways.allergen.models.responses.EdamamParsedResponse;
 import fr.sweetiez.api.core.ingredients.ports.IngredientApi;
-import org.json.JSONException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -57,7 +56,7 @@ public class EdamamApi implements IngredientApi {
 
             return response.parsed().get(0).food().foodId();
         }
-        catch (RestClientException | NullPointerException | JSONException exception) {
+        catch (RestClientException | NullPointerException exception) {
             throw new IngredientNotFoundException();
         }
     }
@@ -77,8 +76,7 @@ public class EdamamApi implements IngredientApi {
 
             return healthLabels;
         }
-        catch (RestClientException | NullPointerException | JSONException exception) {
-            exception.printStackTrace();
+        catch (RestClientException | NullPointerException exception) {
             throw new IngredientNotFoundException();
         }
     }
