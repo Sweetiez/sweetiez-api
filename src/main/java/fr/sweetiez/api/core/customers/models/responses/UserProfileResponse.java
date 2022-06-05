@@ -5,8 +5,8 @@ import fr.sweetiez.api.core.customers.models.CustomerId;
 
 public record UserProfileResponse(
         String id,
-        String lastName,
         String firstName,
+        String lastName,
         String email,
         String phone
 ) {

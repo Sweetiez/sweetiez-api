@@ -15,8 +15,8 @@ public record Customer(
     public Customer(CustomerId id, Optional<Account> account, UpdateCustomerRequest request) {
         this(
                 id,
-                request.lastName(),
                 request.firstName(),
+                request.lastName(),
                 request.email(),
                 request.phone(),
                 account
