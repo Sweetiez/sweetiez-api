@@ -1,4 +1,4 @@
-package fr.sweetiez.api.infrastructure.delivery.sweet;
+package fr.sweetiez.api.infrastructure.delivery.tray;
 
 import fr.sweetiez.api.adapter.delivery.sweet.SweetEndPoints;
 import fr.sweetiez.api.core.sweets.models.responses.BannerSweetResponse;
@@ -13,28 +13,28 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/sweets")
-public class SpringSweetController {
+@RequestMapping("/trays")
+public class SpringTrayController {
 
-    private final SweetEndPoints sweetsEndPoints;
+    private final SweetEndPoints sweetEndPoints;
 
-    public SpringSweetController(SweetEndPoints sweetsEndPoints) {
-        this.sweetsEndPoints = sweetsEndPoints;
+    public SpringTrayController(SweetEndPoints sweetEndPoints) {
+        this.sweetEndPoints = sweetEndPoints;
     }
 
     @GetMapping("/published")
     public ResponseEntity<Collection<SimpleSweetResponse>> retrievePublishedSweets() {
-        return sweetsEndPoints.retrievePublishedSweets();
+        return sweetEndPoints.retrievePublishedSweets();
     }
 
     @GetMapping("/banner")
     public ResponseEntity<Collection<BannerSweetResponse>> retrieveBannerSweets() {
-        return sweetsEndPoints.retrieveBannerSweets();
+        return sweetEndPoints.retrieveBannerSweets();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DetailedSweetResponse> retrieveSweetDetails(@PathVariable("id") String id) {
-        return sweetsEndPoints.retrieveSweetDetails(id);
+        return sweetEndPoints.retrieveSweetDetails(id);
     }
 
 }

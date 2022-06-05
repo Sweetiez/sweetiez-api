@@ -1,6 +1,6 @@
 package fr.sweetiez.api.infrastructure.delivery.auth;
 
-import fr.sweetiez.api.adapter.delivery.AuthenticationEndPoints;
+import fr.sweetiez.api.adapter.delivery.authentication.AuthenticationEndPoints;
 import fr.sweetiez.api.core.authentication.models.LoginRequest;
 import fr.sweetiez.api.core.authentication.models.SubscriptionRequest;
 import org.springframework.http.ResponseEntity;
