@@ -3,6 +3,7 @@ package fr.sweetiez.api.core.authentication.services;
 import fr.sweetiez.api.core.authentication.models.Account;
 import fr.sweetiez.api.core.authentication.models.LoginRequest;
 import fr.sweetiez.api.core.authentication.models.SubscriptionRequest;
+import fr.sweetiez.api.core.authentication.models.UpdateAccountPasswordRequest;
 import fr.sweetiez.api.core.authentication.ports.AuthenticationRepository;
 import fr.sweetiez.api.core.customers.models.Customer;
 import fr.sweetiez.api.core.customers.services.CustomerService;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -92,5 +94,18 @@ public class AuthenticationService {
         httpHeaders.add("refresh-token", "Bearer " + refreshToken);
 
         return httpHeaders;
+    }
+
+    public void updatePassword(UpdateAccountPasswordRequest request) {
+        var account = repository.findByUsername(request.email()).orElseThrow();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        if (!passwordEncoder.matches(request.currentPassword(), account.password())) {
+            throw new AuthenticationServiceException("Password invalid");
+        }
+
+        var newPassword = new BCryptPasswordEncoder().encode(request.newPassword());
+        var updatedAccount = new Account(account.id(), account.username(), newPassword, account.roles());
+        repository.registerAccount(updatedAccount);
     }
 }
