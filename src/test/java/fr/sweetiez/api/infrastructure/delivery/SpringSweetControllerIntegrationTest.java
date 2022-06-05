@@ -1,8 +1,8 @@
 package fr.sweetiez.api.infrastructure.delivery;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.sweetiez.api.adapter.delivery.AdminSweetEndPoints;
-import fr.sweetiez.api.adapter.delivery.SweetEndPoints;
+import fr.sweetiez.api.adapter.delivery.sweet.AdminSweetEndPoints;
+import fr.sweetiez.api.adapter.delivery.sweet.SweetEndPoints;
 import fr.sweetiez.api.adapter.shared.SweetMapper;
 import fr.sweetiez.api.core.ingredients.models.Ingredient;
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;

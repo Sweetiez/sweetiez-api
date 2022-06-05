@@ -111,7 +111,7 @@
             <artifactId>stripe-java</artifactId>
             <version>20.123.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.github.spullara.mustache.java/compiler -->
+
         <dependency>
             <groupId>com.github.spullara.mustache.java</groupId>
             <artifactId>compiler</artifactId>

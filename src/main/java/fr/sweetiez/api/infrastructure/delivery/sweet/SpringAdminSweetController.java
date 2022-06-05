@@ -1,11 +1,9 @@
 package fr.sweetiez.api.infrastructure.delivery.sweet;
 
-import fr.sweetiez.api.adapter.delivery.AdminSweetEndPoints;
-import fr.sweetiez.api.adapter.delivery.SweetEndPoints;
+import fr.sweetiez.api.adapter.delivery.sweet.AdminSweetEndPoints;
 import fr.sweetiez.api.core.sweets.models.requests.*;
 import fr.sweetiez.api.core.sweets.models.responses.AdminDetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.AdminSweetSimpleResponse;
-import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 import org.springframework.http.ResponseEntity;
