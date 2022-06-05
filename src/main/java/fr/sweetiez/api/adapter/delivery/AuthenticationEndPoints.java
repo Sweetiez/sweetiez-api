@@ -2,6 +2,7 @@ package fr.sweetiez.api.adapter.delivery;
 
 import fr.sweetiez.api.core.authentication.models.LoginRequest;
 import fr.sweetiez.api.core.authentication.models.SubscriptionRequest;
+import fr.sweetiez.api.core.authentication.models.UpdateAccountPasswordRequest;
 import fr.sweetiez.api.core.authentication.services.AccountAlreadyExistsException;
 import fr.sweetiez.api.core.authentication.services.AuthenticationService;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.security.core.AuthenticationException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.util.NoSuchElementException;
 
 public class AuthenticationEndPoints {
 
@@ -45,6 +47,16 @@ public class AuthenticationEndPoints {
             return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
         }
         catch (Exception exception) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    public ResponseEntity<Object> updatePassword(UpdateAccountPasswordRequest request) {
+        try {
+            authenticationService.updatePassword(request);
+            return ResponseEntity.ok().build();
+        }
+        catch (AuthenticationException exception) {
             return ResponseEntity.badRequest().build();
         }
     }
