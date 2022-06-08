@@ -6,8 +6,12 @@ import fr.sweetiez.api.core.customers.services.exceptions.CustomerDoesNotExistEx
 import fr.sweetiez.api.core.evaluations.models.CreateEvaluationRequest;
 import fr.sweetiez.api.core.evaluations.models.Evaluation;
 import fr.sweetiez.api.core.evaluations.models.EvaluationId;
+import fr.sweetiez.api.core.evaluations.models.EvaluationResponse;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationReader;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationWriter;
+import fr.sweetiez.api.core.orders.services.exceptions.OrderNotFoundException;
+import fr.sweetiez.api.core.sweets.models.responses.AdminDetailedSweetResponse;
+import fr.sweetiez.api.core.sweets.models.sweet.SweetId;
 
 import java.util.Collection;
 import java.time.LocalDate;
@@ -27,6 +31,10 @@ public class EvaluationService {
 
     public Collection<Evaluation> retrieveAllBySubject(String id) {
         return reader.retrieveAllBySubject(UUID.fromString(id));
+    }
+
+    public Evaluation getById(String id) throws EvaluationDoesNotExistException {
+        return this.reader.findById(id).orElseThrow();
     }
 
     public Evaluation create(CreateEvaluationRequest request) {

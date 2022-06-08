@@ -3,11 +3,13 @@ package fr.sweetiez.api.core.reports.services;
 import fr.sweetiez.api.core.customers.models.CustomerId;
 import fr.sweetiez.api.core.customers.services.CustomerService;
 import fr.sweetiez.api.core.customers.services.exceptions.CustomerDoesNotExistException;
+import fr.sweetiez.api.core.evaluations.models.Evaluation;
 import fr.sweetiez.api.core.evaluations.models.EvaluationId;
 import fr.sweetiez.api.core.reports.models.Report;
 import fr.sweetiez.api.core.reports.models.ReportEvaluationRequest;
 import fr.sweetiez.api.core.evaluations.services.EvaluationDoesNotExistException;
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
+import fr.sweetiez.api.core.reports.models.responses.AdminReportResponse;
 import fr.sweetiez.api.core.reports.ports.ReportRepository;
 
 import java.time.LocalDateTime;
@@ -53,8 +55,16 @@ public class ReportService {
         return reportRepository.save(reportedEvaluation);
     }
 
-    public Collection<Report> retrieveAll() {
-        return reportRepository.retrieveAll();
+    public Collection<AdminReportResponse> retrieveAll() {
+        return reportRepository.retrieveAll().stream()
+                .map(report -> new AdminReportResponse(
+                    report.id(),
+                    report.reporterId(),
+                    evaluationService.getById(report.evaluationId().toString()).comment(),
+                    report.reason(),
+                    report.content(),
+                    report.creationDate()
+                )).toList();
     }
 
     public void deleteReportedEvaluationWithReport(String id) {
