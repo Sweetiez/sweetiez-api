@@ -14,6 +14,9 @@ import fr.sweetiez.api.core.evaluations.services.EvaluationService;
 import fr.sweetiez.api.core.orders.ports.OrdersReader;
 import fr.sweetiez.api.core.orders.ports.OrdersWriter;
 import fr.sweetiez.api.core.orders.services.OrderService;
+import fr.sweetiez.api.core.recipes.ports.RecipeReader;
+import fr.sweetiez.api.core.recipes.ports.RecipeWriter;
+import fr.sweetiez.api.core.recipes.services.RecipeService;
 import fr.sweetiez.api.core.reports.services.ReportService;
 import fr.sweetiez.api.core.sweets.ports.SweetsReader;
 import fr.sweetiez.api.core.sweets.ports.SweetsWriter;
@@ -26,6 +29,8 @@ import fr.sweetiez.api.infrastructure.repository.customers.CustomerRepository;
 import fr.sweetiez.api.infrastructure.repository.evaluations.EvaluationRepository;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderDetailRepository;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderRepository;
+import fr.sweetiez.api.infrastructure.repository.recipe.RecipeRepository;
+import fr.sweetiez.api.infrastructure.repository.recipe.RecipeStepRepository;
 import fr.sweetiez.api.infrastructure.repository.reports.ReportRepository;
 import fr.sweetiez.api.infrastructure.repository.sweets.SweetRepository;
 import io.minio.MinioClient;
@@ -64,11 +69,15 @@ public class SpringDependenciesConfig {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManager;
 
+    private final RecipeRepository recipeRepository;
+
+    private final RecipeStepRepository recipeStepRepository;
+
     public SpringDependenciesConfig(SweetRepository sweetRepository, EvaluationRepository evaluationRepository,
                                     ReportRepository reportRepository, CustomerRepository customerRepository,
                                     AccountRepository accountRepository, RoleRepository roleRepository,
                                     OrderRepository orderRepository, OrderDetailRepository orderDetailRepository,
-                                    TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManager)
+                                    TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManager, RecipeRepository recipeRepository, RecipeStepRepository recipeStepRepository)
     {
         this.sweetRepository = sweetRepository;
         this.evaluationRepository = evaluationRepository;
@@ -80,6 +89,8 @@ public class SpringDependenciesConfig {
         this.authenticationManager = authenticationManager;
         this.orderRepository = orderRepository;
         this.orderDetailRepository = orderDetailRepository;
+        this.recipeRepository = recipeRepository;
+        this.recipeStepRepository = recipeStepRepository;
     }
 
     // MAPPERS
@@ -111,6 +122,11 @@ public class SpringDependenciesConfig {
     @Bean
     public OrderMapper orderMapper() {
         return new OrderMapper();
+    }
+
+    @Bean
+    public RecipeMapper recipeMapper() {
+        return new RecipeMapper();
     }
 
     // ADAPTERS
@@ -164,6 +180,16 @@ public class SpringDependenciesConfig {
         return new OrderWriterAdapter(orderRepository, orderDetailRepository, orderMapper());
     }
 
+    @Bean
+    public RecipeReader recipeReader() {
+        return new RecipeReaderAdapter(recipeRepository, recipeStepRepository, recipeMapper());
+    }
+
+    @Bean
+    public RecipeWriter recipeWriter() {
+        return new RecipeWriterAdapter(recipeRepository, recipeStepRepository, recipeMapper());
+    }
+
     // SERVICES
     @Bean
     public EvaluationService evaluationService() {
@@ -193,6 +219,11 @@ public class SpringDependenciesConfig {
     @Bean
     public OrderService orderService() {
         return new OrderService(orderWriter(), orderReader(), sweetService(), customerService(), stripeService());
+    }
+
+    @Bean
+    public RecipeService recipeService() {
+        return new RecipeService(recipeReader(), recipeWriter());
     }
 
     // END POINTS
@@ -234,6 +265,11 @@ public class SpringDependenciesConfig {
     @Bean
     public UserEndPoints userEndPoints() {
         return new UserEndPoints(customerService());
+    }
+
+    @Bean
+    public AdminRecipeEndPoints recipeEndPoints() {
+        return new AdminRecipeEndPoints(recipeService());
     }
 
     // MINIO
