@@ -8,4 +8,8 @@ public record Steps(Collection<Step> steps) {
     public Steps() {
         this(Set.of());
     }
+
+    public void addStep(Step step) {
+        steps.add(step);
+    }
 }

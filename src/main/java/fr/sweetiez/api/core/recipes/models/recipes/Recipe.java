@@ -2,6 +2,7 @@ package fr.sweetiez.api.core.recipes.models.recipes;
 
 import fr.sweetiez.api.core.recipes.models.recipes.details.RecipeDetail;
 import fr.sweetiez.api.core.recipes.models.recipes.details.Title;
+import fr.sweetiez.api.core.recipes.models.recipes.steps.Step;
 import fr.sweetiez.api.core.recipes.models.recipes.steps.Steps;
 import fr.sweetiez.api.core.recipes.models.requests.CreateRecipeRequest;
 
@@ -22,5 +23,10 @@ public record Recipe(RecipeId id,
             Set.of(),
             new Steps()
         );
+    }
+
+    public Recipe addStep(Step step) {
+        steps.addStep(step);
+        return this;
     }
 }
