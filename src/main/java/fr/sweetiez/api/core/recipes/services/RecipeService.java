@@ -26,8 +26,8 @@ public class RecipeService {
     public Recipe addStep(CreateStepRequest request) {
         var step = new Step(request);
         var recipe = reader.findById(request.id());
-        recipe.addStep(step);
-        return writer.save(recipe);
+        var updatedRecipe = recipe.addStep(step);
+        return writer.save(updatedRecipe);
     }
 
 

@@ -25,8 +25,17 @@ public record Recipe(RecipeId id,
         );
     }
 
+    public Recipe(Recipe recipe, Steps steps) {
+        this(
+            recipe.id(),
+            recipe.title(),
+            recipe.detail(),
+            recipe.images(),
+            steps
+        );
+    }
+
     public Recipe addStep(Step step) {
-        steps.addStep(step);
-        return this;
+        return new Recipe(this, steps.addStep(step));
     }
 }

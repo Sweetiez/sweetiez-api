@@ -1,6 +1,7 @@
 package fr.sweetiez.api.adapter.delivery;
 
 import fr.sweetiez.api.core.recipes.models.requests.CreateRecipeRequest;
+import fr.sweetiez.api.core.recipes.models.requests.CreateStepRequest;
 import fr.sweetiez.api.core.recipes.models.responses.RecipeDetailedResponse;
 import fr.sweetiez.api.core.recipes.services.RecipeService;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,13 @@ public class AdminRecipeEndPoints {
     public ResponseEntity<RecipeDetailedResponse> create(CreateRecipeRequest request) {
         System.out.println(request);
         var recipe = recipeService.createRecipe(request);
+
+        return ResponseEntity.ok(new RecipeDetailedResponse(recipe));
+    }
+
+    public ResponseEntity<RecipeDetailedResponse> addStep(CreateStepRequest request) {
+//        System.out.println(request);
+        var recipe = recipeService.addStep(request);
 
         return ResponseEntity.ok(new RecipeDetailedResponse(recipe));
     }
