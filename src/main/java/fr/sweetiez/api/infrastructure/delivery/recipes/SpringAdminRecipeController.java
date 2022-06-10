@@ -5,10 +5,9 @@ import fr.sweetiez.api.core.recipes.models.requests.CreateRecipeRequest;
 import fr.sweetiez.api.core.recipes.models.requests.CreateStepRequest;
 import fr.sweetiez.api.core.recipes.models.responses.RecipeDetailedResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/recipes")
@@ -28,6 +27,16 @@ public class SpringAdminRecipeController {
     @PostMapping("/step")
     public ResponseEntity<RecipeDetailedResponse> addStep(@RequestBody CreateStepRequest request) {
         return recipesEndPoints.addStep(request);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<RecipeDetailedResponse>> retrieveAll() {
+        return recipesEndPoints.retrieveAll();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RecipeDetailedResponse> retrieveById(@PathVariable String id) {
+        return recipesEndPoints.retrieveById(id);
     }
 
 

@@ -1,6 +1,7 @@
 package fr.sweetiez.api.core.recipes.services;
 
 import fr.sweetiez.api.core.recipes.models.recipes.Recipe;
+import fr.sweetiez.api.core.recipes.models.recipes.Recipes;
 import fr.sweetiez.api.core.recipes.models.recipes.steps.Step;
 import fr.sweetiez.api.core.recipes.models.requests.CreateRecipeRequest;
 import fr.sweetiez.api.core.recipes.models.requests.CreateStepRequest;
@@ -31,4 +32,11 @@ public class RecipeService {
     }
 
 
+    public Recipes retrieveAll() {
+        return reader.findAll();
+    }
+
+    public Recipe retrieveById(String id) {
+        return reader.findById(id);
+    }
 }

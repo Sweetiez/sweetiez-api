@@ -6,6 +6,8 @@ import fr.sweetiez.api.core.recipes.models.responses.RecipeDetailedResponse;
 import fr.sweetiez.api.core.recipes.services.RecipeService;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public class AdminRecipeEndPoints {
 
     private final RecipeService recipeService;
@@ -26,6 +28,19 @@ public class AdminRecipeEndPoints {
 //        System.out.println(request);
         var recipe = recipeService.addStep(request);
 
+        return ResponseEntity.ok(new RecipeDetailedResponse(recipe));
+    }
+
+    public ResponseEntity<List<RecipeDetailedResponse>> retrieveAll() {
+        var recipes = recipeService.retrieveAll();
+
+        return ResponseEntity.ok(recipes.recipes().stream()
+                .map(RecipeDetailedResponse::new)
+                .toList());
+    }
+
+    public ResponseEntity<RecipeDetailedResponse> retrieveById(String id) {
+        var recipe = recipeService.retrieveById(id);
         return ResponseEntity.ok(new RecipeDetailedResponse(recipe));
     }
 }
