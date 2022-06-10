@@ -7,6 +7,11 @@ import fr.sweetiez.api.core.recipes.models.requests.CreateRecipeRequest;
 import fr.sweetiez.api.core.recipes.models.requests.CreateStepRequest;
 import fr.sweetiez.api.core.recipes.ports.RecipeReader;
 import fr.sweetiez.api.core.recipes.ports.RecipeWriter;
+import fr.sweetiez.api.core.recipes.services.exceptions.InvalidRecipeException;
+import fr.sweetiez.api.core.recipes.services.exceptions.RecipeNotFoundException;
+
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 public class RecipeService {
 
@@ -36,7 +41,15 @@ public class RecipeService {
         return reader.findAll();
     }
 
-    public Recipe retrieveById(String id) {
-        return reader.findById(id);
+    public Recipe retrieveById(String id) throws InvalidRecipeException, RecipeNotFoundException {
+        try {
+            UUID.fromString(id);
+            return reader.findById(id);
+        }
+        catch (IllegalArgumentException exception) {
+            throw new InvalidRecipeException();
+        } catch (NoSuchElementException exception) {
+            throw new RecipeNotFoundException();
+        }
     }
 }
