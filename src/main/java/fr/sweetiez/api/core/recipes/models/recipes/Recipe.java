@@ -6,9 +6,7 @@ import fr.sweetiez.api.core.recipes.models.recipes.steps.Step;
 import fr.sweetiez.api.core.recipes.models.recipes.steps.Steps;
 import fr.sweetiez.api.core.recipes.models.requests.CreateRecipeRequest;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public record Recipe(RecipeId id,
                      Title title,
@@ -42,5 +40,11 @@ public record Recipe(RecipeId id,
 
     public Recipe changeStepsOrder(List<Step> steps) {
         return new Recipe(this, new Steps(steps));
+    }
+
+    public Recipe sortSteps() {
+        var stepList = new ArrayList<>(steps.steps());
+        stepList.sort(Comparator.comparing(Step::order));
+        return new Recipe(this, new Steps(stepList));
     }
 }

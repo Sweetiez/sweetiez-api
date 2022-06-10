@@ -58,6 +58,6 @@ public class RecipeMapper {
                         )
                 ),
                 List.of(entity.getImages().split(";")),
-                new Steps(recipeSteps.stream().map(this::toDto).toList()));
+                new Steps(recipeSteps.stream().map(this::toDto).toList())).sortSteps();
     }
 }
