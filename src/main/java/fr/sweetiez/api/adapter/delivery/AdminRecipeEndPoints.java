@@ -1,13 +1,14 @@
 package fr.sweetiez.api.adapter.delivery;
 
-import fr.sweetiez.api.core.recipes.models.recipes.Recipe;
 import fr.sweetiez.api.core.recipes.models.requests.ChangeStepsOrderRequest;
 import fr.sweetiez.api.core.recipes.models.requests.CreateRecipeRequest;
 import fr.sweetiez.api.core.recipes.models.requests.CreateStepRequest;
+import fr.sweetiez.api.core.recipes.models.requests.RemoveStepRequest;
 import fr.sweetiez.api.core.recipes.models.responses.RecipeDetailedResponse;
 import fr.sweetiez.api.core.recipes.services.RecipeService;
 import fr.sweetiez.api.core.recipes.services.exceptions.InvalidRecipeException;
 import fr.sweetiez.api.core.recipes.services.exceptions.RecipeNotFoundException;
+import fr.sweetiez.api.core.recipes.services.exceptions.StepNotFoundException;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -61,6 +62,17 @@ public class AdminRecipeEndPoints {
         } catch (InvalidRecipeException e) {
             return ResponseEntity.badRequest().build();
         } catch (RecipeNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public ResponseEntity<RecipeDetailedResponse> deleteStep(RemoveStepRequest request) {
+        try {
+            var recipe = recipeService.removeStep(request);
+            return ResponseEntity.ok(new RecipeDetailedResponse(recipe));
+        } catch (InvalidRecipeException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (RecipeNotFoundException | StepNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }

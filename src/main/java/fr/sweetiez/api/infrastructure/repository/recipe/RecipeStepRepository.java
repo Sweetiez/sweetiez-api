@@ -10,4 +10,6 @@ import java.util.UUID;
 public interface RecipeStepRepository extends JpaRepository<RecipeStepEntity, UUID> {
 
      List<RecipeStepEntity> findByRecipeId(UUID id);
+
+     boolean removeById(UUID id);
 }

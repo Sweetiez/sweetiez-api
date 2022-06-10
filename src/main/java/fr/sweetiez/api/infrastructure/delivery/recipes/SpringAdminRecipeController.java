@@ -4,6 +4,7 @@ import fr.sweetiez.api.adapter.delivery.AdminRecipeEndPoints;
 import fr.sweetiez.api.core.recipes.models.requests.ChangeStepsOrderRequest;
 import fr.sweetiez.api.core.recipes.models.requests.CreateRecipeRequest;
 import fr.sweetiez.api.core.recipes.models.requests.CreateStepRequest;
+import fr.sweetiez.api.core.recipes.models.requests.RemoveStepRequest;
 import fr.sweetiez.api.core.recipes.models.responses.RecipeDetailedResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,11 @@ public class SpringAdminRecipeController {
     @PutMapping("/step")
     public ResponseEntity<RecipeDetailedResponse> changeStepsOrder(@RequestBody ChangeStepsOrderRequest request) {
         return recipesEndPoints.changeStepOrder(request);
+    }
+
+    @DeleteMapping("/step")
+    public ResponseEntity<RecipeDetailedResponse> deleteStepsOrder(@RequestBody RemoveStepRequest request) {
+        return recipesEndPoints.deleteStep(request);
     }
 
     @GetMapping

@@ -2,9 +2,12 @@ package fr.sweetiez.api.adapter.repository;
 
 import fr.sweetiez.api.adapter.shared.RecipeMapper;
 import fr.sweetiez.api.core.recipes.models.recipes.Recipe;
+import fr.sweetiez.api.core.recipes.models.requests.RemoveStepRequest;
 import fr.sweetiez.api.core.recipes.ports.RecipeWriter;
 import fr.sweetiez.api.infrastructure.repository.recipe.RecipeRepository;
 import fr.sweetiez.api.infrastructure.repository.recipe.RecipeStepRepository;
+
+import java.util.UUID;
 
 public class RecipeWriterAdapter implements RecipeWriter {
 
@@ -28,5 +31,10 @@ public class RecipeWriterAdapter implements RecipeWriter {
                 .map(stepRepository::save)
                 .toList();
         return mapper.toDto(recipeEntity, list);
+    }
+
+    @Override
+    public void removeStep(RemoveStepRequest request) {
+        stepRepository.deleteById(UUID.fromString(request.stepId()));
     }
 }
