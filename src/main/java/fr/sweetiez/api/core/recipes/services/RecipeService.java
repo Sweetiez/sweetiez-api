@@ -3,6 +3,7 @@ package fr.sweetiez.api.core.recipes.services;
 import fr.sweetiez.api.core.recipes.models.recipes.Recipe;
 import fr.sweetiez.api.core.recipes.models.recipes.Recipes;
 import fr.sweetiez.api.core.recipes.models.recipes.steps.Step;
+import fr.sweetiez.api.core.recipes.models.requests.ChangeStepsOrderRequest;
 import fr.sweetiez.api.core.recipes.models.requests.CreateRecipeRequest;
 import fr.sweetiez.api.core.recipes.models.requests.CreateStepRequest;
 import fr.sweetiez.api.core.recipes.ports.RecipeReader;
@@ -51,5 +52,15 @@ public class RecipeService {
         } catch (NoSuchElementException exception) {
             throw new RecipeNotFoundException();
         }
+    }
+
+    public Recipe changeStepsOrder(ChangeStepsOrderRequest request) throws RecipeNotFoundException, InvalidRecipeException {
+        System.out.println(request);
+        var recipe = retrieveById(request.recipeId());
+        var steps =request.steps().stream()
+                .map(Step::new)
+                .toList();
+        var updatedRecipe = recipe.changeStepsOrder(steps);
+        return writer.save(updatedRecipe);
     }
 }

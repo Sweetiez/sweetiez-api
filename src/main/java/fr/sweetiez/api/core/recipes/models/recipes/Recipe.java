@@ -7,6 +7,7 @@ import fr.sweetiez.api.core.recipes.models.recipes.steps.Steps;
 import fr.sweetiez.api.core.recipes.models.requests.CreateRecipeRequest;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 public record Recipe(RecipeId id,
@@ -37,5 +38,9 @@ public record Recipe(RecipeId id,
 
     public Recipe addStep(Step step) {
         return new Recipe(this, steps.addStep(step));
+    }
+
+    public Recipe changeStepsOrder(List<Step> steps) {
+        return new Recipe(this, new Steps(steps));
     }
 }

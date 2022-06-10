@@ -1,6 +1,7 @@
 package fr.sweetiez.api.adapter.delivery;
 
 import fr.sweetiez.api.core.recipes.models.recipes.Recipe;
+import fr.sweetiez.api.core.recipes.models.requests.ChangeStepsOrderRequest;
 import fr.sweetiez.api.core.recipes.models.requests.CreateRecipeRequest;
 import fr.sweetiez.api.core.recipes.models.requests.CreateStepRequest;
 import fr.sweetiez.api.core.recipes.models.responses.RecipeDetailedResponse;
@@ -45,6 +46,17 @@ public class AdminRecipeEndPoints {
     public ResponseEntity<RecipeDetailedResponse> retrieveById(String id) {
         try {
             var recipe = recipeService.retrieveById(id);
+            return ResponseEntity.ok(new RecipeDetailedResponse(recipe));
+        } catch (InvalidRecipeException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (RecipeNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public ResponseEntity<RecipeDetailedResponse> changeStepOrder(ChangeStepsOrderRequest request) {
+        try {
+            var recipe = recipeService.changeStepsOrder(request);
             return ResponseEntity.ok(new RecipeDetailedResponse(recipe));
         } catch (InvalidRecipeException e) {
             return ResponseEntity.badRequest().build();

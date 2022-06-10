@@ -1,6 +1,7 @@
 package fr.sweetiez.api.infrastructure.delivery.recipes;
 
 import fr.sweetiez.api.adapter.delivery.AdminRecipeEndPoints;
+import fr.sweetiez.api.core.recipes.models.requests.ChangeStepsOrderRequest;
 import fr.sweetiez.api.core.recipes.models.requests.CreateRecipeRequest;
 import fr.sweetiez.api.core.recipes.models.requests.CreateStepRequest;
 import fr.sweetiez.api.core.recipes.models.responses.RecipeDetailedResponse;
@@ -27,6 +28,11 @@ public class SpringAdminRecipeController {
     @PostMapping("/step")
     public ResponseEntity<RecipeDetailedResponse> addStep(@RequestBody CreateStepRequest request) {
         return recipesEndPoints.addStep(request);
+    }
+
+    @PutMapping("/step")
+    public ResponseEntity<RecipeDetailedResponse> changeStepsOrder(@RequestBody ChangeStepsOrderRequest request) {
+        return recipesEndPoints.changeStepOrder(request);
     }
 
     @GetMapping
