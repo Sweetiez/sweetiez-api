@@ -7,6 +7,7 @@ import fr.sweetiez.api.core.recipes.models.recipes.steps.Steps;
 import fr.sweetiez.api.core.recipes.models.requests.CreateRecipeRequest;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public record Recipe(RecipeId id,
                      Title title,
@@ -46,5 +47,22 @@ public record Recipe(RecipeId id,
         var stepList = new ArrayList<>(steps.steps());
         stepList.sort(Comparator.comparing(Step::order));
         return new Recipe(this, new Steps(stepList));
+    }
+
+    public Recipe addImage(String imageUrl) {
+        var imageList = new ArrayList<>(images);
+        if (images.size() == 1 && images.toArray()[0].equals("")) {
+            imageList = new ArrayList<>();
+        }
+        imageList.add(imageUrl);
+        return new Recipe(this.id(), this.title(), this.detail(), imageList, this.steps());
+    }
+
+    public Recipe deleteImage(String imageUrl) {
+        var updatedImages = images.stream()
+                .filter(image -> !image.equals(imageUrl))
+                .collect(Collectors.toSet());
+
+        return new Recipe(this.id(), this.title(), this.detail(), updatedImages, this.steps());
     }
 }

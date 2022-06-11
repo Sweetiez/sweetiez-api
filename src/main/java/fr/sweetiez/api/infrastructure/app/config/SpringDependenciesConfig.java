@@ -269,7 +269,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public AdminRecipeEndPoints recipeEndPoints() {
-        return new AdminRecipeEndPoints(recipeService());
+        return new AdminRecipeEndPoints(recipeService(), minioClient());
     }
 
     // MINIO

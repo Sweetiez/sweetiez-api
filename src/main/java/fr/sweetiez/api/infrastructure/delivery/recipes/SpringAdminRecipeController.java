@@ -6,8 +6,10 @@ import fr.sweetiez.api.core.recipes.models.requests.CreateRecipeRequest;
 import fr.sweetiez.api.core.recipes.models.requests.CreateStepRequest;
 import fr.sweetiez.api.core.recipes.models.requests.RemoveStepRequest;
 import fr.sweetiez.api.core.recipes.models.responses.RecipeDetailedResponse;
+import fr.sweetiez.api.core.sweets.models.requests.DeleteImageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -51,5 +53,13 @@ public class SpringAdminRecipeController {
         return recipesEndPoints.retrieveById(id);
     }
 
+    @PostMapping("/{id}/image")
+    public ResponseEntity<RecipeDetailedResponse> addImage(@PathVariable("id") String id, @RequestParam MultipartFile image) {
+        return recipesEndPoints.addImage(id, image);
+    }
 
+    @DeleteMapping("/{id}/image")
+    public ResponseEntity<RecipeDetailedResponse> deleteImage(@PathVariable("id") String id, @RequestBody DeleteImageRequest request) {
+        return recipesEndPoints.deleteImage(id, request);
+    }
 }

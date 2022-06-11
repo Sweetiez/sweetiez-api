@@ -69,4 +69,16 @@ public class RecipeService {
         var updatedRecipe = recipe.changeStepsOrder(steps);
         return writer.save(updatedRecipe);
     }
+
+    public Recipe addImage(String recipeId, String imageUrl) throws RecipeNotFoundException, InvalidRecipeException {
+        var recipe = retrieveById(recipeId);
+        var updatedRecipe = recipe.addImage(imageUrl);
+        return writer.save(updatedRecipe);
+    }
+
+    public Recipe deleteImage(String recipeId, String imageUrl) throws RecipeNotFoundException, InvalidRecipeException {
+        var recipe = retrieveById(recipeId);
+        var updatedRecipe = recipe.deleteImage(imageUrl);
+        return writer.save(updatedRecipe);
+    }
 }
