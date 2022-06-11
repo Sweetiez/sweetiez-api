@@ -1,6 +1,7 @@
 package fr.sweetiez.api.core.recipes.models.recipes;
 
 import fr.sweetiez.api.core.recipes.models.recipes.details.RecipeDetail;
+import fr.sweetiez.api.core.recipes.models.recipes.details.State;
 import fr.sweetiez.api.core.recipes.models.recipes.details.Title;
 import fr.sweetiez.api.core.recipes.models.recipes.steps.Step;
 import fr.sweetiez.api.core.recipes.models.recipes.steps.Steps;
@@ -13,6 +14,7 @@ public record Recipe(RecipeId id,
                      Title title,
                      RecipeDetail detail,
                      Collection<String> images,
+                     State state,
                      Steps steps) {
 
     public Recipe(CreateRecipeRequest request) {
@@ -21,6 +23,7 @@ public record Recipe(RecipeId id,
             new Title(request.title()),
             new RecipeDetail(request),
             Set.of(),
+            State.NON_PUBLISHED,
             new Steps()
         );
     }
@@ -31,7 +34,19 @@ public record Recipe(RecipeId id,
             recipe.title(),
             recipe.detail(),
             recipe.images(),
+            recipe.state(),
             steps
+        );
+    }
+
+    public Recipe(Recipe recipe, State state) {
+        this(
+            recipe.id(),
+            recipe.title(),
+            recipe.detail(),
+            recipe.images(),
+            state,
+            recipe.steps()
         );
     }
 
@@ -55,7 +70,7 @@ public record Recipe(RecipeId id,
             imageList = new ArrayList<>();
         }
         imageList.add(imageUrl);
-        return new Recipe(this.id(), this.title(), this.detail(), imageList, this.steps());
+        return new Recipe(this.id(), this.title(), this.detail(), imageList, this.state, this.steps());
     }
 
     public Recipe deleteImage(String imageUrl) {
@@ -63,6 +78,14 @@ public record Recipe(RecipeId id,
                 .filter(image -> !image.equals(imageUrl))
                 .collect(Collectors.toSet());
 
-        return new Recipe(this.id(), this.title(), this.detail(), updatedImages, this.steps());
+        return new Recipe(this.id(), this.title(), this.detail(), updatedImages, this.state, this.steps());
+    }
+
+    public Recipe publish() {
+        return new Recipe(this, State.PUBLISHED);
+    }
+
+    public Recipe unPublish() {
+        return new Recipe(this, State.NON_PUBLISHED);
     }
 }

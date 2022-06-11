@@ -2,6 +2,7 @@ package fr.sweetiez.api.infrastructure.repository.recipe;
 
 
 import fr.sweetiez.api.core.recipes.models.recipes.details.RecipeDifficulty;
+import fr.sweetiez.api.core.recipes.models.recipes.details.State;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -43,6 +44,10 @@ public class RecipeEntity {
     @Column(columnDefinition = "text")
     private String images;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private State state;
+
     public RecipeEntity() {
         this.id = null;
         this.title = null;
@@ -54,9 +59,14 @@ public class RecipeEntity {
         this.chillTime = null;
         this.cookTime = null;
         this.images = null;
+        this.state = null;
     }
 
-    public RecipeEntity(UUID id, String title, String description, RecipeDifficulty difficulty, Integer cost, Integer people, Integer preparationTime, Integer chillTime, Integer cookTime, String images) {
+    public RecipeEntity(UUID id, String title, String description,
+                        RecipeDifficulty difficulty, Integer cost,
+                        Integer people, Integer preparationTime,
+                        Integer chillTime, Integer cookTime,
+                        String images, State state) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -67,6 +77,7 @@ public class RecipeEntity {
         this.chillTime = chillTime;
         this.cookTime = cookTime;
         this.images = images;
+        this.state = state;
     }
 
     public UUID getId() {
@@ -109,17 +120,21 @@ public class RecipeEntity {
         return images;
     }
 
+    public State getState() {
+        return state;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RecipeEntity that = (RecipeEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(description, that.description) && difficulty == that.difficulty && Objects.equals(cost, that.cost) && Objects.equals(people, that.people) && Objects.equals(preparationTime, that.preparationTime) && Objects.equals(chillTime, that.chillTime) && Objects.equals(cookTime, that.cookTime) && Objects.equals(images, that.images);
+        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(description, that.description) && difficulty == that.difficulty && Objects.equals(cost, that.cost) && Objects.equals(people, that.people) && Objects.equals(preparationTime, that.preparationTime) && Objects.equals(chillTime, that.chillTime) && Objects.equals(cookTime, that.cookTime) && Objects.equals(images, that.images) && state == that.state;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, difficulty, cost, people, preparationTime, chillTime, cookTime, images);
+        return Objects.hash(id, title, description, difficulty, cost, people, preparationTime, chillTime, cookTime, images, state);
     }
 
     @Override
@@ -135,6 +150,7 @@ public class RecipeEntity {
                 ", chillTime=" + chillTime +
                 ", cookTime=" + cookTime +
                 ", images='" + images + '\'' +
+                ", state=" + state +
                 '}';
     }
 }

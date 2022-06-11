@@ -38,7 +38,8 @@ public class RecipeMapper {
                 recipe.detail().cookTime().cookTime(),
                 recipe.images().stream()
                         .map(image -> image.isEmpty() ? image : image.concat(";"))
-                        .reduce("", String::concat)
+                        .reduce("", String::concat),
+                recipe.state()
         );
     }
 
@@ -58,6 +59,8 @@ public class RecipeMapper {
                         )
                 ),
                 List.of(entity.getImages().split(";")),
-                new Steps(recipeSteps.stream().map(this::toDto).toList())).sortSteps();
+                entity.getState(),
+                new Steps(recipeSteps.stream().map(this::toDto).toList())
+        ).sortSteps();
     }
 }

@@ -3,10 +3,7 @@ package fr.sweetiez.api.core.recipes.services;
 import fr.sweetiez.api.core.recipes.models.recipes.Recipe;
 import fr.sweetiez.api.core.recipes.models.recipes.Recipes;
 import fr.sweetiez.api.core.recipes.models.recipes.steps.Step;
-import fr.sweetiez.api.core.recipes.models.requests.ChangeStepsOrderRequest;
-import fr.sweetiez.api.core.recipes.models.requests.CreateRecipeRequest;
-import fr.sweetiez.api.core.recipes.models.requests.CreateStepRequest;
-import fr.sweetiez.api.core.recipes.models.requests.RemoveStepRequest;
+import fr.sweetiez.api.core.recipes.models.requests.*;
 import fr.sweetiez.api.core.recipes.ports.RecipeReader;
 import fr.sweetiez.api.core.recipes.ports.RecipeWriter;
 import fr.sweetiez.api.core.recipes.services.exceptions.InvalidRecipeException;
@@ -79,6 +76,18 @@ public class RecipeService {
     public Recipe deleteImage(String recipeId, String imageUrl) throws RecipeNotFoundException, InvalidRecipeException {
         var recipe = retrieveById(recipeId);
         var updatedRecipe = recipe.deleteImage(imageUrl);
+        return writer.save(updatedRecipe);
+    }
+
+    public Recipe publish(PublishRecipeRequest request) throws RecipeNotFoundException, InvalidRecipeException {
+        var recipe = retrieveById(request.id());
+        var updatedRecipe = recipe.publish();
+        return writer.save(updatedRecipe);
+    }
+
+    public Recipe unPublish(UnPublishRecipeRequest request) throws RecipeNotFoundException, InvalidRecipeException {
+        var recipe = retrieveById(request.id());
+        var updatedRecipe = recipe.unPublish();
         return writer.save(updatedRecipe);
     }
 }

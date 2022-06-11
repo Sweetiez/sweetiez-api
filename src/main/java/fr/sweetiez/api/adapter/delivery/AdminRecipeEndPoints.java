@@ -1,10 +1,7 @@
 package fr.sweetiez.api.adapter.delivery;
 
 import fr.sweetiez.api.core.recipes.models.recipes.Recipe;
-import fr.sweetiez.api.core.recipes.models.requests.ChangeStepsOrderRequest;
-import fr.sweetiez.api.core.recipes.models.requests.CreateRecipeRequest;
-import fr.sweetiez.api.core.recipes.models.requests.CreateStepRequest;
-import fr.sweetiez.api.core.recipes.models.requests.RemoveStepRequest;
+import fr.sweetiez.api.core.recipes.models.requests.*;
 import fr.sweetiez.api.core.recipes.models.responses.RecipeDetailedResponse;
 import fr.sweetiez.api.core.recipes.services.RecipeService;
 import fr.sweetiez.api.core.recipes.services.exceptions.InvalidRecipeException;
@@ -136,4 +133,25 @@ public class AdminRecipeEndPoints {
         }
     }
 
+    public ResponseEntity<RecipeDetailedResponse> publish(PublishRecipeRequest request) {
+        try {
+            var recipe = recipeService.publish(request);
+            return ResponseEntity.ok(new RecipeDetailedResponse(recipe));
+        } catch (RecipeNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (InvalidRecipeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    public ResponseEntity<RecipeDetailedResponse> unPublish(UnPublishRecipeRequest request) {
+        try {
+            var recipe = recipeService.unPublish(request);
+            return ResponseEntity.ok(new RecipeDetailedResponse(recipe));
+        } catch (RecipeNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (InvalidRecipeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

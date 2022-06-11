@@ -2,6 +2,7 @@ package fr.sweetiez.api.core.recipes.models.responses;
 
 import fr.sweetiez.api.core.recipes.models.recipes.Recipe;
 import fr.sweetiez.api.core.recipes.models.recipes.details.RecipeDifficulty;
+import fr.sweetiez.api.core.recipes.models.recipes.details.State;
 
 import java.util.Collection;
 
@@ -15,7 +16,8 @@ public record RecipeDetailedResponse(String id,
                                      Integer chillTime,
                                      Integer cookTime,
                                      Collection<String> images,
-                                     Collection<StepDetailedResponse> steps) {
+                                     Collection<StepDetailedResponse> steps,
+                                     State state) {
 
     public RecipeDetailedResponse(Recipe recipe) {
         this(
@@ -31,7 +33,8 @@ public record RecipeDetailedResponse(String id,
           recipe.images(),
           recipe.steps().steps().stream()
             .map(StepDetailedResponse::new)
-            .toList()
+            .toList(),
+          recipe.state()
         );
     }
 
