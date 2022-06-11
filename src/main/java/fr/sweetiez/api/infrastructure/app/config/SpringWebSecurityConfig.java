@@ -75,6 +75,7 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/auth/**",
                         "/order/**",
                         "/payment/**",
+                        "/recipes/**",
                         "/sweets/published",
                         "/sweets/{\\d+}"
                 ).permitAll()

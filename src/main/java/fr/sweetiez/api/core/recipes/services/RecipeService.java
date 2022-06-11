@@ -90,4 +90,11 @@ public class RecipeService {
         var updatedRecipe = recipe.unPublish();
         return writer.save(updatedRecipe);
     }
+
+    public Recipes retrievePublishedRecipes() {
+        return new Recipes(reader.findAll().recipes()
+                .stream()
+                .filter(Recipe::isPublished)
+                .toList());
+    }
 }

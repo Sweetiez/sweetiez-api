@@ -88,4 +88,8 @@ public record Recipe(RecipeId id,
     public Recipe unPublish() {
         return new Recipe(this, State.NON_PUBLISHED);
     }
+
+    public boolean isPublished() {
+        return state == State.PUBLISHED;
+    }
 }
