@@ -6,6 +6,7 @@ import fr.sweetiez.api.core.recipes.models.recipes.details.Title;
 import fr.sweetiez.api.core.recipes.models.recipes.steps.Step;
 import fr.sweetiez.api.core.recipes.models.recipes.steps.Steps;
 import fr.sweetiez.api.core.recipes.models.requests.CreateRecipeRequest;
+import fr.sweetiez.api.core.recipes.models.requests.UpdateRecipeRequest;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,6 +26,17 @@ public record Recipe(RecipeId id,
             Set.of(),
             State.NON_PUBLISHED,
             new Steps()
+        );
+    }
+
+    public Recipe(Recipe recipe, UpdateRecipeRequest request) {
+        this(
+            recipe.id(),
+            new Title(request.title()),
+            new RecipeDetail(request),
+            recipe.images(),
+            recipe.state(),
+            recipe.steps()
         );
     }
 

@@ -154,4 +154,15 @@ public class AdminRecipeEndPoints {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    public ResponseEntity<RecipeDetailedResponse> update(String id, UpdateRecipeRequest request) {
+        try {
+            var recipe = recipeService.update(id, request);
+            return ResponseEntity.ok(new RecipeDetailedResponse(recipe));
+        } catch (RecipeNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (InvalidRecipeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

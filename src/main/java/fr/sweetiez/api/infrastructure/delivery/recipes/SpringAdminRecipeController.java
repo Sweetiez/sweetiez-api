@@ -50,6 +50,11 @@ public class SpringAdminRecipeController {
         return recipesEndPoints.retrieveById(id);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<RecipeDetailedResponse> updateRecipe(@PathVariable String id, @RequestBody UpdateRecipeRequest request) {
+        return recipesEndPoints.update(id, request);
+    }
+
     @PostMapping("/{id}/image")
     public ResponseEntity<RecipeDetailedResponse> addImage(@PathVariable("id") String id, @RequestParam MultipartFile image) {
         return recipesEndPoints.addImage(id, image);

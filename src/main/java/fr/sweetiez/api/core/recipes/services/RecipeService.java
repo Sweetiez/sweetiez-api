@@ -97,4 +97,10 @@ public class RecipeService {
                 .filter(Recipe::isPublished)
                 .toList());
     }
+
+    public Recipe update(String id, UpdateRecipeRequest request) throws RecipeNotFoundException, InvalidRecipeException {
+        var recipe = retrieveById(id);
+        var updatedRecipe = new Recipe(recipe, request);
+        return writer.save(updatedRecipe);
+    }
 }
