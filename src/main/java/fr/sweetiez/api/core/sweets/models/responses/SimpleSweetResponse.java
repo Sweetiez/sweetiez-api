@@ -1,5 +1,6 @@
 package fr.sweetiez.api.core.sweets.models.responses;
 
+import fr.sweetiez.api.core.evaluations.models.Evaluation;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 
 import java.util.Collection;
@@ -11,7 +12,7 @@ public record SimpleSweetResponse(
         String description,
         String flavor,
         Collection<String> images,
-        double rating
+        Collection<Evaluation> rating
 )
 {
     public SimpleSweetResponse(Sweet sweet) {
@@ -22,6 +23,6 @@ public record SimpleSweetResponse(
                 sweet.details().description().shortContent(),
                 sweet.details().flavor().name(),
                 sweet.details().images(),
-                sweet.details().score());
+                sweet.details().evaluations());
     }
 }

@@ -1,14 +1,20 @@
 package fr.sweetiez.api.core.sweets.models.sweet.details;
 
-import fr.sweetiez.api.core.ingredients.models.Ingredients;
+import fr.sweetiez.api.core.evaluations.models.Evaluation;
+import fr.sweetiez.api.core.ingredients.models.Ingredient;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public record Details(Description description, Flavor flavor, Collection<String> images, Ingredients ingredients, double score) {
+public record Details(
+        Description description,
+        Flavor flavor,
+        Collection<String> images,
+        Collection<Ingredient> ingredients,
+        Collection<Evaluation> evaluations) {
     public boolean isValid() {
-        return description != null && flavor != null && images != null && ingredients.isValid();
+        return description != null && flavor != null && images != null && ingredients != null;
     }
 
     public Details addImage(String imageUrl) {
@@ -17,7 +23,7 @@ public record Details(Description description, Flavor flavor, Collection<String>
             imageList = new ArrayList<>();
         }
         imageList.add(imageUrl);
-        return new Details(this.description, this.flavor, imageList, this.ingredients, this.score);
+        return new Details(this.description, this.flavor, imageList, this.ingredients, this.evaluations);
     }
 
     public Details deleteImage(String imageUrl) {
@@ -25,6 +31,6 @@ public record Details(Description description, Flavor flavor, Collection<String>
                 .filter(image -> !image.equals(imageUrl))
                 .collect(Collectors.toSet());
 
-        return new Details(this.description, this.flavor, updatedImages, this.ingredients, this.score);
+        return new Details(this.description, this.flavor, updatedImages, this.ingredients, this.evaluations);
     }
 }

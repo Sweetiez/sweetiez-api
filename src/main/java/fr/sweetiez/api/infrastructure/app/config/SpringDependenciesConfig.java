@@ -8,8 +8,6 @@ import fr.sweetiez.api.adapter.delivery.payment.PaymentWebhookEndpoint;
 import fr.sweetiez.api.adapter.delivery.report.ReportEndPoints;
 import fr.sweetiez.api.adapter.delivery.sweet.AdminSweetEndPoints;
 import fr.sweetiez.api.adapter.delivery.sweet.SweetEndPoints;
-import fr.sweetiez.api.adapter.delivery.tray.AdminTrayEndPoints;
-import fr.sweetiez.api.adapter.delivery.tray.TrayEndPoints;
 import fr.sweetiez.api.adapter.delivery.user.UserEndPoints;
 import fr.sweetiez.api.adapter.gateways.allergen.EdamamApi;
 import fr.sweetiez.api.adapter.gateways.translator.LibreTranslateApi;
@@ -24,8 +22,6 @@ import fr.sweetiez.api.adapter.repository.order.OrderWriterAdapter;
 import fr.sweetiez.api.adapter.repository.report.ReportRepositoryAdapter;
 import fr.sweetiez.api.adapter.repository.sweet.SweetReaderAdapter;
 import fr.sweetiez.api.adapter.repository.sweet.SweetWriterAdapter;
-import fr.sweetiez.api.adapter.repository.tray.TrayReaderAdapter;
-import fr.sweetiez.api.adapter.repository.tray.TrayWriterAdapter;
 import fr.sweetiez.api.adapter.shared.*;
 import fr.sweetiez.api.core.authentication.ports.AuthenticationRepository;
 import fr.sweetiez.api.core.authentication.services.AuthenticationService;
@@ -42,13 +38,11 @@ import fr.sweetiez.api.core.ingredients.services.IngredientService;
 import fr.sweetiez.api.core.orders.ports.OrdersReader;
 import fr.sweetiez.api.core.orders.ports.OrdersWriter;
 import fr.sweetiez.api.core.orders.services.OrderService;
+import fr.sweetiez.api.core.products.models.Sweet;
+import fr.sweetiez.api.core.products.ports.ProductsReader;
+import fr.sweetiez.api.core.products.ports.ProductsWriter;
+import fr.sweetiez.api.core.products.services.SweetService;
 import fr.sweetiez.api.core.reports.services.ReportService;
-import fr.sweetiez.api.core.sweets.ports.SweetsReader;
-import fr.sweetiez.api.core.sweets.ports.SweetsWriter;
-import fr.sweetiez.api.core.sweets.services.SweetService;
-import fr.sweetiez.api.core.trays.ports.TraysReader;
-import fr.sweetiez.api.core.trays.ports.TraysWriter;
-import fr.sweetiez.api.core.trays.services.TrayService;
 import fr.sweetiez.api.infrastructure.app.security.TokenProvider;
 import fr.sweetiez.api.infrastructure.payements.StripePaymentService;
 import fr.sweetiez.api.infrastructure.repository.accounts.AccountRepository;
@@ -139,7 +133,7 @@ public class SpringDependenciesConfig {
   
     @Bean
     public EvaluationMapper evaluationMapper() {
-        return new EvaluationMapper();
+        return new EvaluationMapper(customerMapper());
     }
 
     @Bean
@@ -154,7 +148,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public SweetMapper sweetMapper() {
-        return new SweetMapper();
+        return new SweetMapper(ingredientMapper(), evaluationMapper());
     }
 
     @Bean
@@ -172,10 +166,10 @@ public class SpringDependenciesConfig {
         return new OrderMapper();
     }
 
-    @Bean
-    public TrayMapper trayMapper() {
-        return new TrayMapper(sweetMapper());
-    }
+//    @Bean
+//    public TrayMapper trayMapper() {
+//        return new TrayMapper(sweetMapper());
+//    }
 
     // REPOSITORY ADAPTERS
 
@@ -200,24 +194,24 @@ public class SpringDependenciesConfig {
     }
 
     @Bean
-    public SweetsReader sweetReader() {
+    public ProductsReader<Sweet> sweetReader() {
         return new SweetReaderAdapter(sweetRepository, sweetMapper());
     }
 
     @Bean
-    public SweetsWriter sweetWriter() {
+    public ProductsWriter<Sweet> sweetWriter() {
         return new SweetWriterAdapter(sweetRepository, sweetMapper());
     }
 
-    @Bean
-    public TraysReader trayReader() {
-        return new TrayReaderAdapter(trayRepository, trayMapper());
-    }
+//    @Bean
+//    public TraysReader trayReader() {
+//        return new TrayReaderAdapter(trayRepository, trayMapper());
+//    }
 
-    @Bean
-    public TraysWriter trayWriter() {
-        return new TrayWriterAdapter(trayRepository, trayMapper());
-    }
+//    @Bean
+//    public TraysWriter trayWriter() {
+//        return new TrayWriterAdapter(trayRepository, trayMapper());
+//    }
 
     @Bean
     public AuthenticationRepository authenticationRepository() {
@@ -275,13 +269,13 @@ public class SpringDependenciesConfig {
 
     @Bean
     public SweetService sweetService() {
-        return new SweetService(sweetWriter(), sweetReader(), evaluationService(), customerService());
+        return new SweetService(sweetWriter(), sweetReader(), evaluationService(), ingredientService());
     }
 
-    @Bean
-    public TrayService trayService() {
-        return new TrayService(trayWriter(), trayReader(), evaluationService(), customerService());
-    }
+//    @Bean
+//    public TrayService trayService() {
+//        return new TrayService(trayWriter(), trayReader(), evaluationService(), customerService());
+//    }
 
     @Bean
     public ReportService reportService() {
@@ -310,10 +304,10 @@ public class SpringDependenciesConfig {
         return new SweetEndPoints(sweetService());
     }
 
-    @Bean
-    public TrayEndPoints trayEndPoints() {
-        return new TrayEndPoints(trayService());
-    }
+//    @Bean
+//    public TrayEndPoints trayEndPoints() {
+//        return new TrayEndPoints(trayService());
+//    }
 
     @Bean
     public AuthenticationEndPoints authenticationEndPoints() {
@@ -325,10 +319,10 @@ public class SpringDependenciesConfig {
         return new AdminSweetEndPoints(sweetService(), minioClient());
     }
 
-    @Bean
-    public AdminTrayEndPoints adminTrayEndPoints() {
-        return new AdminTrayEndPoints(trayService(), minioClient());
-    }
+//    @Bean
+//    public AdminTrayEndPoints adminTrayEndPoints() {
+//        return new AdminTrayEndPoints(trayService(), minioClient());
+//    }
 
     @Bean
     public ReportEndPoints reportEndPoints() {

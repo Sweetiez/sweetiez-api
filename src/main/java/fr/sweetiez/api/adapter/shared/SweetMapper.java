@@ -1,50 +1,58 @@
 package fr.sweetiez.api.adapter.shared;
 
-import fr.sweetiez.api.core.ingredients.models.Ingredients;
-import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
-import fr.sweetiez.api.core.sweets.models.sweet.SweetId;
-import fr.sweetiez.api.core.sweets.models.sweet.details.Description;
-import fr.sweetiez.api.core.sweets.models.sweet.details.Details;
-import fr.sweetiez.api.core.sweets.models.sweet.details.Name;
-import fr.sweetiez.api.core.sweets.models.sweet.details.Price;
-import fr.sweetiez.api.core.sweets.models.sweet.states.States;
+
+import fr.sweetiez.api.core.products.models.Sweet;
+import fr.sweetiez.api.core.products.models.common.Description;
+import fr.sweetiez.api.core.products.models.common.Name;
+import fr.sweetiez.api.core.products.models.common.Price;
+import fr.sweetiez.api.core.products.models.common.ProductID;
+import fr.sweetiez.api.core.products.models.common.details.Details;
+import fr.sweetiez.api.core.products.models.common.details.Valuation;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.Characteristics;
 import fr.sweetiez.api.infrastructure.repository.sweets.SweetEntity;
 
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
 public class SweetMapper {
 
+    private final IngredientMapper ingredientMapper;
+    private final EvaluationMapper evaluationMapper;
+
+    public SweetMapper(IngredientMapper ingredientMapper, EvaluationMapper evaluationMapper) {
+        this.ingredientMapper = ingredientMapper;
+        this.evaluationMapper = evaluationMapper;
+    }
+
     public SweetEntity toEntity(Sweet sweet) {
         return new SweetEntity(
-                UUID.fromString(sweet.id().value()),
+                sweet.id().value(),
                 sweet.name().value(),
-                sweet.details().description().content(),
+                sweet.description().content(),
                 sweet.price().value(),
-                sweet.states().highlight(),
-                sweet.states().state(),
-                sweet.details().flavor(),
+                sweet.details().characteristics().highlight(),
+                sweet.details().characteristics().state(),
+                sweet.details().characteristics().flavor(),
                 sweet.details().images()
                         .stream()
                         .map(image -> image.isEmpty() ? image : image.concat(";"))
-                        .reduce("", String::concat)
+                        .reduce("", String::concat),
+                sweet.ingredients().stream().map(ingredientMapper::toEntity).toList(),
+                sweet.details().valuation().evaluations().stream().map(evaluationMapper::toEntity).toList()
         );
     }
 
     public Sweet toDto(SweetEntity entity) {
         return new Sweet(
-                new SweetId(entity.getId().toString()),
+                new ProductID(entity.getId()),
                 new Name(entity.getName()),
+                new Description(entity.getDescription()),
                 new Price(entity.getPrice()),
-                new States(entity.getHighlight(), entity.getState()),
                 new Details(
-                        new Description(entity.getDescription()),
-                        entity.getFlavor(),
                         List.of(entity.getImages().split(";")),
-                        new Ingredients(Set.of()),
-                        5.
-                )
+                        new Characteristics(entity.getHighlight(), entity.getState(), entity.getFlavor()),
+                        new Valuation(entity.getEvaluations().stream().map(evaluationMapper::toDto).toList())
+                ),
+                entity.getIngredients().stream().map(ingredientMapper::toDto).toList()
         );
     }
 }

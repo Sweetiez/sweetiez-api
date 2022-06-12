@@ -5,10 +5,12 @@ import fr.sweetiez.api.core.ingredients.models.Ingredient;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface Ingredients {
     Optional<Ingredient> findByName(String name);
     Collection<HealthProperty> retrieveAllHealthProperties();
     HealthProperty saveHealthProperty(HealthProperty dietProperty);
     Ingredient saveIngredient(Ingredient ingredient);
+    Collection<Ingredient> findAllById(Collection<UUID> ingredients);
 }

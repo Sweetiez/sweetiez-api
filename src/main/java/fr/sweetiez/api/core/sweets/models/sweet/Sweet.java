@@ -1,13 +1,16 @@
 package fr.sweetiez.api.core.sweets.models.sweet;
 
-import fr.sweetiez.api.core.ingredients.models.Ingredients;
 import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.sweets.models.requests.UpdateSweetRequest;
-import fr.sweetiez.api.core.sweets.models.sweet.details.*;
+import fr.sweetiez.api.core.sweets.models.sweet.details.Description;
+import fr.sweetiez.api.core.sweets.models.sweet.details.Details;
+import fr.sweetiez.api.core.sweets.models.sweet.details.Name;
+import fr.sweetiez.api.core.sweets.models.sweet.details.Price;
 import fr.sweetiez.api.core.sweets.models.sweet.states.Highlight;
 import fr.sweetiez.api.core.sweets.models.sweet.states.State;
 import fr.sweetiez.api.core.sweets.models.sweet.states.States;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public record Sweet(
@@ -17,9 +20,9 @@ public record Sweet(
         States states,
         Details details)
 {
-    public Sweet(SweetId sweetId, CreateSweetRequest request) {
+    public Sweet(CreateSweetRequest request) {
         this(
-                sweetId,
+                null,
                 new Name(request.name()),
                 new Price(request.price()),
                 new States(Highlight.COMMON, State.CREATED),
@@ -27,8 +30,8 @@ public record Sweet(
                         new Description(request.description()),
                         request.flavor(),
                         Set.of(),
-                        new Ingredients(request.ingredients()),
-                        5.
+                        request.ingredients(),
+                        new ArrayList<>()
                 )
         );
     }
@@ -43,8 +46,9 @@ public record Sweet(
                         new Description(request.description()),
                         request.flavor(),
                         request.images(),
-                        new Ingredients(request.ingredients()),
-                        request.rating()
+                        request.ingredients(),
+                        new ArrayList<>()
+//                        request.rating()
                 )
         );
     }
@@ -67,8 +71,7 @@ public record Sweet(
     }
 
     public boolean isValid() {
-        return id.isValid()
-                && name.isValid()
+        return name.isValid()
                 && price.isValid()
                 && states.isValid()
                 && details.isValid();

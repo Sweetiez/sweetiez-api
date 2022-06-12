@@ -1,7 +1,9 @@
 package fr.sweetiez.api.infrastructure.repository.evaluations;
 
+import fr.sweetiez.api.infrastructure.repository.customers.CustomerEntity;
+
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -15,8 +17,8 @@ public class EvaluationEntity {
     @Column(columnDefinition = "text")
     private final String comment;
 
-    @Column(nullable = false)
-    private final UUID author;
+    @OneToOne
+    private final CustomerEntity author;
 
     @Column(nullable = false)
     private final UUID subject;
@@ -25,7 +27,7 @@ public class EvaluationEntity {
     private final Integer mark;
 
     @Column
-    private final LocalDate date;
+    private final LocalDateTime date;
 
     public EvaluationEntity() {
         id = null;
@@ -33,10 +35,10 @@ public class EvaluationEntity {
         author = null;
         subject = null;
         mark = null;
-        date = LocalDate.now();
+        date = LocalDateTime.now();
     }
 
-    public EvaluationEntity(UUID id, String content, UUID author, UUID sweetId, Integer mark, LocalDate date) {
+    public EvaluationEntity(UUID id, String content, CustomerEntity author, UUID sweetId, Integer mark, LocalDateTime date) {
         this.id = id;
         this.comment = content;
         this.author = author;
@@ -53,7 +55,7 @@ public class EvaluationEntity {
         return comment;
     }
 
-    public UUID getAuthor() {
+    public CustomerEntity getAuthor() {
         return author;
     }
 
@@ -64,7 +66,7 @@ public class EvaluationEntity {
     public Integer getMark() {
         return mark;
     }
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 }

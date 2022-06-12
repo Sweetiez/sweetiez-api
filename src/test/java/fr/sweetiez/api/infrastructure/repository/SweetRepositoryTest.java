@@ -1,8 +1,8 @@
 package fr.sweetiez.api.infrastructure.repository;
 
-import fr.sweetiez.api.core.sweets.models.sweet.details.Flavor;
-import fr.sweetiez.api.core.sweets.models.sweet.states.Highlight;
-import fr.sweetiez.api.core.sweets.models.sweet.states.State;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.Flavor;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
 import fr.sweetiez.api.infrastructure.repository.sweets.SweetEntity;
 import fr.sweetiez.api.infrastructure.repository.sweets.SweetRepository;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -57,7 +58,9 @@ class SweetRepositoryTest {
                         Highlight.COMMON,
                         State.CREATED,
                         Flavor.SWEET,
-                        ""
+                        "",
+                        List.of(),
+                        List.of()
                 ),
                 new SweetEntity(
                         UUID.randomUUID(),
@@ -67,8 +70,11 @@ class SweetRepositoryTest {
                         Highlight.COMMON,
                         State.PUBLISHED,
                         Flavor.SWEET,
-                        ""
-                ),new SweetEntity(
+                        "",
+                        List.of(),
+                        List.of()
+                ),
+                new SweetEntity(
                         UUID.randomUUID(),
                         "NON_PUBLISHED",
                         "",
@@ -76,8 +82,11 @@ class SweetRepositoryTest {
                         Highlight.COMMON,
                         State.NON_PUBLISHED,
                         Flavor.SWEET,
-                        ""
-                ),new SweetEntity(
+                        "",
+                        List.of(),
+                        List.of()
+                ),
+                new SweetEntity(
                         UUID.randomUUID(),
                         "DELETED",
                         "",
@@ -85,7 +94,9 @@ class SweetRepositoryTest {
                         Highlight.COMMON,
                         State.DELETED,
                         Flavor.SWEET,
-                        ""
+                        "",
+                        List.of(),
+                        List.of()
                 )
         );
     }
