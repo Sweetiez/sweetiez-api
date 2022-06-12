@@ -7,6 +7,9 @@ import fr.sweetiez.api.core.products.models.common.ProductID;
 import fr.sweetiez.api.core.products.models.common.details.Details;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 public abstract class Product {
@@ -34,6 +37,33 @@ public abstract class Product {
                 && description != null && description.isValid()
                 && price != null && price.isValid()
                 && details != null && details.isValid();
+    }
+
+    protected abstract Collection<String> diets();
+
+    protected abstract Collection<String> allergens();
+
+    protected Collection<String> computeDiets(Collection<List<String>> dietsProperties) {
+        var diets = new ArrayList<String>();
+
+        for (var properties : dietsProperties) {
+            for (var diet : properties) {
+                var isPresentEveryWhere = true;
+
+                for (var dietProperties : dietsProperties) {
+                    if (!dietProperties.contains(diet)) {
+                        isPresentEveryWhere = false;
+                        break;
+                    }
+                }
+
+                if (isPresentEveryWhere) {
+                    diets.add(diet);
+                }
+            }
+        }
+
+        return diets;
     }
 
     public ProductID id() {

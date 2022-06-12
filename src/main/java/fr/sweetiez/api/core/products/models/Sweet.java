@@ -15,7 +15,6 @@ import fr.sweetiez.api.core.products.models.common.details.characteristics.State
 import fr.sweetiez.api.core.products.models.requests.CreateProductRequest;
 import fr.sweetiez.api.core.products.models.requests.UpdateSweetRequest;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -100,30 +99,11 @@ public class Sweet extends Product {
     }
 
     public Collection<String> diets() {
-        var allIngredientsDietProperties = ingredientsDietLabels();
-        var diets = new ArrayList<String>();
-
-        for (var properties : allIngredientsDietProperties) {
-            for (var diet : properties) {
-                var isPresentEveryWhere = true;
-
-                for (var dietProperties : allIngredientsDietProperties) {
-                    if (!dietProperties.contains(diet)) {
-                        isPresentEveryWhere = false;
-                        break;
-                    }
-                }
-
-                if (isPresentEveryWhere) {
-                    diets.add(diet);
-                }
-            }
-        }
-
-        return diets;
+        var ingredientsDiets = ingredientsDietLabels();
+        return computeDiets(ingredientsDiets);
     }
 
-    private List<List<String>> ingredientsDietLabels() {
+    private Collection<List<String>> ingredientsDietLabels() {
         return ingredients.stream()
                 .map(Ingredient::healthProperties)
                 .map(properties -> properties
