@@ -8,6 +8,7 @@ import fr.sweetiez.api.infrastructure.repository.ingredients.HealthPropertyRepos
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class IngredientRepositoryAdapter implements Ingredients {
@@ -43,5 +44,9 @@ public class IngredientRepositoryAdapter implements Ingredients {
 
     public Ingredient saveIngredient(Ingredient ingredient) {
         return mapper.toDto(repository.save(mapper.toEntity(ingredient)));
+    }
+
+    public Collection<Ingredient> findAllById(Collection<UUID> ingredients) {
+        return null;
     }
 }

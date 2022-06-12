@@ -47,16 +47,15 @@ import fr.sweetiez.api.core.ingredients.services.IngredientService;
 import fr.sweetiez.api.core.orders.ports.OrdersReader;
 import fr.sweetiez.api.core.orders.ports.OrdersWriter;
 import fr.sweetiez.api.core.orders.services.OrderService;
+import fr.sweetiez.api.core.products.models.Sweet;
+import fr.sweetiez.api.core.products.ports.ProductsReader;
+import fr.sweetiez.api.core.products.ports.ProductsWriter;
+import fr.sweetiez.api.core.products.services.SweetService;
 import fr.sweetiez.api.core.recipes.ports.RecipeReader;
 import fr.sweetiez.api.core.recipes.ports.RecipeWriter;
 import fr.sweetiez.api.core.recipes.services.RecipeService;
 import fr.sweetiez.api.core.reports.services.ReportService;
-import fr.sweetiez.api.core.sweets.ports.SweetsReader;
-import fr.sweetiez.api.core.sweets.ports.SweetsWriter;
-import fr.sweetiez.api.core.sweets.services.SweetService;
-import fr.sweetiez.api.core.trays.ports.TraysReader;
-import fr.sweetiez.api.core.trays.ports.TraysWriter;
-import fr.sweetiez.api.core.trays.services.TrayService;
+import fr.sweetiez.api.core.trays.models.tray.Tray;
 import fr.sweetiez.api.infrastructure.app.security.TokenProvider;
 import fr.sweetiez.api.infrastructure.notification.email.GmailSender;
 import fr.sweetiez.api.infrastructure.payements.StripePaymentService;
@@ -68,6 +67,8 @@ import fr.sweetiez.api.infrastructure.repository.ingredients.HealthPropertyRepos
 import fr.sweetiez.api.infrastructure.repository.ingredients.IngredientRepository;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderDetailRepository;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderRepository;
+import fr.sweetiez.api.infrastructure.repository.recipe.RecipeRepository;
+import fr.sweetiez.api.infrastructure.repository.recipe.RecipeStepRepository;
 import fr.sweetiez.api.infrastructure.repository.recipe.RecipeRepository;
 import fr.sweetiez.api.infrastructure.repository.recipe.RecipeStepRepository;
 import fr.sweetiez.api.infrastructure.repository.reports.ReportRepository;
@@ -155,7 +156,7 @@ public class SpringDependenciesConfig {
   
     @Bean
     public EvaluationMapper evaluationMapper() {
-        return new EvaluationMapper();
+        return new EvaluationMapper(customerMapper());
     }
 
     @Bean
@@ -170,7 +171,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public SweetMapper sweetMapper() {
-        return new SweetMapper();
+        return new SweetMapper(ingredientMapper(), evaluationMapper());
     }
 
     @Bean
@@ -221,22 +222,22 @@ public class SpringDependenciesConfig {
     }
 
     @Bean
-    public SweetsReader sweetReader() {
+    public ProductsReader<Sweet> sweetReader() {
         return new SweetReaderAdapter(sweetRepository, sweetMapper());
     }
 
     @Bean
-    public SweetsWriter sweetWriter() {
+    public ProductsWriter<Sweet> sweetWriter() {
         return new SweetWriterAdapter(sweetRepository, sweetMapper());
     }
 
     @Bean
-    public TraysReader trayReader() {
+    public ProductsReader<Tray> trayReader() {
         return new TrayReaderAdapter(trayRepository, trayMapper());
     }
 
     @Bean
-    public TraysWriter trayWriter() {
+    public ProductsWriter<Tray> trayWriter() {
         return new TrayWriterAdapter(trayRepository, trayMapper());
     }
 

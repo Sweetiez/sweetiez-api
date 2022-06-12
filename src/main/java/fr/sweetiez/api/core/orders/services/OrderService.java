@@ -15,8 +15,9 @@ import fr.sweetiez.api.core.orders.ports.OrdersWriter;
 import fr.sweetiez.api.core.orders.services.exceptions.InvalidOrderException;
 import fr.sweetiez.api.core.orders.services.exceptions.OrderNotFoundException;
 import fr.sweetiez.api.core.orders.services.exceptions.PaymentIntentException;
-import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
-import fr.sweetiez.api.core.sweets.services.SweetService;
+import fr.sweetiez.api.core.products.models.common.ProductID;
+import fr.sweetiez.api.core.products.models.responses.DetailedSweetResponse;
+import fr.sweetiez.api.core.products.services.SweetService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -87,10 +88,10 @@ public class OrderService {
         return request.products().stream()
                 .filter(productRequest -> productRequest.type() == ProductType.SWEET)
                 .map(productRequest -> new TmpProcessItem(
-                        this.sweetService.retrieveSweetDetails(productRequest.productId().toString()),
+                        this.sweetService.retrieveDetailsOf(new ProductID(productRequest.productId())),
                         productRequest.quantity()))
                 .map(item -> new Product(
-                        item.sweet.id(),
+                        item.sweet.id().toString(),
                         item.sweet.name(),
                         ProductType.SWEET,
                         item.quantity,

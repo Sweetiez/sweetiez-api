@@ -1,13 +1,14 @@
 package fr.sweetiez.api.adapter.delivery.sweet;
 
-import fr.sweetiez.api.core.sweets.models.requests.*;
-import fr.sweetiez.api.core.sweets.models.responses.AdminDetailedSweetResponse;
-import fr.sweetiez.api.core.sweets.models.responses.AdminSweetSimpleResponse;
-import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
-import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
-import fr.sweetiez.api.core.sweets.services.SweetService;
-import fr.sweetiez.api.core.sweets.services.exceptions.InvalidFieldsException;
-import fr.sweetiez.api.core.sweets.services.exceptions.SweetAlreadyExistsException;
+import fr.sweetiez.api.core.products.models.Sweet;
+import fr.sweetiez.api.core.products.models.common.ProductID;
+import fr.sweetiez.api.core.products.models.requests.*;
+import fr.sweetiez.api.core.products.models.responses.AdminDetailedSweetResponse;
+import fr.sweetiez.api.core.products.models.responses.AdminSimpleProductResponse;
+import fr.sweetiez.api.core.products.models.responses.SimpleProductResponse;
+import fr.sweetiez.api.core.products.services.SweetService;
+import fr.sweetiez.api.core.products.services.exceptions.InvalidFieldsException;
+import fr.sweetiez.api.core.products.services.exceptions.ProductAlreadyExistsException;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
@@ -37,9 +38,9 @@ public class AdminSweetEndPoints {
         this.minioClient = minioClient;
     }
 
-    public ResponseEntity<Object> create(CreateSweetRequest request) {
+    public ResponseEntity<Object> create(CreateProductRequest request) {
         try {
-            var createdSweet = sweetService.createSweet(request);
+            var createdSweet = sweetService.create(request);
             return ResponseEntity
                     .created(URI.create("/sweets/" + createdSweet.id().value()))
                     .build();
@@ -47,50 +48,50 @@ public class AdminSweetEndPoints {
         catch (InvalidFieldsException exception) {
             return ResponseEntity.badRequest().build();
         }
-        catch (SweetAlreadyExistsException exception) {
+        catch (ProductAlreadyExistsException exception) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
 
-    public ResponseEntity<Sweet> publish(PublishSweetRequest request) {
+    public ResponseEntity<SimpleProductResponse> publish(PublishProductRequest request) {
         try {
-            var sweet = sweetService.publishSweet(request);
-            return ResponseEntity.ok(sweet);
+            var sweet = sweetService.publish(request);
+            return ResponseEntity.ok(new SimpleProductResponse(sweet));
         }
         catch (NoSuchElementException exception) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    public ResponseEntity<Sweet> unPublish(UnPublishSweetRequest request) {
+    public ResponseEntity<SimpleProductResponse> unpublish(UnpublishProductRequest request) {
         try {
-            var sweet = sweetService.unPublishSweet(request);
-            return ResponseEntity.ok(sweet);
+            var sweet = sweetService.unpublish(request);
+            return ResponseEntity.ok(new SimpleProductResponse(sweet));
         }
         catch (NoSuchElementException exception) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    public ResponseEntity<Collection<AdminSweetSimpleResponse>> retrieveAllSweets() {
-        var allSweets = sweetService.retrieveAllSweets().content()
+    public ResponseEntity<Collection<AdminSimpleProductResponse>> retrieveAllSweets() {
+        var allSweets = sweetService.retrieveAll()
                 .stream()
-                .map(AdminSweetSimpleResponse::new)
+                .map(AdminSimpleProductResponse::new)
                 .collect(Collectors.toSet());
 
         return ResponseEntity.ok(allSweets);
     }
 
-    public ResponseEntity<AdminDetailedSweetResponse> adminRetrieveSweetDetails(String id) {
+    public ResponseEntity<AdminDetailedSweetResponse> adminRetrieveSweetDetails(UUID id) {
         try {
-            return ResponseEntity.ok(sweetService.adminRetrieveSweetDetails(id));
+            return ResponseEntity.ok(sweetService.adminRetrieveDetailsOf(new ProductID(id)));
         }
         catch (NoSuchElementException exception) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    public ResponseEntity<SimpleSweetResponse> addImage(String id, MultipartFile image) {
+    public ResponseEntity<SimpleProductResponse> addImage(UUID id, MultipartFile image) {
         var imageName = String.format("sweet_%s_%s", image.getOriginalFilename(), UUID.randomUUID());
         // Store the image in the minio bucket
         try {
@@ -116,7 +117,7 @@ public class AdminSweetEndPoints {
         }
         url = url.substring(0, url.indexOf('?'));
 
-        return ResponseEntity.ok(sweetService.addImageToSweet(id, url));
+        return ResponseEntity.ok(sweetService.addImageTo(new ProductID(id), url));
     }
 
     public ResponseEntity<AdminDetailedSweetResponse> adminUpdateSweetDetails(UpdateSweetRequest request) {
@@ -128,7 +129,7 @@ public class AdminSweetEndPoints {
         }
     }
 
-    public ResponseEntity<SimpleSweetResponse> deleteImage(String id, DeleteImageRequest request) {
+    public ResponseEntity<SimpleProductResponse> deleteImage(UUID id, DeleteImageRequest request) {
 
         try {
             var objectName = request.imageUrl().substring(request.imageUrl().lastIndexOf('/') + 1);
@@ -139,7 +140,7 @@ public class AdminSweetEndPoints {
                             .object(objectName)
                             .build());
 
-            return ResponseEntity.ok(sweetService.adminDeleteImageFromSweet(id, request));
+            return ResponseEntity.ok(sweetService.adminDeleteImageFrom(new ProductID(id), request));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("Error", "Error while deleting file").build();
         }

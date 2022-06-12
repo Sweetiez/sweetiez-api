@@ -1,21 +1,26 @@
 package fr.sweetiez.api.core.sweets.services;
 
 import fr.sweetiez.api.core.ingredients.models.Ingredient;
-import fr.sweetiez.api.core.ingredients.models.Ingredients;
-import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
-import fr.sweetiez.api.core.sweets.models.requests.PublishSweetRequest;
-import fr.sweetiez.api.core.sweets.models.requests.UnPublishSweetRequest;
-import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
-import fr.sweetiez.api.core.sweets.models.sweet.SweetId;
-import fr.sweetiez.api.core.sweets.models.sweet.Sweets;
-import fr.sweetiez.api.core.sweets.models.sweet.details.*;
-import fr.sweetiez.api.core.sweets.models.sweet.states.Highlight;
-import fr.sweetiez.api.core.sweets.models.sweet.states.State;
-import fr.sweetiez.api.core.sweets.models.sweet.states.States;
-import fr.sweetiez.api.core.sweets.ports.SweetsReader;
-import fr.sweetiez.api.core.sweets.ports.SweetsWriter;
-import fr.sweetiez.api.core.sweets.services.exceptions.InvalidFieldsException;
-import fr.sweetiez.api.core.sweets.services.exceptions.SweetAlreadyExistsException;
+import fr.sweetiez.api.core.ingredients.services.IngredientService;
+import fr.sweetiez.api.core.products.models.Sweet;
+import fr.sweetiez.api.core.products.models.common.Description;
+import fr.sweetiez.api.core.products.models.common.Name;
+import fr.sweetiez.api.core.products.models.common.Price;
+import fr.sweetiez.api.core.products.models.common.ProductID;
+import fr.sweetiez.api.core.products.models.common.details.Details;
+import fr.sweetiez.api.core.products.models.common.details.Valuation;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.Characteristics;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.Flavor;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
+import fr.sweetiez.api.core.products.models.requests.CreateProductRequest;
+import fr.sweetiez.api.core.products.models.requests.PublishProductRequest;
+import fr.sweetiez.api.core.products.models.requests.UnpublishProductRequest;
+import fr.sweetiez.api.core.products.ports.ProductsReader;
+import fr.sweetiez.api.core.products.ports.ProductsWriter;
+import fr.sweetiez.api.core.products.services.SweetService;
+import fr.sweetiez.api.core.products.services.exceptions.InvalidFieldsException;
+import fr.sweetiez.api.core.products.services.exceptions.ProductAlreadyExistsException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,9 +31,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -39,31 +44,35 @@ import static org.mockito.Mockito.*;
 class SweetServiceTest {
 
     @Mock
-    private SweetsReader reader;
+    private ProductsReader<Sweet> reader;
 
     @Mock
-    private SweetsWriter writer;
+    private ProductsWriter<Sweet> writer;
+
+    @Mock
+    private IngredientService ingredientService;
 
     @InjectMocks
     private SweetService sut;
 
     @Test
     void shouldCreateSweet() {
-        var sweetId = new SweetId(UUID.randomUUID().toString());
-        var request = new CreateSweetRequest(
+        var request = new CreateProductRequest(
                 "Sweet name",
                 BigDecimal.valueOf(1.99),
-                Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
+                List.of(UUID.randomUUID()),
                 "Sweet description",
                 Flavor.SWEET
         );
 
-        when(reader.findAll()).thenReturn(new Sweets(Set.of()));
-        when(writer.save(any())).thenReturn(new Sweet(sweetId, request));
+        when(ingredientService.retrieveAllById(any())).
+                thenReturn(List.of(new Ingredient(UUID.randomUUID(), "Banana", List.of())));
+        when(reader.findAll()).thenReturn(List.of());
+        when(writer.save(any())).thenReturn(new Sweet(request, List.of()));
 
-        var sweet = sut.createSweet(request);
+        var sweet = sut.create(request);
 
-        assertEquals(State.CREATED, sweet.states().state());
+        assertEquals(State.CREATED, sweet.details().characteristics().state());
 
         verify(reader).findAll();
         verifyNoMoreInteractions(reader);
@@ -73,59 +82,64 @@ class SweetServiceTest {
 
     @Test
     void shouldNotCreateSweetWhenSweetNameAlreadyExists() {
-        var request = new CreateSweetRequest(
+        var ingredientId = UUID.randomUUID();
+        var request = new CreateProductRequest(
                 "Sweet name",
                 BigDecimal.valueOf(1.99),
-                Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
+                List.of(ingredientId),
                 "Sweet description",
                 Flavor.SWEET
         );
-        var id = new SweetId(UUID.randomUUID().toString());
-        var sweet= new Sweet(id, request);
 
-        when(reader.findAll()).thenReturn(new Sweets(Set.of(sweet)));
+        var ingredient = new Ingredient(ingredientId, "Banana", List.of());
+        var sweet = new Sweet(request, List.of(ingredient));
 
-        assertThrowsExactly(
-                SweetAlreadyExistsException.class,
-                () -> sut.createSweet(request));
+        when(ingredientService.retrieveAllById(request.composition())).thenReturn(List.of(ingredient));
+        when(reader.findAll()).thenReturn(List.of(sweet));
+
+        assertThrowsExactly(ProductAlreadyExistsException.class, () -> sut.create(request));
 
         verify(reader).findAll();
-        verifyNoMoreInteractions(reader);
+        verify(ingredientService).retrieveAllById(request.composition());
+        verifyNoMoreInteractions(reader, ingredientService);
         verifyNoInteractions(writer);
     }
 
     @ParameterizedTest
     @MethodSource("provideInvalidCreateSweetRequest")
-    void shouldNotCreateSweetWhenRequiredFieldsAreInvalid(CreateSweetRequest request) {
+    void shouldNotCreateSweetWhenRequiredFieldsAreInvalid(CreateProductRequest request) {
 
-        when(reader.findAll()).thenReturn(new Sweets(Set.of()));
+        when(ingredientService.retrieveAllById(request.composition())).thenReturn(List.of());
 
-        assertThrowsExactly(
-                InvalidFieldsException.class,
-                () -> sut.createSweet(request));
+        assertThrowsExactly(InvalidFieldsException.class, () -> sut.create(request));
 
-        verify(reader).findAll();
-        verifyNoMoreInteractions(reader);
-        verifyNoInteractions(writer);
+        verify(ingredientService).retrieveAllById(request.composition());
+        verifyNoMoreInteractions(ingredientService);
+        verifyNoInteractions(reader, writer);
     }
 
     @Test
     void shouldPublishSweetWhenSweetIdExists() {
-        var createRequest = new CreateSweetRequest(
-                "Sweet name",
-                BigDecimal.valueOf(1.99),
-                Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
-                "Sweet description",
-                Flavor.SWEET
+        var ingredient = new Ingredient(UUID.randomUUID(), "Banana", List.of());
+        var sweet = new Sweet(
+                new ProductID(UUID.randomUUID()),
+                new Name("Sweet name"),
+                new Description("Sweet description"),
+                new Price(BigDecimal.valueOf(1.99)),
+                new Details(
+                        List.of(),
+                        new Characteristics(Highlight.COMMON, State.CREATED, Flavor.SWEET),
+                        new Valuation(List.of())
+                ),
+                List.of(ingredient)
         );
-        var sweetId = new SweetId(UUID.randomUUID().toString());
-        var sweet = new Sweet(sweetId, createRequest);
-        var publishRequest = new PublishSweetRequest(sweetId.value(), Highlight.PROMOTED);
+
+        var publishRequest = new PublishProductRequest(sweet.id().value(), Highlight.PROMOTED);
 
         when(reader.findById(any())).thenReturn(Optional.of(sweet));
         when(writer.save(any())).thenReturn(sweet);
 
-        sut.publishSweet(publishRequest);
+        sut.publish(publishRequest);
         var sweetArgumentCaptor = ArgumentCaptor.forClass(Sweet.class);
 
         verify(reader).findById(any());
@@ -135,19 +149,19 @@ class SweetServiceTest {
 
         var capturedSweet = sweetArgumentCaptor.getValue();
 
-        assertEquals(State.PUBLISHED, capturedSweet.states().state());
+        assertEquals(State.PUBLISHED, capturedSweet.details().characteristics().state());
     }
 
     @Test
     void shouldNotPublishSweetWhenSweetIdDoesNotExist() {
-        var sweetId = new SweetId(UUID.randomUUID().toString());
-        var request = new PublishSweetRequest(sweetId.value(), Highlight.PROMOTED);
+        var sweetId = new ProductID(UUID.randomUUID());
+        var request = new PublishProductRequest(sweetId.value(), Highlight.PROMOTED);
 
         when(reader.findById(any())).thenReturn(Optional.empty());
 
         assertThrowsExactly(
                 NoSuchElementException.class,
-                () -> sut.publishSweet(request));
+                () -> sut.publish(request));
 
         verify(reader).findById(any());
         verifyNoMoreInteractions(reader);
@@ -155,22 +169,27 @@ class SweetServiceTest {
     }
 
     @Test
-    void shouldUnPublishSweetWhenSweetIdExists() {
-        var createRequest = new CreateSweetRequest(
-                "Sweet name",
-                BigDecimal.valueOf(1.99),
-                Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
-                "Sweet description",
-                Flavor.SWEET
+    void shouldUnpublishSweetWhenSweetIdExists() {
+        var ingredient = new Ingredient(UUID.randomUUID(), "Banana", List.of());
+        var sweet = new Sweet(
+                new ProductID(UUID.randomUUID()),
+                new Name("Sweet name"),
+                new Description("Sweet description"),
+                new Price(BigDecimal.valueOf(1.99)),
+                new Details(
+                        List.of(),
+                        new Characteristics(Highlight.BANNER, State.PUBLISHED, Flavor.SWEET),
+                        new Valuation(List.of())
+                ),
+                List.of(ingredient)
         );
-        var sweetId = new SweetId(UUID.randomUUID().toString());
-        var sweet = new Sweet(sweetId, createRequest);
-        var publishRequest = new UnPublishSweetRequest(sweetId.value());
+
+        var publishRequest = new UnpublishProductRequest(sweet.id().value());
 
         when(reader.findById(any())).thenReturn(Optional.of(sweet));
         when(writer.save(any())).thenReturn(sweet);
 
-        sut.unPublishSweet(publishRequest);
+        sut.unpublish(publishRequest);
         var sweetArgumentCaptor = ArgumentCaptor.forClass(Sweet.class);
 
         verify(reader).findById(any());
@@ -180,19 +199,19 @@ class SweetServiceTest {
 
         var capturedSweet = sweetArgumentCaptor.getValue();
 
-        assertEquals(State.NON_PUBLISHED, capturedSweet.states().state());
+        assertEquals(State.NON_PUBLISHED, capturedSweet.details().characteristics().state());
     }
 
     @Test
     void shouldNotUnPublishSweetWhenSweetIdDoesNotExist() {
-        var sweetId = new SweetId(UUID.randomUUID().toString());
-        var request = new UnPublishSweetRequest(sweetId.value());
+        var sweetId = new ProductID(UUID.randomUUID());
+        var request = new UnpublishProductRequest(sweetId.value());
 
         when(reader.findById(any())).thenReturn(Optional.empty());
 
         assertThrowsExactly(
                 NoSuchElementException.class,
-                () -> sut.unPublishSweet(request));
+                () -> sut.unpublish(request));
 
         verify(reader).findById(any());
         verifyNoMoreInteractions(reader);
@@ -201,11 +220,11 @@ class SweetServiceTest {
 
     @Test
     void shouldProvideAnEmptyCollectionOfPublishedSweets() {
-        when(reader.findAllPublished()).thenReturn(new Sweets(Set.of()));
+        when(reader.findAllPublished()).thenReturn(List.of());
 
-        var sweets = sut.retrievePublishedSweets();
+        var sweets = sut.retrieveAllPublished();
 
-        assertTrue(sweets.content().isEmpty());
+        assertTrue(sweets.isEmpty());
 
         verify(reader).findAllPublished();
         verifyNoMoreInteractions(reader);
@@ -214,74 +233,72 @@ class SweetServiceTest {
 
     @Test
     void shouldProvideNonEmptyCollectionOfPublishedSweets() {
-        var sweetId = new SweetId(UUID.randomUUID().toString());
+        var sweetId = new ProductID(UUID.randomUUID());
         var publishedSweet = new Sweet(
                 sweetId,
                 new Name("Valid name"),
+                new Description(""),
                 new Price(BigDecimal.ONE),
-                new States(
-                        Highlight.PROMOTED,
-                        State.PUBLISHED),
                 new Details(
-                        new Description(""),
-                        Flavor.SWEET,
-                        Set.of(),
-                        new Ingredients(Set.of()),
-                        5.)
+                        List.of(),
+                        new Characteristics(Highlight.COMMON, State.PUBLISHED, Flavor.SWEET),
+                        new Valuation(List.of())
+                ),
+                List.of()
         );
 
-        when(reader.findAllPublished()).thenReturn(new Sweets(Set.of(publishedSweet)));
+        when(reader.findAllPublished()).thenReturn(List.of(publishedSweet));
 
-        var sweets = sut.retrievePublishedSweets();
+        var sweets = sut.retrieveAllPublished();
 
-        assertFalse(sweets.content().isEmpty());
+        assertFalse(sweets.isEmpty());
 
         verify(reader).findAllPublished();
         verifyNoMoreInteractions(reader);
     }
 
 
-    public static Stream<CreateSweetRequest> provideInvalidCreateSweetRequest() {
+    public static Stream<CreateProductRequest> provideInvalidCreateSweetRequest() {
         return Stream.of(
-                new CreateSweetRequest(
+                new CreateProductRequest(
                         "sweet name",
                         BigDecimal.valueOf(1.99),
-                        Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
+                        List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
                 ),
-                new CreateSweetRequest(
+                new CreateProductRequest(
                         "",
                         BigDecimal.valueOf(1.99),
-                        Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
+                        List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
                 ),
-                new CreateSweetRequest(
+                new CreateProductRequest(
                         null,
                         BigDecimal.valueOf(1.99),
-                        Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
+                        List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
                 ),
-                new CreateSweetRequest(
+                new CreateProductRequest(
                         "Sweet name",
                         BigDecimal.valueOf(1.99),
                         null,
                         "Sweet description",
                         Flavor.SWEET
                 ),
-                new CreateSweetRequest(
+                new CreateProductRequest(
                         "Sweet name",
                         BigDecimal.valueOf(-1.45),
-                        Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
+                        List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
                 ),
-                new CreateSweetRequest(
+                new CreateProductRequest(
                         "Sweet name",
                         BigDecimal.valueOf(0.),
-                        Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
+                        List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
                 )

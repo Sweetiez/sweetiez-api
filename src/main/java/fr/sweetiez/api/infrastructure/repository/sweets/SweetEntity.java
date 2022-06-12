@@ -1,13 +1,16 @@
 package fr.sweetiez.api.infrastructure.repository.sweets;
 
-import fr.sweetiez.api.core.sweets.models.sweet.details.Flavor;
-import fr.sweetiez.api.core.sweets.models.sweet.states.Highlight;
-import fr.sweetiez.api.core.sweets.models.sweet.states.State;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.Flavor;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
+import fr.sweetiez.api.infrastructure.repository.evaluations.EvaluationEntity;
+import fr.sweetiez.api.infrastructure.repository.ingredients.IngredientEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -45,6 +48,12 @@ public class SweetEntity {
     @Column(columnDefinition = "text")
     private String images;
 
+    @OneToMany
+    private final List<IngredientEntity> ingredients;
+
+    @OneToMany
+    private final List<EvaluationEntity> evaluations;
+
     public SweetEntity() {
         this.id = null;
         this.name = null;
@@ -54,9 +63,14 @@ public class SweetEntity {
         this.state = null;
         this.flavor = null;
         this.images = null;
+        this.ingredients = null;
+        this.evaluations = null;
     }
 
-    public SweetEntity(UUID id, String name, String description, BigDecimal price, Highlight highlight, State state, Flavor flavor, String images) {
+    public SweetEntity(UUID id, String name, String description, BigDecimal price, Highlight highlight,
+                       State state, Flavor flavor, String images, List<IngredientEntity> ingredients,
+                       List<EvaluationEntity> evaluations)
+    {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -65,6 +79,8 @@ public class SweetEntity {
         this.state = state;
         this.flavor = flavor;
         this.images = images;
+        this.ingredients = ingredients;
+        this.evaluations = evaluations;
     }
 
     public UUID getId() {
@@ -97,6 +113,13 @@ public class SweetEntity {
 
     public String getImages() {
         return images;
+    }
+
+    public List<IngredientEntity> getIngredients() {
+        return ingredients;
+    }
+    public List<EvaluationEntity> getEvaluations() {
+        return evaluations;
     }
 
     public boolean equals(Object o) {

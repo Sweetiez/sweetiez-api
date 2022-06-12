@@ -1,6 +1,5 @@
 package fr.sweetiez.api.core.evaluations.services;
 
-import fr.sweetiez.api.core.customers.models.CustomerId;
 import fr.sweetiez.api.core.customers.services.CustomerService;
 import fr.sweetiez.api.core.customers.services.exceptions.CustomerDoesNotExistException;
 import fr.sweetiez.api.core.evaluations.models.CreateEvaluationRequest;
@@ -13,8 +12,9 @@ import fr.sweetiez.api.core.orders.services.exceptions.OrderNotFoundException;
 import fr.sweetiez.api.core.sweets.models.responses.AdminDetailedSweetResponse;
 import fr.sweetiez.api.core.sweets.models.sweet.SweetId;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.time.LocalDate;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 public class EvaluationService {
@@ -29,8 +29,8 @@ public class EvaluationService {
         this.customerService = customerService;
     }
 
-    public Collection<Evaluation> retrieveAllBySubject(String id) {
-        return reader.retrieveAllBySubject(UUID.fromString(id));
+    public Collection<Evaluation> retrieveAllBySubject(UUID id) {
+        return reader.retrieveAllBySubject(id);
     }
 
     public Evaluation getById(String id) throws EvaluationDoesNotExistException {
@@ -38,20 +38,21 @@ public class EvaluationService {
     }
 
     public Evaluation create(CreateEvaluationRequest request) {
-        if (!customerService.exists(new CustomerId(request.author().toString()))) {
+        try {
+            var customer = customerService.findById(request.author().toString());
+            var evaluation = new Evaluation(
+                    null,
+                    request.content(),
+                    customer,
+                    request.subject(),
+                    request.mark().doubleValue(),
+                    LocalDateTime.now());
+
+            return writer.save(evaluation);
+        }
+        catch (NoSuchElementException exception) {
             throw new CustomerDoesNotExistException();
         }
-
-        var evaluation = new Evaluation(
-                null,
-                request.content(),
-                request.author(),
-                request.subject(),
-                request.mark().doubleValue(),
-                LocalDate.now()
-        );
-
-        return writer.save(evaluation);
     }
 
     public Double computeTotalScore(Collection<Evaluation> evaluations) {

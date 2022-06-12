@@ -1,5 +1,6 @@
 package fr.sweetiez.api.core.sweets.models.responses;
 
+import fr.sweetiez.api.core.evaluations.models.Evaluation;
 import fr.sweetiez.api.core.ingredients.models.Ingredient;
 import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 
@@ -13,7 +14,7 @@ public record AdminDetailedSweetResponse(
         String flavor,
         Collection<String> images,
         Collection<Ingredient> ingredients,
-        double rating,
+        Collection<Evaluation> rating,
         String state,
         String highlight
 )
@@ -26,8 +27,8 @@ public record AdminDetailedSweetResponse(
                 sweet.details().description().content(),
                 sweet.details().flavor().name(),
                 sweet.details().images(),
-                sweet.details().ingredients().content(),
-                sweet.details().score(),
+                sweet.details().ingredients(),
+                sweet.details().evaluations(),
                 sweet.states().state().name(),
                 sweet.states().highlight().name()
         );
