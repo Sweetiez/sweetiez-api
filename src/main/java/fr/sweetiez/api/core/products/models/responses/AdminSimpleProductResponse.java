@@ -1,6 +1,7 @@
 package fr.sweetiez.api.core.products.models.responses;
 
-import fr.sweetiez.api.core.products.models.Sweet;
+
+import fr.sweetiez.api.core.products.models.Product;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -14,15 +15,15 @@ public record AdminSimpleProductResponse(
         Collection<String> images,
         String highlight
 ) {
-    public AdminSimpleProductResponse(Sweet sweet) {
+    public AdminSimpleProductResponse(Product product) {
         this(
-                sweet.id().value(),
-                sweet.name().value(),
-                sweet.price().value().doubleValue(),
-                sweet.details().characteristics().state().toString(),
-                sweet.description().shortContent(),
-                sweet.details().images(),
-                sweet.details().characteristics().highlight().toString()
+                product.id().value(),
+                product.name().value(),
+                product.price().value().doubleValue(),
+                product.details().characteristics().state().toString(),
+                product.description().shortContent(),
+                product.details().images(),
+                product.details().characteristics().highlight().toString()
         );
     }
 }

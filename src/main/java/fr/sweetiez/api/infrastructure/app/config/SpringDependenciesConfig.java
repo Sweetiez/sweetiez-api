@@ -48,14 +48,15 @@ import fr.sweetiez.api.core.orders.ports.OrdersReader;
 import fr.sweetiez.api.core.orders.ports.OrdersWriter;
 import fr.sweetiez.api.core.orders.services.OrderService;
 import fr.sweetiez.api.core.products.models.Sweet;
+import fr.sweetiez.api.core.products.models.Tray;
 import fr.sweetiez.api.core.products.ports.ProductsReader;
 import fr.sweetiez.api.core.products.ports.ProductsWriter;
 import fr.sweetiez.api.core.products.services.SweetService;
+import fr.sweetiez.api.core.products.services.TrayService;
 import fr.sweetiez.api.core.recipes.ports.RecipeReader;
 import fr.sweetiez.api.core.recipes.ports.RecipeWriter;
 import fr.sweetiez.api.core.recipes.services.RecipeService;
 import fr.sweetiez.api.core.reports.services.ReportService;
-import fr.sweetiez.api.core.trays.models.tray.Tray;
 import fr.sweetiez.api.infrastructure.app.security.TokenProvider;
 import fr.sweetiez.api.infrastructure.notification.email.GmailSender;
 import fr.sweetiez.api.infrastructure.payements.StripePaymentService;
@@ -194,9 +195,9 @@ public class SpringDependenciesConfig {
         return new RecipeMapper();
     }
 
-    // ADAPTERS
+    @Bean
     public TrayMapper trayMapper() {
-        return new TrayMapper(sweetMapper());
+        return new TrayMapper(sweetMapper(), evaluationMapper());
     }
 
     // REPOSITORY ADAPTERS
@@ -312,12 +313,12 @@ public class SpringDependenciesConfig {
 
     @Bean
     public SweetService sweetService() {
-        return new SweetService(sweetWriter(), sweetReader(), evaluationService(), customerService());
+        return new SweetService(sweetWriter(), sweetReader(), evaluationService(), ingredientService());
     }
 
     @Bean
     public TrayService trayService() {
-        return new TrayService(trayWriter(), trayReader(), evaluationService(), customerService());
+        return new TrayService(trayWriter(), trayReader(), evaluationService(), sweetService());
     }
 
     @Bean

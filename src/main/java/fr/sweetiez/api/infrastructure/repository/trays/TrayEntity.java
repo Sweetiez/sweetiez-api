@@ -1,8 +1,9 @@
 package fr.sweetiez.api.infrastructure.repository.trays;
 
-import fr.sweetiez.api.core.trays.models.tray.details.Flavor;
-import fr.sweetiez.api.core.trays.models.tray.states.Highlight;
-import fr.sweetiez.api.core.trays.models.tray.states.State;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.Flavor;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
+import fr.sweetiez.api.infrastructure.repository.evaluations.EvaluationEntity;
 import fr.sweetiez.api.infrastructure.repository.sweets.SweetEntity;
 
 import javax.persistence.*;
@@ -50,6 +51,9 @@ public class TrayEntity {
     @OneToMany
     private final List<SweetEntity> sweets;
 
+    @OneToMany
+    private final List<EvaluationEntity> evaluations;
+
     public TrayEntity() {
         this.id = null;
         this.name = null;
@@ -60,9 +64,10 @@ public class TrayEntity {
         this.flavor = null;
         this.images = null;
         this.sweets = null;
+        this.evaluations = null;
     }
 
-    public TrayEntity(UUID id, String name, String description, BigDecimal price, Highlight highlight, State state, Flavor flavor, String images, List<SweetEntity> sweets) {
+    public TrayEntity(UUID id, String name, String description, BigDecimal price, Highlight highlight, State state, Flavor flavor, String images, List<SweetEntity> sweets, List<EvaluationEntity> evaluations) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -72,6 +77,7 @@ public class TrayEntity {
         this.flavor = flavor;
         this.images = images;
         this.sweets = sweets;
+        this.evaluations = evaluations;
     }
 
     public UUID getId() {
@@ -108,6 +114,10 @@ public class TrayEntity {
 
     public List<SweetEntity> getSweets() {
         return sweets;
+    }
+
+    public List<EvaluationEntity> getEvaluations() {
+        return evaluations;
     }
 
     public boolean equals(Object o) {
