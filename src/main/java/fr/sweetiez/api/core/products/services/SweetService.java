@@ -1,6 +1,7 @@
 package fr.sweetiez.api.core.products.services;
 
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
+import fr.sweetiez.api.core.ingredients.models.Ingredient;
 import fr.sweetiez.api.core.ingredients.services.IngredientService;
 import fr.sweetiez.api.core.products.models.Sweet;
 import fr.sweetiez.api.core.products.models.common.ProductID;
@@ -16,8 +17,10 @@ import fr.sweetiez.api.core.products.ports.ProductsWriter;
 import fr.sweetiez.api.core.products.services.exceptions.InvalidFieldsException;
 import fr.sweetiez.api.core.products.services.exceptions.ProductAlreadyExistsException;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class SweetService {
@@ -117,9 +120,9 @@ public class SweetService {
         return new SimpleProductResponse(writer.save(sweet.addImage(imageUrl)));
     }
 
-    public AdminDetailedSweetResponse adminUpdateSweetDetails(UpdateSweetRequest request) {
+    public AdminDetailedSweetResponse adminUpdateSweetDetails(UpdateProductRequest request) {
         var sweet = reader.findById(new ProductID(request.id())).orElseThrow();
-        var ingredients = ingredientService.retrieveAllById(request.ingredients());
+        var ingredients = ingredientService.retrieveAllById(request.composition());
         var updatedSweet = new Sweet(sweet, request, ingredients);
 
         return new AdminDetailedSweetResponse(writer.save(updatedSweet));
@@ -128,5 +131,18 @@ public class SweetService {
     public SimpleProductResponse adminDeleteImageFrom(ProductID id, DeleteImageRequest request) {
         var sweet = reader.findById(id).orElseThrow();
         return new SimpleProductResponse(writer.save(sweet.deleteImage(request.imageUrl())));
+    }
+
+    public Collection<Sweet> retrieveAllById(Collection<UUID> ids) {
+        var existingSweets = reader.findAll();
+        var sweets = new ArrayList<Sweet>();
+
+        ids.forEach(id -> existingSweets
+                .forEach(sweet -> {
+                    if (sweet.id().value().equals(id)) sweets.add(sweet);
+                })
+        );
+
+        return sweets;
     }
 }

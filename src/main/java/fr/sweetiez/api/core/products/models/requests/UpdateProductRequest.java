@@ -8,13 +8,13 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.UUID;
 
-public record UpdateSweetRequest(
+public record UpdateProductRequest(
         UUID id,
         String name,
         BigDecimal price,
         String description,
         Collection<String> images,
-        Collection<UUID> ingredients,
+        Collection<UUID> composition,
         Highlight highlight,
         State state,
         Flavor flavor

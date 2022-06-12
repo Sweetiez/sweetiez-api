@@ -1,6 +1,6 @@
 package fr.sweetiez.api.infrastructure.repository.trays;
 
-import fr.sweetiez.api.core.trays.models.tray.states.State;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

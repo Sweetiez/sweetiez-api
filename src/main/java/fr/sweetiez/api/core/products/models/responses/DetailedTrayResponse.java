@@ -1,30 +1,38 @@
 package fr.sweetiez.api.core.products.models.responses;
 
 import fr.sweetiez.api.core.evaluations.models.EvaluationResponse;
+import fr.sweetiez.api.core.ingredients.models.Ingredient;
+import fr.sweetiez.api.core.products.models.Sweet;
+import fr.sweetiez.api.core.products.models.Tray;
+import fr.sweetiez.api.core.products.models.common.Name;
 import fr.sweetiez.api.core.sweets.models.responses.Evaluation;
-import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
 
 import java.util.Collection;
+import java.util.UUID;
 
 public record DetailedTrayResponse(
-        String id,
+        UUID id,
         String name,
         double price,
         String description,
         Collection<String> images,
-        Evaluation evaluation,
-        Collection<EvaluationResponse> comments
+        Collection<String> sweets,
+        Collection<String> diets,
+        Collection<String> allergens,
+        ValuationResponse valuation
 )
 {
-    public DetailedTrayResponse(Sweet sweet, Evaluation evaluation, Collection<EvaluationResponse> comments) {
+    public DetailedTrayResponse(Tray tray, ValuationResponse valuation) {
         this(
-                sweet.id().value(),
-                sweet.name().value(),
-                sweet.price().value().doubleValue(),
-                sweet.details().description().content(),
-                sweet.details().images(),
-                evaluation,
-                comments
+                tray.id().value(),
+                tray.name().value(),
+                tray.price().value().doubleValue(),
+                tray.description().content(),
+                tray.details().images(),
+                tray.sweets().stream().map(Sweet::name).map(Name::value).toList(),
+                tray.diets(),
+                tray.allergens(),
+                valuation
         );
     }
 }

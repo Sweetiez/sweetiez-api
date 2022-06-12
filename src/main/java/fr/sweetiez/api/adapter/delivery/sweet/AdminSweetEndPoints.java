@@ -1,6 +1,5 @@
 package fr.sweetiez.api.adapter.delivery.sweet;
 
-import fr.sweetiez.api.core.products.models.Sweet;
 import fr.sweetiez.api.core.products.models.common.ProductID;
 import fr.sweetiez.api.core.products.models.requests.*;
 import fr.sweetiez.api.core.products.models.responses.AdminDetailedSweetResponse;
@@ -120,7 +119,7 @@ public class AdminSweetEndPoints {
         return ResponseEntity.ok(sweetService.addImageTo(new ProductID(id), url));
     }
 
-    public ResponseEntity<AdminDetailedSweetResponse> adminUpdateSweetDetails(UpdateSweetRequest request) {
+    public ResponseEntity<AdminDetailedSweetResponse> adminUpdateSweetDetails(UpdateProductRequest request) {
         try {
             return ResponseEntity.ok(sweetService.adminUpdateSweetDetails(request));
         }

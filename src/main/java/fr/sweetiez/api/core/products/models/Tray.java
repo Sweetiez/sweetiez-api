@@ -10,7 +10,7 @@ import fr.sweetiez.api.core.products.models.common.details.characteristics.Chara
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
 import fr.sweetiez.api.core.products.models.requests.CreateProductRequest;
-import fr.sweetiez.api.core.products.models.requests.UpdateSweetRequest;
+import fr.sweetiez.api.core.products.models.requests.UpdateProductRequest;
 
 import java.util.Collection;
 import java.util.List;
@@ -47,7 +47,7 @@ public class Tray extends Product {
         sweets = tray.sweets();
     }
 
-    public Tray(Tray tray, UpdateSweetRequest request, Collection<Sweet> sweets) {
+    public Tray(Tray tray, UpdateProductRequest request, Collection<Sweet> sweets) {
         super(tray.id,
                 new Name(request.name()),
                 new Description(request.description()),
