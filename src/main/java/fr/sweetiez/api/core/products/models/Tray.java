@@ -1,7 +1,5 @@
-package fr.sweetiez.api.core.products;
+package fr.sweetiez.api.core.products.models;
 
-import fr.sweetiez.api.core.products.models.Product;
-import fr.sweetiez.api.core.products.models.Sweet;
 import fr.sweetiez.api.core.products.models.common.Description;
 import fr.sweetiez.api.core.products.models.common.Name;
 import fr.sweetiez.api.core.products.models.common.Price;
