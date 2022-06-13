@@ -1,4 +1,4 @@
-package fr.sweetiez.api.adapter.repository.tray;
+package fr.sweetiez.api.adapter.repository.products.tray;
 
 import fr.sweetiez.api.adapter.shared.TrayMapper;
 import fr.sweetiez.api.core.products.models.Tray;

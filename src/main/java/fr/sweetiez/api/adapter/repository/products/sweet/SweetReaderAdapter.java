@@ -1,4 +1,4 @@
-package fr.sweetiez.api.adapter.repository.sweet;
+package fr.sweetiez.api.adapter.repository.products.sweet;
 
 import fr.sweetiez.api.adapter.shared.SweetMapper;
 import fr.sweetiez.api.core.products.models.Sweet;
