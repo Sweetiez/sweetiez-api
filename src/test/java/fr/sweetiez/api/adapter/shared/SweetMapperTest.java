@@ -11,7 +11,7 @@ import fr.sweetiez.api.core.products.models.common.details.characteristics.Chara
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Flavor;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
-import fr.sweetiez.api.infrastructure.repository.sweets.SweetEntity;
+import fr.sweetiez.api.infrastructure.repository.products.sweets.SweetEntity;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

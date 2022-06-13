@@ -3,7 +3,7 @@ package fr.sweetiez.api.adapter.repository.tray;
 import fr.sweetiez.api.adapter.shared.TrayMapper;
 import fr.sweetiez.api.core.products.models.Tray;
 import fr.sweetiez.api.core.products.ports.ProductsWriter;
-import fr.sweetiez.api.infrastructure.repository.trays.TrayRepository;
+import fr.sweetiez.api.infrastructure.repository.products.trays.TrayRepository;
 
 public class TrayWriterAdapter implements ProductsWriter<Tray> {
 

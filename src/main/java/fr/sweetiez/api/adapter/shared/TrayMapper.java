@@ -4,7 +4,7 @@ import fr.sweetiez.api.core.products.models.Tray;
 import fr.sweetiez.api.core.products.models.common.ProductID;
 import fr.sweetiez.api.core.products.models.common.details.Valuation;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Characteristics;
-import fr.sweetiez.api.infrastructure.repository.trays.TrayEntity;
+import fr.sweetiez.api.infrastructure.repository.products.trays.TrayEntity;
 
 import java.util.List;
 
