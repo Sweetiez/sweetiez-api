@@ -47,6 +47,9 @@ public class IngredientRepositoryAdapter implements Ingredients {
     }
 
     public Collection<Ingredient> findAllById(Collection<UUID> ingredients) {
-        return null;
+        return repository.findAllById(ingredients)
+                .stream()
+                .map(mapper::toDto)
+                .toList();
     }
 }

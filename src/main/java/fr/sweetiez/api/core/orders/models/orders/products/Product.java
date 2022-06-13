@@ -1,6 +1,6 @@
 package fr.sweetiez.api.core.orders.models.orders.products;
 
-import fr.sweetiez.api.core.sweets.models.sweet.details.Price;
+import fr.sweetiez.api.core.products.models.common.Price;
 
 import java.math.BigDecimal;
 import java.util.UUID;

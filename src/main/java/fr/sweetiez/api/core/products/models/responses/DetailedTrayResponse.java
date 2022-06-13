@@ -1,11 +1,8 @@
 package fr.sweetiez.api.core.products.models.responses;
 
-import fr.sweetiez.api.core.evaluations.models.EvaluationResponse;
-import fr.sweetiez.api.core.ingredients.models.Ingredient;
 import fr.sweetiez.api.core.products.models.Sweet;
 import fr.sweetiez.api.core.products.models.Tray;
 import fr.sweetiez.api.core.products.models.common.Name;
-import fr.sweetiez.api.core.sweets.models.responses.Evaluation;
 
 import java.util.Collection;
 import java.util.UUID;

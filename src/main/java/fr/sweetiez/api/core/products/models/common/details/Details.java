@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public record Details(Collection<String> images, Characteristics characteristics, Valuation valuation) {
     public boolean isValid() {
-        return images != null && characteristics != null && valuation != null;
+        return characteristics != null && valuation != null;
     }
 
     public Details addImage(String imageUrl) {

@@ -29,7 +29,7 @@ public class Sweet extends Product {
     }
 
     public Sweet(CreateProductRequest request, Collection<Ingredient> ingredients) {
-        super(null,
+        super(new ProductID(null),
                 new Name(request.name()),
                 new Description(request.description()),
                 new Price(request.price()),

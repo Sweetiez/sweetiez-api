@@ -44,7 +44,7 @@ public abstract class Product {
     protected abstract Collection<String> allergens();
 
     protected Collection<String> computeDiets(Collection<List<String>> dietsProperties) {
-        var diets = new ArrayList<String>();
+        var uncheckedDiets = new ArrayList<String>();
 
         for (var properties : dietsProperties) {
             for (var diet : properties) {
@@ -58,9 +58,15 @@ public abstract class Product {
                 }
 
                 if (isPresentEveryWhere) {
-                    diets.add(diet);
+                    uncheckedDiets.add(diet);
                 }
             }
+        }
+
+        var diets = new ArrayList<>(uncheckedDiets.stream().distinct().toList());
+
+        if (allergens().contains("GLUTEN")) {
+            diets.remove("GLUTEN FREE");
         }
 
         return diets;

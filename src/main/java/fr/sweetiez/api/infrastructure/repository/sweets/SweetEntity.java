@@ -5,6 +5,8 @@ import fr.sweetiez.api.core.products.models.common.details.characteristics.Highl
 import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
 import fr.sweetiez.api.infrastructure.repository.evaluations.EvaluationEntity;
 import fr.sweetiez.api.infrastructure.repository.ingredients.IngredientEntity;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -48,10 +50,12 @@ public class SweetEntity {
     @Column(columnDefinition = "text")
     private String images;
 
-    @OneToMany
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     private final List<IngredientEntity> ingredients;
 
     @OneToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     private final List<EvaluationEntity> evaluations;
 
     public SweetEntity() {
