@@ -27,10 +27,10 @@ import fr.sweetiez.api.adapter.repository.ingredient.IngredientRepositoryAdapter
 import fr.sweetiez.api.adapter.repository.order.OrderReaderAdapter;
 import fr.sweetiez.api.adapter.repository.order.OrderWriterAdapter;
 import fr.sweetiez.api.adapter.repository.report.ReportRepositoryAdapter;
-import fr.sweetiez.api.adapter.repository.sweet.SweetReaderAdapter;
-import fr.sweetiez.api.adapter.repository.sweet.SweetWriterAdapter;
-import fr.sweetiez.api.adapter.repository.tray.TrayReaderAdapter;
-import fr.sweetiez.api.adapter.repository.tray.TrayWriterAdapter;
+import fr.sweetiez.api.adapter.repository.products.sweet.SweetReaderAdapter;
+import fr.sweetiez.api.adapter.repository.products.sweet.SweetWriterAdapter;
+import fr.sweetiez.api.adapter.repository.products.tray.TrayReaderAdapter;
+import fr.sweetiez.api.adapter.repository.products.tray.TrayWriterAdapter;
 import fr.sweetiez.api.adapter.shared.*;
 import fr.sweetiez.api.core.authentication.ports.AuthenticationRepository;
 import fr.sweetiez.api.core.authentication.services.AuthenticationService;
