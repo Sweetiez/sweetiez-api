@@ -1,4 +1,4 @@
-package fr.sweetiez.api.infrastructure.repository.sweets;
+package fr.sweetiez.api.infrastructure.repository.products.sweets;
 
 import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
 import org.springframework.data.jpa.repository.JpaRepository;

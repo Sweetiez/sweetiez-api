@@ -5,7 +5,7 @@ import fr.sweetiez.api.core.products.models.Sweet;
 import fr.sweetiez.api.core.products.models.common.ProductID;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
 import fr.sweetiez.api.core.products.ports.ProductsReader;
-import fr.sweetiez.api.infrastructure.repository.sweets.SweetRepository;
+import fr.sweetiez.api.infrastructure.repository.products.sweets.SweetRepository;
 
 import java.util.Collection;
 import java.util.Optional;

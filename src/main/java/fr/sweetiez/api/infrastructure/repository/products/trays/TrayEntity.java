@@ -1,10 +1,10 @@
-package fr.sweetiez.api.infrastructure.repository.sweets;
+package fr.sweetiez.api.infrastructure.repository.products.trays;
 
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Flavor;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
 import fr.sweetiez.api.infrastructure.repository.evaluations.EvaluationEntity;
-import fr.sweetiez.api.infrastructure.repository.ingredients.IngredientEntity;
+import fr.sweetiez.api.infrastructure.repository.products.sweets.SweetEntity;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name="sweet")
-public class SweetEntity {
+public class TrayEntity {
 
     @Id
     @GeneratedValue
@@ -52,13 +52,12 @@ public class SweetEntity {
 
     @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
-    private final List<IngredientEntity> ingredients;
+    private final List<SweetEntity> sweets;
 
     @OneToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
     private final List<EvaluationEntity> evaluations;
 
-    public SweetEntity() {
+    public TrayEntity() {
         this.id = null;
         this.name = null;
         this.description = null;
@@ -67,14 +66,11 @@ public class SweetEntity {
         this.state = null;
         this.flavor = null;
         this.images = null;
-        this.ingredients = null;
+        this.sweets = null;
         this.evaluations = null;
     }
 
-    public SweetEntity(UUID id, String name, String description, BigDecimal price, Highlight highlight,
-                       State state, Flavor flavor, String images, List<IngredientEntity> ingredients,
-                       List<EvaluationEntity> evaluations)
-    {
+    public TrayEntity(UUID id, String name, String description, BigDecimal price, Highlight highlight, State state, Flavor flavor, String images, List<SweetEntity> sweets, List<EvaluationEntity> evaluations) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -83,7 +79,7 @@ public class SweetEntity {
         this.state = state;
         this.flavor = flavor;
         this.images = images;
-        this.ingredients = ingredients;
+        this.sweets = sweets;
         this.evaluations = evaluations;
     }
 
@@ -119,9 +115,10 @@ public class SweetEntity {
         return images;
     }
 
-    public List<IngredientEntity> getIngredients() {
-        return ingredients;
+    public List<SweetEntity> getSweets() {
+        return sweets;
     }
+
     public List<EvaluationEntity> getEvaluations() {
         return evaluations;
     }
@@ -129,7 +126,7 @@ public class SweetEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SweetEntity that = (SweetEntity) o;
+        TrayEntity that = (TrayEntity) o;
         return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(price, that.price) && highlight == that.highlight && state == that.state && flavor == that.flavor && Objects.equals(images, that.images);
     }
 
@@ -142,7 +139,7 @@ public class SweetEntity {
     }
 
     public String toString() {
-        return "SweetEntity{" +
+        return "TrayEntity{" +
                 ", id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +

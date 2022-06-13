@@ -9,7 +9,7 @@ import fr.sweetiez.api.core.products.models.common.ProductID;
 import fr.sweetiez.api.core.products.models.common.details.Details;
 import fr.sweetiez.api.core.products.models.common.details.Valuation;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Characteristics;
-import fr.sweetiez.api.infrastructure.repository.sweets.SweetEntity;
+import fr.sweetiez.api.infrastructure.repository.products.sweets.SweetEntity;
 
 import java.util.List;
 

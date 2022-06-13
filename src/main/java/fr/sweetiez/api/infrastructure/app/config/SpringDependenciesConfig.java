@@ -60,8 +60,8 @@ import fr.sweetiez.api.infrastructure.repository.ingredients.IngredientRepositor
 import fr.sweetiez.api.infrastructure.repository.orders.OrderDetailRepository;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderRepository;
 import fr.sweetiez.api.infrastructure.repository.reports.ReportRepository;
-import fr.sweetiez.api.infrastructure.repository.sweets.SweetRepository;
-import fr.sweetiez.api.infrastructure.repository.trays.TrayRepository;
+import fr.sweetiez.api.infrastructure.repository.products.sweets.SweetRepository;
+import fr.sweetiez.api.infrastructure.repository.products.trays.TrayRepository;
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

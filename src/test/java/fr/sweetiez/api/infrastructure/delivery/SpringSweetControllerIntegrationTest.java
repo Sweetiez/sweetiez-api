@@ -19,7 +19,7 @@ import fr.sweetiez.api.core.products.models.requests.CreateProductRequest;
 import fr.sweetiez.api.core.products.models.requests.PublishProductRequest;
 import fr.sweetiez.api.core.products.models.responses.SimpleProductResponse;
 import fr.sweetiez.api.infrastructure.delivery.sweet.SpringSweetController;
-import fr.sweetiez.api.infrastructure.repository.sweets.SweetEntity;
+import fr.sweetiez.api.infrastructure.repository.products.sweets.SweetEntity;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
