@@ -1,4 +1,4 @@
-package fr.sweetiez.api.adapter.repository.report;
+package fr.sweetiez.api.adapter.repository.reports;
 
 import fr.sweetiez.api.adapter.shared.ReportMapper;
 import fr.sweetiez.api.core.reports.models.Report;

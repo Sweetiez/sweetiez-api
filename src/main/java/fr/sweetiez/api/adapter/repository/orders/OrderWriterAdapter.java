@@ -1,4 +1,4 @@
-package fr.sweetiez.api.adapter.repository.order;
+package fr.sweetiez.api.adapter.repository.orders;
 
 import fr.sweetiez.api.adapter.shared.OrderMapper;
 import fr.sweetiez.api.core.orders.models.orders.Order;
