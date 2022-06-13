@@ -1,6 +1,8 @@
 package fr.sweetiez.api.infrastructure.app.config;
 
 import fr.sweetiez.api.adapter.delivery.*;
+import fr.sweetiez.api.adapter.gateways.allergen.EdamamApi;
+import fr.sweetiez.api.adapter.gateways.translator.LibreTranslateApi;
 import fr.sweetiez.api.adapter.repository.*;
 import fr.sweetiez.api.adapter.shared.*;
 import fr.sweetiez.api.core.authentication.ports.AuthenticationRepository;
@@ -11,6 +13,10 @@ import fr.sweetiez.api.core.customers.services.CustomerService;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationReader;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationWriter;
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
+import fr.sweetiez.api.core.ingredients.ports.IngredientApi;
+import fr.sweetiez.api.core.ingredients.ports.Ingredients;
+import fr.sweetiez.api.core.ingredients.ports.TranslatorApi;
+import fr.sweetiez.api.core.ingredients.services.IngredientService;
 import fr.sweetiez.api.core.orders.ports.OrdersReader;
 import fr.sweetiez.api.core.orders.ports.OrdersWriter;
 import fr.sweetiez.api.core.orders.services.OrderService;
@@ -27,6 +33,8 @@ import fr.sweetiez.api.infrastructure.repository.accounts.AccountRepository;
 import fr.sweetiez.api.infrastructure.repository.accounts.RoleRepository;
 import fr.sweetiez.api.infrastructure.repository.customers.CustomerRepository;
 import fr.sweetiez.api.infrastructure.repository.evaluations.EvaluationRepository;
+import fr.sweetiez.api.infrastructure.repository.ingredients.HealthPropertyRepository;
+import fr.sweetiez.api.infrastructure.repository.ingredients.IngredientRepository;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderDetailRepository;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderRepository;
 import fr.sweetiez.api.infrastructure.repository.recipe.RecipeRepository;
@@ -38,6 +46,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class SpringDependenciesConfig {
@@ -50,6 +59,12 @@ public class SpringDependenciesConfig {
     @Value("${minio.url}")
     private String minioUrl;
 
+    @Value("${apis.edamam.app-id}")
+    private String edamamAppId;
+
+    @Value("${apis.edamam.app-key}")
+    private String edamamAppKey;
+  
     @Value("${stripe.secret-key}")
     private String stripeSecretKey;
 
@@ -62,8 +77,9 @@ public class SpringDependenciesConfig {
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
+    private final IngredientRepository ingredientRepository;
+    private final HealthPropertyRepository healthPropertyRepository;
     private final OrderRepository orderRepository;
-
     private final OrderDetailRepository orderDetailRepository;
 
     private final TokenProvider tokenProvider;
@@ -77,8 +93,14 @@ public class SpringDependenciesConfig {
                                     ReportRepository reportRepository, CustomerRepository customerRepository,
                                     AccountRepository accountRepository, RoleRepository roleRepository,
                                     OrderRepository orderRepository, OrderDetailRepository orderDetailRepository,
-                                    TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManager, RecipeRepository recipeRepository, RecipeStepRepository recipeStepRepository)
-    {
+                                    RecipeRepository recipeRepository, 
+                                    RecipeStepRepository recipeStepRepository,
+                                    IngredientRepository ingredientRepository,
+                                    HealthPropertyRepository healthPropertyRepository,
+                                    TokenProvider tokenProvider,
+                                    AuthenticationManagerBuilder authenticationManager)
+
+  {
         this.sweetRepository = sweetRepository;
         this.evaluationRepository = evaluationRepository;
         this.reportRepository = reportRepository;
@@ -91,9 +113,17 @@ public class SpringDependenciesConfig {
         this.orderDetailRepository = orderDetailRepository;
         this.recipeRepository = recipeRepository;
         this.recipeStepRepository = recipeStepRepository;
+        this.ingredientRepository = ingredientRepository;
+        this.healthPropertyRepository = healthPropertyRepository;
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
     // MAPPERS
+  
     @Bean
     public EvaluationMapper evaluationMapper() {
         return new EvaluationMapper();
@@ -120,6 +150,11 @@ public class SpringDependenciesConfig {
     }
 
     @Bean
+    public IngredientMapper ingredientMapper() {
+        return new IngredientMapper();
+    }
+  
+    @Bean
     public OrderMapper orderMapper() {
         return new OrderMapper();
     }
@@ -130,6 +165,8 @@ public class SpringDependenciesConfig {
     }
 
     // ADAPTERS
+    // REPOSITORY ADAPTERS
+
     @Bean
     public EvaluationReader evaluationReader() {
         return new EvaluationReaderAdapter(evaluationRepository, evaluationMapper());
@@ -171,6 +208,11 @@ public class SpringDependenciesConfig {
     }
 
     @Bean
+    public Ingredients ingredientRepositoryPort() {
+        return new IngredientRepositoryAdapter(ingredientRepository, healthPropertyRepository, ingredientMapper());
+    }
+  
+    @Bean
     public OrdersReader orderReader() {
         return new OrderReaderAdapter(orderRepository, orderDetailRepository, orderMapper());
     }
@@ -188,9 +230,21 @@ public class SpringDependenciesConfig {
     @Bean
     public RecipeWriter recipeWriter() {
         return new RecipeWriterAdapter(recipeRepository, recipeStepRepository, recipeMapper());
+
+     // GATEWAY ADAPTERS
+  
+    @Bean
+    public TranslatorApi translatorGateway() {
+        return new LibreTranslateApi(restTemplate());
+    }
+
+    @Bean
+    public IngredientApi ingredientGateway() {
+        return new EdamamApi(edamamAppId, edamamAppKey, restTemplate());
     }
 
     // SERVICES
+  
     @Bean
     public EvaluationService evaluationService() {
         return new EvaluationService(evaluationReader(), evaluationWriter(), customerService());
@@ -217,6 +271,11 @@ public class SpringDependenciesConfig {
     }
 
     @Bean
+    public IngredientService ingredientService() {
+        return new IngredientService(translatorGateway(), ingredientGateway(), ingredientRepositoryPort());
+    }
+  
+    @Bean
     public OrderService orderService() {
         return new OrderService(orderWriter(), orderReader(), sweetService(), customerService(), stripeService());
     }
@@ -227,6 +286,7 @@ public class SpringDependenciesConfig {
     }
 
     // END POINTS
+  
     @Bean
     public EvaluationEndPoints evaluationEndPoints() {
         return new EvaluationEndPoints(evaluationService());
@@ -253,6 +313,11 @@ public class SpringDependenciesConfig {
     }
 
     @Bean
+    public IngredientEndPoints ingredientEndPoints() {
+        return new IngredientEndPoints(ingredientService());
+    }
+  
+    @Bean
     public OrderEndPoints orderEndPoints() {
         return new OrderEndPoints(orderService());
     }
@@ -278,6 +343,7 @@ public class SpringDependenciesConfig {
     }
 
     // MINIO
+  
     @Bean
     public MinioClient minioClient() {
         return new MinioClient.Builder()
@@ -287,6 +353,7 @@ public class SpringDependenciesConfig {
     }
 
     // STRIPE
+  
     @Bean
     public StripePaymentService stripeService() {
         return new StripePaymentService(stripeEndpointSecret, stripeSecretKey);

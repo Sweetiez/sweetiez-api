@@ -27,7 +27,7 @@ class SweetTest {
         var request = new CreateSweetRequest(
                 "Valid sweet name",
                 BigDecimal.valueOf(1.99),
-                Set.of(new Ingredient("Valid ingredient name", Set.of())),
+                Set.of(new Ingredient(UUID.randomUUID(), "Valid ingredient name", Set.of())),
                 "Sweet description",
                 Flavor.SWEET
         );
@@ -47,7 +47,7 @@ class SweetTest {
         var request = new CreateSweetRequest(
                 "invalid sweet name",
                 BigDecimal.valueOf(1.99),
-                Set.of(new Ingredient("Valid ingredient name", Set.of())),
+                Set.of(new Ingredient(UUID.randomUUID(), "Valid ingredient name", Set.of())),
                 "Sweet description",
                 Flavor.SWEET
         );
@@ -67,7 +67,7 @@ class SweetTest {
         var request = new CreateSweetRequest(
                 "Valid sweet name",
                 BigDecimal.valueOf(1.99),
-                Set.of(new Ingredient("Valid ingredient name", Set.of())),
+                Set.of(new Ingredient(UUID.randomUUID(), "Valid ingredient name", Set.of())),
                 "Sweet description",
                 Flavor.SWEET
         );
@@ -87,21 +87,21 @@ class SweetTest {
                 new CreateSweetRequest(
                         "sweet name",
                         BigDecimal.valueOf(1.99),
-                        Set.of(new Ingredient("Ingredient name", Set.of())),
+                        Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
                         "Sweet description",
                         Flavor.SWEET
                 ),
                 new CreateSweetRequest(
                         "",
                         BigDecimal.valueOf(1.99),
-                        Set.of(new Ingredient("Ingredient name", Set.of())),
+                        Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
                         "Sweet description",
                         Flavor.SWEET
                 ),
                 new CreateSweetRequest(
                         null,
                         BigDecimal.valueOf(1.99),
-                        Set.of(new Ingredient("Ingredient name", Set.of())),
+                        Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
                         "Sweet description",
                         Flavor.SWEET
                 ),
@@ -115,14 +115,14 @@ class SweetTest {
                 new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(-1.45),
-                        Set.of(new Ingredient("Ingredient name", Set.of())),
+                        Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
                         "Sweet description",
                         Flavor.SWEET
                 ),
                 new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(0.),
-                        Set.of(new Ingredient("Ingredient name", Set.of())),
+                        Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
                         "Sweet description",
                         Flavor.SWEET
                 )

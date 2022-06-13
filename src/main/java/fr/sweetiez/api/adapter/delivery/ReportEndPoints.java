@@ -4,6 +4,7 @@ import fr.sweetiez.api.core.customers.services.exceptions.CustomerDoesNotExistEx
 import fr.sweetiez.api.core.reports.models.Report;
 import fr.sweetiez.api.core.reports.models.ReportEvaluationRequest;
 import fr.sweetiez.api.core.evaluations.services.EvaluationDoesNotExistException;
+import fr.sweetiez.api.core.reports.models.responses.AdminReportResponse;
 import fr.sweetiez.api.core.reports.services.ReportAlreadyCreatedByUserException;
 import fr.sweetiez.api.core.reports.services.ReportService;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,7 @@ public class ReportEndPoints {
         }
     }
 
-    public ResponseEntity<Collection<Report>> retrieveAll() {
+    public ResponseEntity<Collection<AdminReportResponse>> retrieveAll() {
         return ResponseEntity.ok(service.retrieveAll());
     }
 

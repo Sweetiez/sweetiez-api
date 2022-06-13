@@ -3,6 +3,7 @@ package fr.sweetiez.api.infrastructure.delivery;
 import fr.sweetiez.api.adapter.delivery.ReportEndPoints;
 import fr.sweetiez.api.core.reports.models.Report;
 import fr.sweetiez.api.core.reports.models.ReportEvaluationRequest;
+import fr.sweetiez.api.core.reports.models.responses.AdminReportResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class SpringReportController {
     }
 
     @GetMapping("/admin/reports")
-    public ResponseEntity<Collection<Report>> retrieveAll() {
+    public ResponseEntity<Collection<AdminReportResponse>> retrieveAll() {
         return reportEndPoints.retrieveAll();
     }
 

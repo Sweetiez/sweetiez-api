@@ -9,5 +9,17 @@ public record Customer(
         String firstName,
         String lastName,
         String email,
+        String phone,
         Optional<Account> account
-) {}
+) {
+    public Customer(CustomerId id, Optional<Account> account, UpdateCustomerRequest request) {
+        this(
+                id,
+                request.firstName(),
+                request.lastName(),
+                request.email(),
+                request.phone(),
+                account
+        );
+    }
+}

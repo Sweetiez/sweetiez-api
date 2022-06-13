@@ -21,7 +21,7 @@ public class SpringAdminOrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SimpleOrderResponse>> getOrders() {
+    public ResponseEntity<List<DetailedOrderResponse>> getOrders() {
         return this.orderEndPoints.getOrders();
     }
 
