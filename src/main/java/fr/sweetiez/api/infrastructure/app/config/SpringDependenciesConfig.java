@@ -230,9 +230,10 @@ public class SpringDependenciesConfig {
     @Bean
     public RecipeWriter recipeWriter() {
         return new RecipeWriterAdapter(recipeRepository, recipeStepRepository, recipeMapper());
+    }
 
      // GATEWAY ADAPTERS
-  
+
     @Bean
     public TranslatorApi translatorGateway() {
         return new LibreTranslateApi(restTemplate());
