@@ -1,4 +1,4 @@
-package fr.sweetiez.api.adapter.repository.customer;
+package fr.sweetiez.api.adapter.repository.customers;
 
 import fr.sweetiez.api.adapter.shared.CustomerMapper;
 import fr.sweetiez.api.core.customers.models.Customer;

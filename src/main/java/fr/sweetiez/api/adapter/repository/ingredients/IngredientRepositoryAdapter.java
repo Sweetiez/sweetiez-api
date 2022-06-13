@@ -1,4 +1,4 @@
-package fr.sweetiez.api.adapter.repository.ingredient;
+package fr.sweetiez.api.adapter.repository.ingredients;
 
 import fr.sweetiez.api.adapter.shared.IngredientMapper;
 import fr.sweetiez.api.core.ingredients.models.HealthProperty;

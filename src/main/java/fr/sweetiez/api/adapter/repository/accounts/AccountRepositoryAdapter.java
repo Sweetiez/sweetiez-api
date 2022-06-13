@@ -1,4 +1,4 @@
-package fr.sweetiez.api.adapter.repository.account;
+package fr.sweetiez.api.adapter.repository.accounts;
 
 import fr.sweetiez.api.adapter.shared.AccountMapper;
 import fr.sweetiez.api.core.authentication.models.Account;

@@ -1,4 +1,4 @@
-package fr.sweetiez.api.adapter.repository.evaluation;
+package fr.sweetiez.api.adapter.repository.evaluations;
 
 import fr.sweetiez.api.adapter.shared.EvaluationMapper;
 import fr.sweetiez.api.core.evaluations.models.Evaluation;
