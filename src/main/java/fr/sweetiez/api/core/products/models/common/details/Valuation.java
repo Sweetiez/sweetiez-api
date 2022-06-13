@@ -12,7 +12,7 @@ public record Valuation(Collection<Evaluation> evaluations) {
     }
 
     public Double globalMark() {
-        if (evaluations.isEmpty()) return -1.;
+        if (evaluations.isEmpty()) return 0.;
 
         var sum = evaluations
                 .stream()

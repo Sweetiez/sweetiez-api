@@ -1,7 +1,6 @@
 package fr.sweetiez.api.core.products.services;
 
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
-import fr.sweetiez.api.core.ingredients.models.Ingredient;
 import fr.sweetiez.api.core.ingredients.services.IngredientService;
 import fr.sweetiez.api.core.products.models.Sweet;
 import fr.sweetiez.api.core.products.models.common.ProductID;

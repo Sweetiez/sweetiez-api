@@ -5,6 +5,8 @@ import fr.sweetiez.api.core.products.models.common.details.characteristics.Highl
 import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
 import fr.sweetiez.api.infrastructure.repository.evaluations.EvaluationEntity;
 import fr.sweetiez.api.infrastructure.repository.sweets.SweetEntity;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -48,7 +50,8 @@ public class TrayEntity {
     @Column(columnDefinition = "text")
     private String images;
 
-    @OneToMany
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     private final List<SweetEntity> sweets;
 
     @OneToMany

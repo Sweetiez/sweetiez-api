@@ -25,7 +25,7 @@ public class Tray extends Product {
     }
 
     public Tray(CreateProductRequest request, Collection<Sweet> sweets) {
-        super(null,
+        super(new ProductID(null),
                 new Name(request.name()),
                 new Description(request.description()),
                 new Price(request.price()),
