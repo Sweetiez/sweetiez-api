@@ -28,6 +28,7 @@ import fr.sweetiez.api.core.sweets.ports.SweetsReader;
 import fr.sweetiez.api.core.sweets.ports.SweetsWriter;
 import fr.sweetiez.api.core.sweets.services.SweetService;
 import fr.sweetiez.api.infrastructure.app.security.TokenProvider;
+import fr.sweetiez.api.infrastructure.notification.email.GmailSender;
 import fr.sweetiez.api.infrastructure.payements.StripePaymentService;
 import fr.sweetiez.api.infrastructure.repository.accounts.AccountRepository;
 import fr.sweetiez.api.infrastructure.repository.accounts.RoleRepository;
@@ -232,6 +233,11 @@ public class SpringDependenciesConfig {
         return new RecipeWriterAdapter(recipeRepository, recipeStepRepository, recipeMapper());
     }
 
+    @Bean
+    public OrderNotifierAdapter orderNotifierAdapter() {
+        return new OrderNotifierAdapter(gmailSender());
+    }
+
      // GATEWAY ADAPTERS
 
     @Bean
@@ -278,7 +284,7 @@ public class SpringDependenciesConfig {
   
     @Bean
     public OrderService orderService() {
-        return new OrderService(orderWriter(), orderReader(), sweetService(), customerService(), stripeService());
+        return new OrderService(orderWriter(), orderReader(), sweetService(), customerService(), stripeService(), orderNotifierAdapter());
     }
 
     @Bean
@@ -359,4 +365,11 @@ public class SpringDependenciesConfig {
     public StripePaymentService stripeService() {
         return new StripePaymentService(stripeEndpointSecret, stripeSecretKey);
     }
+
+    // EMAIL NOTIFIER
+    @Bean
+    public GmailSender gmailSender() {
+        return new GmailSender();
+    }
+
 }

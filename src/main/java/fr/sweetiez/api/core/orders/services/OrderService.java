@@ -9,6 +9,7 @@ import fr.sweetiez.api.core.orders.models.orders.products.Product;
 import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
 import fr.sweetiez.api.core.orders.models.requests.CreateOrderRequest;
 import fr.sweetiez.api.core.orders.models.responses.*;
+import fr.sweetiez.api.core.orders.ports.OrdersNotifier;
 import fr.sweetiez.api.core.orders.ports.OrdersReader;
 import fr.sweetiez.api.core.orders.ports.OrdersWriter;
 import fr.sweetiez.api.core.orders.services.exceptions.InvalidOrderException;
@@ -34,12 +35,17 @@ public class OrderService {
 
     private final PaymentService paymentService;
 
-    public OrderService(OrdersWriter writer, OrdersReader reader, SweetService sweetService, CustomerService customerService, PaymentService paymentService) {
+    private final OrdersNotifier notifier;
+
+    public OrderService(OrdersWriter writer, OrdersReader reader, SweetService sweetService,
+                        CustomerService customerService, PaymentService paymentService,
+                        OrdersNotifier notifier) {
         this.writer = writer;
         this.reader = reader;
         this.sweetService = sweetService;
         this.customerService = customerService;
         this.paymentService = paymentService;
+        this.notifier = notifier;
     }
 
     public OrderCreatedResponse create(CreateOrderRequest request) throws InvalidOrderException {
@@ -59,11 +65,6 @@ public class OrderService {
         if (!order.isValid()) {
             throw new InvalidOrderException();
         }
-
-        // Save order details
-
-        System.out.println(order);
-        System.out.println(order.products().size());
 
         // Save the order
         return new OrderCreatedResponse(this.writer.save(order));
@@ -131,6 +132,9 @@ public class OrderService {
                 order.customerId(),
                 order.paymentIntent()
         );
+
+        // Notify the customer
+        notifier.notifyCustomer(order);
 
         return new OrderStatusUpdatedResponse(this.writer.save(updatedOrder));
     }
