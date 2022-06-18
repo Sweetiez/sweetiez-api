@@ -19,7 +19,7 @@ public record AdminSimpleProductResponse(
         this(
                 product.id().value(),
                 product.name().value(),
-                product.price().value().doubleValue(),
+                product.price().unitPrice().doubleValue(),
                 product.details().characteristics().state().toString(),
                 product.description().shortContent(),
                 product.details().images(),

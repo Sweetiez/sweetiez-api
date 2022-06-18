@@ -178,11 +178,11 @@ public class OrderService {
 
     /**
      * Computation of the total price of the order
-     * @return value to pay
+     * @return unitPrice to pay
      */
     private double computeTotalPrice(List<Product> products) {
         return products.stream()
-                .map(p -> p.unitPrice().value().doubleValue() * p.quantity().value())
+                .map(p -> p.unitPrice().unitPrice().doubleValue() * p.quantity().value())
                 .reduce(0.0, Double::sum);
     }
 

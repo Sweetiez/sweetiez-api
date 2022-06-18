@@ -62,7 +62,7 @@ public class SpringAdminSweetController {
     }
 
     @PutMapping()
-    public ResponseEntity<AdminDetailedSweetResponse> adminUpdateSweet(@RequestBody UpdateProductRequest request) {
+    public ResponseEntity<AdminDetailedSweetResponse> adminUpdateSweet(@RequestBody UpdateSweetRequest request) {
         return sweetsEndPoints.adminUpdateSweetDetails(request);
     }
 

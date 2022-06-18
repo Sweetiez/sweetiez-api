@@ -38,7 +38,7 @@ public class AdminTrayEndPoints {
         this.minioClient = minioClient;
     }
 
-    public ResponseEntity<Object> create(CreateSweetRequest request) {
+    public ResponseEntity<Object> create(CreateTrayRequest request) {
         try {
             var createdSweet = trayService.create(request);
             return ResponseEntity
@@ -125,7 +125,7 @@ public class AdminTrayEndPoints {
         return ResponseEntity.ok(trayService.addImageTo(new ProductID(id), url));
     }
 
-    public ResponseEntity<AdminDetailedTrayResponse> adminUpdateSweetDetails(UpdateProductRequest request) {
+    public ResponseEntity<AdminDetailedTrayResponse> adminUpdateSweetDetails(UpdateTrayRequest request) {
         try {
             return ResponseEntity.ok(trayService.adminUpdateTrayDetails(request));
         }

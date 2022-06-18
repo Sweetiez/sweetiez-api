@@ -1,9 +1,11 @@
 package fr.sweetiez.api.adapter.shared;
 
+import fr.sweetiez.api.core.products.models.SweetWithQuantity;
 import fr.sweetiez.api.core.products.models.Tray;
 import fr.sweetiez.api.core.products.models.common.ProductID;
 import fr.sweetiez.api.core.products.models.common.details.Valuation;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Characteristics;
+import fr.sweetiez.api.infrastructure.repository.products.trays.SweetWithQuantityEntity;
 import fr.sweetiez.api.infrastructure.repository.products.trays.TrayEntity;
 
 import java.util.List;
@@ -19,11 +21,19 @@ public class TrayMapper {
     }
 
     public TrayEntity toEntity(Tray tray) {
+        var sweets = tray.sweets()
+                .stream()
+                .map(sweetQty -> new SweetWithQuantityEntity(
+                        null,
+                        sweetMapper.toEntity(sweetQty.sweet()),
+                        sweetQty.quantity()))
+                .toList();
+
         return new TrayEntity(
                 tray.id().value(),
                 tray.name().value(),
                 tray.description().content(),
-                tray.price().value(),
+                tray.price().unitPrice(),
                 tray.details().characteristics().highlight(),
                 tray.details().characteristics().state(),
                 tray.details().characteristics().flavor(),
@@ -31,12 +41,17 @@ public class TrayMapper {
                         .stream()
                         .map(image -> image.isEmpty() ? image : image.concat(";"))
                         .reduce("", String::concat),
-                tray.sweets().stream().map(sweetMapper::toEntity).toList(),
+                sweets,
                 tray.details().valuation().evaluations().stream().map(evaluationMapper::toEntity).toList()
         );
     }
 
     public Tray toDto(TrayEntity entity) {
+        var sweets = entity.getSweets()
+                .stream()
+                .map(sweetQty -> new SweetWithQuantity(sweetMapper.toDto(sweetQty.sweet()), sweetQty.quantity()))
+                .toList();
+
         return new Tray(
                 new ProductID(entity.getId()),
                 new fr.sweetiez.api.core.products.models.common.Name(entity.getName()),
@@ -47,7 +62,7 @@ public class TrayMapper {
                         new Characteristics(entity.getHighlight(), entity.getState(), entity.getFlavor()),
                         new Valuation(entity.getEvaluations().stream().map(evaluationMapper::toDto).toList())
                 ),
-                entity.getSweets().stream().map(sweetMapper::toDto).toList()
+                sweets
         );
     }
 }

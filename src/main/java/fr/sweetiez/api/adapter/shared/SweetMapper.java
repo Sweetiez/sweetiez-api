@@ -28,7 +28,8 @@ public class SweetMapper {
                 sweet.id().value(),
                 sweet.name().value(),
                 sweet.description().content(),
-                sweet.price().value(),
+                sweet.price().unitPrice(),
+                sweet.price().unitPerPackage(),
                 sweet.details().characteristics().highlight(),
                 sweet.details().characteristics().state(),
                 sweet.details().characteristics().flavor(),
@@ -46,7 +47,7 @@ public class SweetMapper {
                 new ProductID(entity.getId()),
                 new Name(entity.getName()),
                 new Description(entity.getDescription()),
-                new Price(entity.getPrice()),
+                new Price(entity.getPrice(), entity.getUnitPerPackage()),
                 new Details(
                         List.of(entity.getImages().split(";")),
                         new Characteristics(entity.getHighlight(), entity.getState(), entity.getFlavor()),

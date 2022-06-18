@@ -23,7 +23,7 @@ public record AdminDetailedSweetResponse(
         this(
                 sweet.id().value(),
                 sweet.name().value(),
-                sweet.price().value().doubleValue(),
+                sweet.price().unitPrice().doubleValue(),
                 sweet.description().content(),
                 sweet.details().characteristics().flavor().name(),
                 sweet.details().images(),

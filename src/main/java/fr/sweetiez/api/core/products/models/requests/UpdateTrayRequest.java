@@ -5,16 +5,16 @@ import fr.sweetiez.api.core.products.models.common.details.characteristics.Highl
 import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
 
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
-public record UpdateProductRequest(
+public record UpdateTrayRequest(
         UUID id,
         String name,
         BigDecimal price,
         String description,
-        Collection<String> images,
-        Collection<UUID> composition,
+        List<String> images,
+        List<SweetWithQuantityRequest> sweets,
         Highlight highlight,
         State state,
         Flavor flavor
