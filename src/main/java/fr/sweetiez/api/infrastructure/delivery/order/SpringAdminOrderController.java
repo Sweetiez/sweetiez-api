@@ -4,7 +4,6 @@ import fr.sweetiez.api.adapter.delivery.order.OrderEndPoints;
 import fr.sweetiez.api.core.orders.models.requests.UpdateOrderStatus;
 import fr.sweetiez.api.core.orders.models.responses.DetailedOrderResponse;
 import fr.sweetiez.api.core.orders.models.responses.OrderStatusUpdatedResponse;
-import fr.sweetiez.api.core.orders.models.responses.SimpleOrderResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
