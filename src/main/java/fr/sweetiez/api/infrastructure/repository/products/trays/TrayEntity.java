@@ -4,7 +4,6 @@ import fr.sweetiez.api.core.products.models.common.details.characteristics.Flavo
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
 import fr.sweetiez.api.infrastructure.repository.evaluations.EvaluationEntity;
-import fr.sweetiez.api.infrastructure.repository.products.sweets.SweetEntity;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -17,7 +16,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name="sweet")
+@Table(name="tray")
 public class TrayEntity {
 
     @Id
@@ -50,11 +49,12 @@ public class TrayEntity {
     @Column(columnDefinition = "text")
     private String images;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @LazyCollection(LazyCollectionOption.FALSE)
-    private final List<SweetEntity> sweets;
+    private final List<SweetWithQuantityEntity> sweets;
 
     @OneToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     private final List<EvaluationEntity> evaluations;
 
     public TrayEntity() {
@@ -70,7 +70,7 @@ public class TrayEntity {
         this.evaluations = null;
     }
 
-    public TrayEntity(UUID id, String name, String description, BigDecimal price, Highlight highlight, State state, Flavor flavor, String images, List<SweetEntity> sweets, List<EvaluationEntity> evaluations) {
+    public TrayEntity(UUID id, String name, String description, BigDecimal price, Highlight highlight, State state, Flavor flavor, String images, List<SweetWithQuantityEntity> sweets, List<EvaluationEntity> evaluations) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -115,7 +115,7 @@ public class TrayEntity {
         return images;
     }
 
-    public List<SweetEntity> getSweets() {
+    public List<SweetWithQuantityEntity> getSweets() {
         return sweets;
     }
 

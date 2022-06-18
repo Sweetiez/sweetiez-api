@@ -31,7 +31,7 @@ public class OrderMapper {
                 product.productId(),
                 product.name(),
                 product.quantity().value(),
-                product.unitPrice().value().doubleValue(),
+                product.unitPrice().unitPrice().doubleValue(),
                 product.type()
         );
     }

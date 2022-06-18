@@ -13,7 +13,7 @@ import fr.sweetiez.api.core.products.models.common.details.characteristics.Chara
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
 import fr.sweetiez.api.core.products.models.requests.CreateSweetRequest;
-import fr.sweetiez.api.core.products.models.requests.UpdateProductRequest;
+import fr.sweetiez.api.core.products.models.requests.UpdateSweetRequest;
 
 import java.util.Collection;
 import java.util.List;
@@ -32,7 +32,7 @@ public class Sweet extends Product {
         super(new ProductID(null),
                 new Name(request.name()),
                 new Description(request.description()),
-                new Price(request.price()),
+                new Price(request.price(), request.unitPerPackage()),
                 new Details(
                         List.of(),
                         new Characteristics(Highlight.COMMON, State.CREATED, request.flavor()),
@@ -51,11 +51,11 @@ public class Sweet extends Product {
         ingredients = sweet.ingredients();
     }
 
-    public Sweet(Sweet sweet, UpdateProductRequest request, Collection<Ingredient> ingredients) {
+    public Sweet(Sweet sweet, UpdateSweetRequest request, Collection<Ingredient> ingredients) {
         super(sweet.id,
                 new Name(request.name()),
                 new Description(request.description()),
-                new Price(request.price()),
+                new Price(request.price(), request.unitPerPackage()),
                 new Details(
                         request.images(),
                         new Characteristics(request.highlight(), request.state(), request.flavor()),

@@ -1,20 +1,20 @@
 package fr.sweetiez.api.core.products.services;
 
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
+import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
+import fr.sweetiez.api.core.products.models.SweetWithQuantity;
 import fr.sweetiez.api.core.products.models.Tray;
 import fr.sweetiez.api.core.products.models.common.ProductID;
 import fr.sweetiez.api.core.products.models.common.details.Valuation;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
 import fr.sweetiez.api.core.products.models.requests.*;
-import fr.sweetiez.api.core.products.models.responses.AdminDetailedTrayResponse;
-import fr.sweetiez.api.core.products.models.responses.DetailedTrayResponse;
-import fr.sweetiez.api.core.products.models.responses.SimpleProductResponse;
-import fr.sweetiez.api.core.products.models.responses.ValuationResponse;
+import fr.sweetiez.api.core.products.models.responses.*;
 import fr.sweetiez.api.core.products.ports.ProductsReader;
 import fr.sweetiez.api.core.products.ports.ProductsWriter;
 import fr.sweetiez.api.core.products.services.exceptions.InvalidFieldsException;
 import fr.sweetiez.api.core.products.services.exceptions.ProductAlreadyExistsException;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
@@ -35,9 +35,18 @@ public class TrayService {
         this.sweetService = sweetService;
     }
 
-    public Tray create(CreateSweetRequest request) {
-        var sweets = sweetService.retrieveAllById(request.ingredients());
-        var trayToCreate = new Tray(request, sweets);
+    public Tray create(CreateTrayRequest request) {
+        var sweetIds = request.sweets().stream().map(SweetWithQuantityRequest::sweetId).toList();
+        var sweets = sweetService.retrieveAllById(sweetIds);
+
+        var sweetsWithQuantity = new ArrayList<SweetWithQuantity>();
+        for (int i = 0; i < sweets.size(); i++) {
+            var sweet = sweets.stream().toList().get(i);
+            var quantity = request.sweets().get(i).quantity();
+            sweetsWithQuantity.add(new SweetWithQuantity(sweet, quantity));
+        }
+
+        var trayToCreate = new Tray(request, sweetsWithQuantity);
 
         if (!trayToCreate.isValid()) {
             throw new InvalidFieldsException();
@@ -114,19 +123,27 @@ public class TrayService {
 
     public SimpleProductResponse addImageTo(ProductID id, String imageUrl) {
         var tray = reader.findById(id).orElseThrow();
-        return new SimpleProductResponse(writer.save(tray.addImage(imageUrl)));
+        return new SimpleProductResponse(writer.save(tray.addImage(imageUrl)), ProductType.TRAY);
     }
 
-    public AdminDetailedTrayResponse adminUpdateTrayDetails(UpdateProductRequest request) {
+    public AdminDetailedTrayResponse adminUpdateTrayDetails(UpdateTrayRequest request) {
         var tray = reader.findById(new ProductID(request.id())).orElseThrow();
-        var sweets = sweetService.retrieveAllById(request.composition());
-        var updatedSweet = new Tray(tray, request, sweets);
+        var sweetIds = request.sweets().stream().map(SweetWithQuantityRequest::sweetId).toList();
+        var sweets = sweetService.retrieveAllById(sweetIds);
 
-        return new AdminDetailedTrayResponse(writer.save(updatedSweet));
+        var sweetsWithQuantity = new ArrayList<SweetWithQuantity>();
+        for (int i = 0; i < sweets.size(); i++) {
+            var sweet = sweets.stream().toList().get(i);
+            var quantity = request.sweets().stream().toList().get(i).quantity();
+            sweetsWithQuantity.add(new SweetWithQuantity(sweet, quantity));
+        }
+        var updatedTray = new Tray(tray, request, sweetsWithQuantity);
+
+        return new AdminDetailedTrayResponse(writer.save(updatedTray));
     }
 
     public SimpleProductResponse adminDeleteImageFrom(ProductID id, DeleteImageRequest request) {
         var sweet = reader.findById(id).orElseThrow();
-        return new SimpleProductResponse(writer.save(sweet.deleteImage(request.imageUrl())));
+        return new SimpleProductResponse(writer.save(sweet.deleteImage(request.imageUrl())), ProductType.TRAY);
     }
 }

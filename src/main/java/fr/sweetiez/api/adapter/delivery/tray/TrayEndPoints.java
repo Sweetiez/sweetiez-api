@@ -1,5 +1,6 @@
 package fr.sweetiez.api.adapter.delivery.tray;
 
+import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
 import fr.sweetiez.api.core.products.models.common.ProductID;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
 import fr.sweetiez.api.core.products.models.responses.DetailedTrayResponse;
@@ -23,7 +24,7 @@ public class TrayEndPoints {
     public ResponseEntity<Collection<SimpleProductResponse>> retrievePublishedTrays() {
         var publishedSweets = trayService.retrieveAllPublished()
                 .stream()
-                .map(SimpleProductResponse::new)
+                .map(tray -> new SimpleProductResponse(tray, ProductType.TRAY))
                 .toList();
 
         return ResponseEntity.ok(publishedSweets);

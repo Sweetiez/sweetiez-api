@@ -49,6 +49,7 @@ public class SpringSweetControllerAcceptanceTest {
         var requestBody = new CreateSweetRequest(
                 "Sweet name",
                 BigDecimal.valueOf(1.99),
+                5,
                 List.of(UUID.randomUUID()),
                 "Sweet description",
                 Flavor.SWEET
@@ -75,6 +76,7 @@ public class SpringSweetControllerAcceptanceTest {
         var requestBody = new CreateSweetRequest(
                 "Sweet name",
                 BigDecimal.valueOf(1.99),
+                5,
                 List.of(UUID.randomUUID()),
                 "Sweet description",
                 Flavor.SWEET
@@ -118,8 +120,9 @@ public class SpringSweetControllerAcceptanceTest {
     public static Stream<CreateSweetRequest> provideInvalidCreateSweetRequestBody() {
         return Stream.of(
                 new CreateSweetRequest(
-                        "sweet name",
+                        "sweets name",
                         BigDecimal.valueOf(1.99),
+                        5,
                         List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
@@ -127,6 +130,7 @@ public class SpringSweetControllerAcceptanceTest {
                 new CreateSweetRequest(
                         "",
                         BigDecimal.valueOf(1.99),
+                        5,
                         List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
@@ -134,6 +138,7 @@ public class SpringSweetControllerAcceptanceTest {
                 new CreateSweetRequest(
                         null,
                         BigDecimal.valueOf(1.99),
+                        5,
                         List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
@@ -141,6 +146,7 @@ public class SpringSweetControllerAcceptanceTest {
                 new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(1.99),
+                        5,
                         null,
                         "Sweet description",
                         Flavor.SWEET
@@ -148,6 +154,7 @@ public class SpringSweetControllerAcceptanceTest {
                 new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(-1.45),
+                        5,
                         List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
@@ -155,6 +162,7 @@ public class SpringSweetControllerAcceptanceTest {
                 new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(0.),
+                        5,
                         List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET

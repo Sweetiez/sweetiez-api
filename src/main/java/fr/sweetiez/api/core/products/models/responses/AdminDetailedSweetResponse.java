@@ -1,9 +1,7 @@
 package fr.sweetiez.api.core.products.models.responses;
 
-import fr.sweetiez.api.core.evaluations.models.Evaluation;
 import fr.sweetiez.api.core.ingredients.models.Ingredient;
 import fr.sweetiez.api.core.products.models.Sweet;
-import fr.sweetiez.api.core.products.models.common.details.Valuation;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -25,7 +23,7 @@ public record AdminDetailedSweetResponse(
         this(
                 sweet.id().value(),
                 sweet.name().value(),
-                sweet.price().value().doubleValue(),
+                sweet.price().unitPrice().doubleValue(),
                 sweet.description().content(),
                 sweet.details().characteristics().flavor().name(),
                 sweet.details().images(),

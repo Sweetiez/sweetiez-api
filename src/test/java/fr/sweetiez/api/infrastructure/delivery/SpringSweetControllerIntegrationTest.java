@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.sweetiez.api.adapter.delivery.sweet.AdminSweetEndPoints;
 import fr.sweetiez.api.adapter.delivery.sweet.SweetEndPoints;
 import fr.sweetiez.api.adapter.shared.*;
+import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
 import fr.sweetiez.api.core.products.models.Sweet;
 import fr.sweetiez.api.core.products.models.common.Description;
 import fr.sweetiez.api.core.products.models.common.Name;
@@ -72,6 +73,7 @@ class SpringSweetControllerIntegrationTest {
         var requestBody = new CreateSweetRequest(
                 "Sweet name",
                 BigDecimal.valueOf(1.99),
+                5,
                 List.of(UUID.randomUUID()),
                 "Sweet description",
                 Flavor.SWEET
@@ -96,6 +98,7 @@ class SpringSweetControllerIntegrationTest {
         var requestBody = new CreateSweetRequest(
                 "Sweet name",
                 BigDecimal.valueOf(1.99),
+                5,
                 List.of(UUID.randomUUID()),
                 "Sweet description",
                 Flavor.SWEET
@@ -118,6 +121,7 @@ class SpringSweetControllerIntegrationTest {
         var requestBody = new CreateSweetRequest(
                 "Sweet name",
                 BigDecimal.valueOf(1.99),
+                10,
                 List.of(UUID.randomUUID()),
                 "Sweet description",
                 Flavor.SWEET
@@ -139,7 +143,7 @@ class SpringSweetControllerIntegrationTest {
     void shouldFindAllSweetWithPublishedState(Collection<Sweet> publishedSweets) throws Exception {
         Collection<SimpleProductResponse> responseBody = publishedSweets
                 .stream()
-                .map(SimpleProductResponse::new)
+                .map(sweet -> new SimpleProductResponse(sweet, ProductType.SWEET))
                 .collect(Collectors.toList());
         var response = ResponseEntity.ok(responseBody);
         var jsonResponse = jsonMapper.writeValueAsString(responseBody);
@@ -178,6 +182,7 @@ class SpringSweetControllerIntegrationTest {
         var createProductRequest = new CreateSweetRequest(
                 "Sweet name",
                 BigDecimal.valueOf(1.99),
+                3,
                 List.of(UUID.randomUUID()),
                 "Sweet description",
                 Flavor.SWEET
@@ -194,7 +199,7 @@ class SpringSweetControllerIntegrationTest {
                 ),
                 List.of());
         var requestBody = new PublishProductRequest(sweetId, Highlight.PROMOTED);
-        var response = ResponseEntity.ok(new SimpleProductResponse(sweet));
+        var response = ResponseEntity.ok(new SimpleProductResponse(sweet, ProductType.SWEET));
 
         when(adminSweetEndPoints.publish(any())).thenReturn(response);
         mockMvc.perform(put("/admin/sweets/publish")
@@ -213,6 +218,7 @@ class SpringSweetControllerIntegrationTest {
                 "Sweet name",
                 "",
                 BigDecimal.ONE,
+                2,
                 Highlight.COMMON,
                 State.PUBLISHED,
                 Flavor.SWEET,

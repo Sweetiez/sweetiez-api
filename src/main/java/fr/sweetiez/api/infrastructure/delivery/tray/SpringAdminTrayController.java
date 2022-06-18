@@ -24,7 +24,7 @@ public class SpringAdminTrayController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody CreateSweetRequest request) {
+    public ResponseEntity<Object> create(@RequestBody CreateTrayRequest request) {
         return trayEndPoints.create(request);
     }
 
@@ -63,7 +63,7 @@ public class SpringAdminTrayController {
     }
 
     @PutMapping()
-    public ResponseEntity<AdminDetailedTrayResponse> adminUpdateTray(@RequestBody UpdateProductRequest request) {
+    public ResponseEntity<AdminDetailedTrayResponse> adminUpdateTray(@RequestBody UpdateTrayRequest request) {
         return trayEndPoints.adminUpdateSweetDetails(request);
     }
 

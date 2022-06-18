@@ -9,22 +9,23 @@ import fr.sweetiez.api.core.products.models.common.details.Valuation;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Characteristics;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
-import fr.sweetiez.api.core.products.models.requests.CreateSweetRequest;
-import fr.sweetiez.api.core.products.models.requests.UpdateProductRequest;
+import fr.sweetiez.api.core.products.models.requests.CreateTrayRequest;
+import fr.sweetiez.api.core.products.models.requests.UpdateSweetRequest;
+import fr.sweetiez.api.core.products.models.requests.UpdateTrayRequest;
 
 import java.util.Collection;
 import java.util.List;
 
 public class Tray extends Product {
-    private final Collection<Sweet> sweets;
+    private final Collection<SweetWithQuantity> sweets;
 
     public Tray(ProductID id, Name name, Description description, Price price,
-                Details details, Collection<Sweet> sweets) {
+                Details details, Collection<SweetWithQuantity> sweets) {
         super(id, name, description, price, details);
         this.sweets = sweets;
     }
 
-    public Tray(CreateSweetRequest request, Collection<Sweet> sweets) {
+    public Tray(CreateTrayRequest request, Collection<SweetWithQuantity> sweets) {
         super(new ProductID(null),
                 new Name(request.name()),
                 new Description(request.description()),
@@ -47,7 +48,7 @@ public class Tray extends Product {
         sweets = tray.sweets();
     }
 
-    public Tray(Tray tray, UpdateProductRequest request, Collection<Sweet> sweets) {
+    public Tray(Tray tray, UpdateTrayRequest request, Collection<SweetWithQuantity> sweets) {
         super(tray.id,
                 new Name(request.name()),
                 new Description(request.description()),
@@ -90,7 +91,7 @@ public class Tray extends Product {
         return new Tray(this, details);
     }
 
-    public Collection<Sweet> sweets() {
+    public Collection<SweetWithQuantity> sweets() {
         return sweets;
     }
 
@@ -101,6 +102,7 @@ public class Tray extends Product {
 
     private Collection<List<String>> sweetsDietLabels() {
         return sweets.stream()
+                .map(SweetWithQuantity::sweet)
                 .map(Sweet::diets)
                 .map(diets -> (List<String>) diets)
                 .toList();
@@ -108,6 +110,7 @@ public class Tray extends Product {
 
     public Collection<String> allergens() {
         return sweets.stream()
+                .map(SweetWithQuantity::sweet)
                 .map(Sweet::allergens)
                 .flatMap(Collection::stream)
                 .distinct()

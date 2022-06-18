@@ -35,6 +35,9 @@ public class SweetEntity {
     @NotNull
     private final BigDecimal price;
 
+    @Column(name = "package", nullable = false)
+    private final Integer unitPerPackage;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private final Highlight highlight;
@@ -63,6 +66,7 @@ public class SweetEntity {
         this.name = null;
         this.description = null;
         this.price = null;
+        this.unitPerPackage = null;
         this.highlight = null;
         this.state = null;
         this.flavor = null;
@@ -71,14 +75,15 @@ public class SweetEntity {
         this.evaluations = null;
     }
 
-    public SweetEntity(UUID id, String name, String description, BigDecimal price, Highlight highlight,
-                       State state, Flavor flavor, String images, List<IngredientEntity> ingredients,
-                       List<EvaluationEntity> evaluations)
+    public SweetEntity(UUID id, String name, String description, BigDecimal price, Integer unitPerPackage,
+                       Highlight highlight, State state, Flavor flavor, String images,
+                       List<IngredientEntity> ingredients, List<EvaluationEntity> evaluations)
     {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.unitPerPackage = unitPerPackage;
         this.highlight = highlight;
         this.state = state;
         this.flavor = flavor;
@@ -101,6 +106,10 @@ public class SweetEntity {
 
     public BigDecimal getPrice() {
         return price;
+    }
+
+    public Integer getUnitPerPackage() {
+        return unitPerPackage;
     }
 
     public Highlight getHighlight() {

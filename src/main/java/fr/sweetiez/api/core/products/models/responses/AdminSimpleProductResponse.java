@@ -2,7 +2,6 @@ package fr.sweetiez.api.core.products.models.responses;
 
 
 import fr.sweetiez.api.core.products.models.Product;
-import fr.sweetiez.api.core.products.models.Sweet;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -20,7 +19,7 @@ public record AdminSimpleProductResponse(
         this(
                 product.id().value(),
                 product.name().value(),
-                product.price().value().doubleValue(),
+                product.price().unitPrice().doubleValue(),
                 product.details().characteristics().state().toString(),
                 product.description().shortContent(),
                 product.details().images(),

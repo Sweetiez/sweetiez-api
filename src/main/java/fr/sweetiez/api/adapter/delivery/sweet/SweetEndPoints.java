@@ -1,5 +1,6 @@
 package fr.sweetiez.api.adapter.delivery.sweet;
 
+import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
 import fr.sweetiez.api.core.products.models.common.ProductID;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
 import fr.sweetiez.api.core.products.models.responses.DetailedSweetResponse;
@@ -23,7 +24,7 @@ public class SweetEndPoints {
     public ResponseEntity<Collection<SimpleProductResponse>> retrievePublishedSweets() {
         var publishedSweets = sweetService.retrieveAllPublished()
                 .stream()
-                .map(SimpleProductResponse::new)
+                .map(sweet -> new SimpleProductResponse(sweet, ProductType.SWEET))
                 .toList();
 
         return ResponseEntity.ok(publishedSweets);
