@@ -35,8 +35,8 @@ public class TrayService {
         this.sweetService = sweetService;
     }
 
-    public Tray create(CreateProductRequest request) {
-        var sweets = sweetService.retrieveAllById(request.composition());
+    public Tray create(CreateSweetRequest request) {
+        var sweets = sweetService.retrieveAllById(request.ingredients());
         var trayToCreate = new Tray(request, sweets);
 
         if (!trayToCreate.isValid()) {

@@ -6,9 +6,9 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.UUID;
 
-public record CreateProductRequest(
+public record CreateSweetRequest(
         String name,
         BigDecimal price,
-        Collection<UUID> composition,
+        Collection<UUID> ingredients,
         String description,
         Flavor flavor) {}

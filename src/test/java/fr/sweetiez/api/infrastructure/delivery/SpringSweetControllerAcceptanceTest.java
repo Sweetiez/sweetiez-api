@@ -1,7 +1,7 @@
 package fr.sweetiez.api.infrastructure.delivery;
 
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Flavor;
-import fr.sweetiez.api.core.products.models.requests.CreateProductRequest;
+import fr.sweetiez.api.core.products.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.infrastructure.app.run.SpringRun;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -46,7 +46,7 @@ public class SpringSweetControllerAcceptanceTest {
     @Test
     @Disabled
     void shouldCreateNewSweet() {
-        var requestBody = new CreateProductRequest(
+        var requestBody = new CreateSweetRequest(
                 "Sweet name",
                 BigDecimal.valueOf(1.99),
                 List.of(UUID.randomUUID()),
@@ -72,7 +72,7 @@ public class SpringSweetControllerAcceptanceTest {
     @Test
     @Disabled
     void shouldNotCreateNewSweetIfSweetNameAlreadyExists() {
-        var requestBody = new CreateProductRequest(
+        var requestBody = new CreateSweetRequest(
                 "Sweet name",
                 BigDecimal.valueOf(1.99),
                 List.of(UUID.randomUUID()),
@@ -99,7 +99,7 @@ public class SpringSweetControllerAcceptanceTest {
     @ParameterizedTest
     @MethodSource("provideInvalidCreateSweetRequestBody")
     @Disabled
-    void shouldNotCreateNewSweetIfFieldsAreInvalid(CreateProductRequest body) {
+    void shouldNotCreateNewSweetIfFieldsAreInvalid(CreateSweetRequest body) {
         ResponseEntity<Object> responseEntity;
 
         try {
@@ -115,44 +115,44 @@ public class SpringSweetControllerAcceptanceTest {
         assertEquals(BAD_REQUEST, responseEntity.getStatusCode());
     }
 
-    public static Stream<CreateProductRequest> provideInvalidCreateSweetRequestBody() {
+    public static Stream<CreateSweetRequest> provideInvalidCreateSweetRequestBody() {
         return Stream.of(
-                new CreateProductRequest(
+                new CreateSweetRequest(
                         "sweet name",
                         BigDecimal.valueOf(1.99),
                         List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
                 ),
-                new CreateProductRequest(
+                new CreateSweetRequest(
                         "",
                         BigDecimal.valueOf(1.99),
                         List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
                 ),
-                new CreateProductRequest(
+                new CreateSweetRequest(
                         null,
                         BigDecimal.valueOf(1.99),
                         List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
                 ),
-                new CreateProductRequest(
+                new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(1.99),
                         null,
                         "Sweet description",
                         Flavor.SWEET
                 ),
-                new CreateProductRequest(
+                new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(-1.45),
                         List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
                 ),
-                new CreateProductRequest(
+                new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(0.),
                         List.of(UUID.randomUUID()),

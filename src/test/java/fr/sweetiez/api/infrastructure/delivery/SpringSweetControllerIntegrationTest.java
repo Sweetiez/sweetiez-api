@@ -15,7 +15,7 @@ import fr.sweetiez.api.core.products.models.common.details.characteristics.Chara
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Flavor;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
-import fr.sweetiez.api.core.products.models.requests.CreateProductRequest;
+import fr.sweetiez.api.core.products.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.products.models.requests.PublishProductRequest;
 import fr.sweetiez.api.core.products.models.responses.SimpleProductResponse;
 import fr.sweetiez.api.infrastructure.delivery.sweet.SpringSweetController;
@@ -69,7 +69,7 @@ class SpringSweetControllerIntegrationTest {
     void shouldCreateNewSweet() throws Exception {
         var sweetId = UUID.randomUUID().toString();
         var response = ResponseEntity.created(URI.create("/sweets/" + sweetId)).build();
-        var requestBody = new CreateProductRequest(
+        var requestBody = new CreateSweetRequest(
                 "Sweet name",
                 BigDecimal.valueOf(1.99),
                 List.of(UUID.randomUUID()),
@@ -93,7 +93,7 @@ class SpringSweetControllerIntegrationTest {
     @Disabled
     void shouldNotCreateNewSweetIfSweetNameAlreadyTaken() throws Exception {
         var response = ResponseEntity.status(HttpStatus.CONFLICT).build();
-        var requestBody = new CreateProductRequest(
+        var requestBody = new CreateSweetRequest(
                 "Sweet name",
                 BigDecimal.valueOf(1.99),
                 List.of(UUID.randomUUID()),
@@ -115,7 +115,7 @@ class SpringSweetControllerIntegrationTest {
     @Disabled
     void shouldNotCreateNewSweetIfFieldsAreInvalid() throws Exception {
         var response = ResponseEntity.badRequest().build();
-        var requestBody = new CreateProductRequest(
+        var requestBody = new CreateSweetRequest(
                 "Sweet name",
                 BigDecimal.valueOf(1.99),
                 List.of(UUID.randomUUID()),
@@ -175,7 +175,7 @@ class SpringSweetControllerIntegrationTest {
     @Disabled
     void shouldChangeSweetStateToPublished() throws Exception {
         var sweetId = UUID.randomUUID();
-        var createProductRequest = new CreateProductRequest(
+        var createProductRequest = new CreateSweetRequest(
                 "Sweet name",
                 BigDecimal.valueOf(1.99),
                 List.of(UUID.randomUUID()),

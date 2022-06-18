@@ -38,7 +38,7 @@ public class AdminTrayEndPoints {
         this.minioClient = minioClient;
     }
 
-    public ResponseEntity<Object> create(CreateProductRequest request) {
+    public ResponseEntity<Object> create(CreateSweetRequest request) {
         try {
             var createdSweet = trayService.create(request);
             return ResponseEntity
