@@ -24,7 +24,7 @@ public class SpringAdminTrayController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody CreateProductRequest request) {
+    public ResponseEntity<Object> create(@RequestBody CreateSweetRequest request) {
         return trayEndPoints.create(request);
     }
 

@@ -38,8 +38,8 @@ public class SweetService {
         this.ingredientService = ingredientService;
     }
 
-    public Sweet create(CreateProductRequest request) {
-        var ingredients = ingredientService.retrieveAllById(request.composition());
+    public Sweet create(CreateSweetRequest request) {
+        var ingredients = ingredientService.retrieveAllById(request.ingredients());
         var sweetToCreate = new Sweet(request, ingredients);
 
         if (!sweetToCreate.isValid()) {

@@ -12,7 +12,7 @@ import fr.sweetiez.api.core.products.models.common.details.Valuation;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Characteristics;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.State;
-import fr.sweetiez.api.core.products.models.requests.CreateProductRequest;
+import fr.sweetiez.api.core.products.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.core.products.models.requests.UpdateProductRequest;
 
 import java.util.Collection;
@@ -28,7 +28,7 @@ public class Sweet extends Product {
         this.ingredients = ingredients;
     }
 
-    public Sweet(CreateProductRequest request, Collection<Ingredient> ingredients) {
+    public Sweet(CreateSweetRequest request, Collection<Ingredient> ingredients) {
         super(new ProductID(null),
                 new Name(request.name()),
                 new Description(request.description()),

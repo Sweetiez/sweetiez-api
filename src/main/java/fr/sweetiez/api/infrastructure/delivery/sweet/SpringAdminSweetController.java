@@ -23,7 +23,7 @@ public class SpringAdminSweetController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createSweet(@RequestBody CreateProductRequest request) {
+    public ResponseEntity<Object> createSweet(@RequestBody CreateSweetRequest request) {
         return sweetsEndPoints.create(request);
     }
 

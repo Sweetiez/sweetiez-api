@@ -37,7 +37,7 @@ public class AdminSweetEndPoints {
         this.minioClient = minioClient;
     }
 
-    public ResponseEntity<Object> create(CreateProductRequest request) {
+    public ResponseEntity<Object> create(CreateSweetRequest request) {
         try {
             var createdSweet = sweetService.create(request);
             return ResponseEntity
