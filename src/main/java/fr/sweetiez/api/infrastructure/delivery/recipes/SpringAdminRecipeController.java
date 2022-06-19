@@ -1,9 +1,9 @@
 package fr.sweetiez.api.infrastructure.delivery.recipes;
 
 import fr.sweetiez.api.adapter.delivery.AdminRecipeEndPoints;
+import fr.sweetiez.api.core.products.models.requests.DeleteImageRequest;
 import fr.sweetiez.api.core.recipes.models.requests.*;
 import fr.sweetiez.api.core.recipes.models.responses.RecipeDetailedResponse;
-import fr.sweetiez.api.core.sweets.models.requests.DeleteImageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

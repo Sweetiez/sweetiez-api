@@ -8,12 +8,18 @@ import java.util.UUID;
 
 public class EvaluationMapper {
 
+    private final CustomerMapper customerMapper;
+
+    public EvaluationMapper(CustomerMapper customerMapper) {
+        this.customerMapper = customerMapper;
+    }
+
     public EvaluationEntity toEntity(Evaluation evaluation) {
         var id = evaluation.id() != null ? UUID.fromString(evaluation.id().value()) : null;
         return new EvaluationEntity(
                 id,
                 evaluation.comment(),
-                evaluation.voter(),
+                customerMapper.toEntity(evaluation.voter()),
                 evaluation.subject(),
                 evaluation.mark().intValue(),
                 evaluation.date()
@@ -24,7 +30,7 @@ public class EvaluationMapper {
         return new Evaluation(
                 new EvaluationId(entity.getId().toString()),
                 entity.getComment(),
-                entity.getAuthor(),
+                customerMapper.toDto(entity.getAuthor()),
                 entity.getSubject(),
                 entity.getMark().doubleValue(),
                 entity.getDate()

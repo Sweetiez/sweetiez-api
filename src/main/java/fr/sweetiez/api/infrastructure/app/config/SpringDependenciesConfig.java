@@ -1,9 +1,39 @@
 package fr.sweetiez.api.infrastructure.app.config;
 
-import fr.sweetiez.api.adapter.delivery.*;
+
+import fr.sweetiez.api.infrastructure.repository.products.sweets.SweetRepository;
+import fr.sweetiez.api.infrastructure.repository.products.trays.TrayRepository;
+import fr.sweetiez.api.adapter.delivery.AdminRecipeEndPoints;
+import fr.sweetiez.api.adapter.delivery.RecipeEndPoints;
+import fr.sweetiez.api.adapter.delivery.authentication.AuthenticationEndPoints;
+import fr.sweetiez.api.adapter.delivery.evaluation.EvaluationEndPoints;
+import fr.sweetiez.api.adapter.delivery.ingredient.IngredientEndPoints;
+import fr.sweetiez.api.adapter.delivery.order.OrderEndPoints;
+import fr.sweetiez.api.adapter.delivery.payment.PaymentWebhookEndpoint;
+import fr.sweetiez.api.adapter.delivery.report.ReportEndPoints;
+import fr.sweetiez.api.adapter.delivery.sweet.AdminSweetEndPoints;
+import fr.sweetiez.api.adapter.delivery.sweet.SweetEndPoints;
+import fr.sweetiez.api.adapter.delivery.tray.AdminTrayEndPoints;
+import fr.sweetiez.api.adapter.delivery.tray.TrayEndPoints;
+import fr.sweetiez.api.adapter.delivery.user.UserEndPoints;
 import fr.sweetiez.api.adapter.gateways.allergen.EdamamApi;
 import fr.sweetiez.api.adapter.gateways.translator.LibreTranslateApi;
-import fr.sweetiez.api.adapter.repository.*;
+import fr.sweetiez.api.adapter.repository.OrderNotifierAdapter;
+import fr.sweetiez.api.adapter.repository.RecipeReaderAdapter;
+import fr.sweetiez.api.adapter.repository.RecipeWriterAdapter;
+import fr.sweetiez.api.adapter.repository.accounts.AccountRepositoryAdapter;
+import fr.sweetiez.api.adapter.repository.customers.CustomerReaderAdapter;
+import fr.sweetiez.api.adapter.repository.customers.CustomerWriterAdapter;
+import fr.sweetiez.api.adapter.repository.evaluations.EvaluationReaderAdapter;
+import fr.sweetiez.api.adapter.repository.evaluations.EvaluationWriterAdapter;
+import fr.sweetiez.api.adapter.repository.ingredients.IngredientRepositoryAdapter;
+import fr.sweetiez.api.adapter.repository.orders.OrderReaderAdapter;
+import fr.sweetiez.api.adapter.repository.orders.OrderWriterAdapter;
+import fr.sweetiez.api.adapter.repository.products.sweet.SweetReaderAdapter;
+import fr.sweetiez.api.adapter.repository.products.sweet.SweetWriterAdapter;
+import fr.sweetiez.api.adapter.repository.products.tray.TrayReaderAdapter;
+import fr.sweetiez.api.adapter.repository.products.tray.TrayWriterAdapter;
+import fr.sweetiez.api.adapter.repository.reports.ReportRepositoryAdapter;
 import fr.sweetiez.api.adapter.shared.*;
 import fr.sweetiez.api.core.authentication.ports.AuthenticationRepository;
 import fr.sweetiez.api.core.authentication.services.AuthenticationService;
@@ -20,13 +50,16 @@ import fr.sweetiez.api.core.ingredients.services.IngredientService;
 import fr.sweetiez.api.core.orders.ports.OrdersReader;
 import fr.sweetiez.api.core.orders.ports.OrdersWriter;
 import fr.sweetiez.api.core.orders.services.OrderService;
+import fr.sweetiez.api.core.products.models.Sweet;
+import fr.sweetiez.api.core.products.models.Tray;
+import fr.sweetiez.api.core.products.ports.ProductsReader;
+import fr.sweetiez.api.core.products.ports.ProductsWriter;
+import fr.sweetiez.api.core.products.services.SweetService;
+import fr.sweetiez.api.core.products.services.TrayService;
 import fr.sweetiez.api.core.recipes.ports.RecipeReader;
 import fr.sweetiez.api.core.recipes.ports.RecipeWriter;
 import fr.sweetiez.api.core.recipes.services.RecipeService;
 import fr.sweetiez.api.core.reports.services.ReportService;
-import fr.sweetiez.api.core.sweets.ports.SweetsReader;
-import fr.sweetiez.api.core.sweets.ports.SweetsWriter;
-import fr.sweetiez.api.core.sweets.services.SweetService;
 import fr.sweetiez.api.infrastructure.app.security.TokenProvider;
 import fr.sweetiez.api.infrastructure.notification.email.GmailSender;
 import fr.sweetiez.api.infrastructure.payements.StripePaymentService;
@@ -41,7 +74,6 @@ import fr.sweetiez.api.infrastructure.repository.orders.OrderRepository;
 import fr.sweetiez.api.infrastructure.repository.recipe.RecipeRepository;
 import fr.sweetiez.api.infrastructure.repository.recipe.RecipeStepRepository;
 import fr.sweetiez.api.infrastructure.repository.reports.ReportRepository;
-import fr.sweetiez.api.infrastructure.repository.sweets.SweetRepository;
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -73,6 +105,7 @@ public class SpringDependenciesConfig {
     private String stripeEndpointSecret;
 
     private final SweetRepository sweetRepository;
+    private final TrayRepository trayRepository;
     private final EvaluationRepository evaluationRepository;
     private final ReportRepository reportRepository;
     private final CustomerRepository customerRepository;
@@ -82,40 +115,36 @@ public class SpringDependenciesConfig {
     private final HealthPropertyRepository healthPropertyRepository;
     private final OrderRepository orderRepository;
     private final OrderDetailRepository orderDetailRepository;
+    private final RecipeRepository recipeRepository;
+    private final RecipeStepRepository recipeStepRepository;
 
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManager;
 
-    private final RecipeRepository recipeRepository;
-
-    private final RecipeStepRepository recipeStepRepository;
-
-    public SpringDependenciesConfig(SweetRepository sweetRepository, EvaluationRepository evaluationRepository,
-                                    ReportRepository reportRepository, CustomerRepository customerRepository,
-                                    AccountRepository accountRepository, RoleRepository roleRepository,
-                                    OrderRepository orderRepository, OrderDetailRepository orderDetailRepository,
-                                    RecipeRepository recipeRepository, 
-                                    RecipeStepRepository recipeStepRepository,
-                                    IngredientRepository ingredientRepository,
-                                    HealthPropertyRepository healthPropertyRepository,
-                                    TokenProvider tokenProvider,
+    public SpringDependenciesConfig(SweetRepository sweetRepository, TrayRepository trayRepository,
+                                    EvaluationRepository evaluationRepository, ReportRepository reportRepository,
+                                    CustomerRepository customerRepository, AccountRepository accountRepository,
+                                    RoleRepository roleRepository, IngredientRepository ingredientRepository,
+                                    HealthPropertyRepository healthPropertyRepository, OrderRepository orderRepository,
+                                    OrderDetailRepository orderDetailRepository, RecipeRepository recipeRepository,
+                                    RecipeStepRepository recipeStepRepository, TokenProvider tokenProvider,
                                     AuthenticationManagerBuilder authenticationManager)
-
-  {
+    {
         this.sweetRepository = sweetRepository;
+        this.trayRepository = trayRepository;
         this.evaluationRepository = evaluationRepository;
         this.reportRepository = reportRepository;
         this.customerRepository = customerRepository;
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
-        this.tokenProvider = tokenProvider;
-        this.authenticationManager = authenticationManager;
+        this.ingredientRepository = ingredientRepository;
+        this.healthPropertyRepository = healthPropertyRepository;
         this.orderRepository = orderRepository;
         this.orderDetailRepository = orderDetailRepository;
         this.recipeRepository = recipeRepository;
         this.recipeStepRepository = recipeStepRepository;
-        this.ingredientRepository = ingredientRepository;
-        this.healthPropertyRepository = healthPropertyRepository;
+        this.tokenProvider = tokenProvider;
+        this.authenticationManager = authenticationManager;
     }
 
     @Bean
@@ -127,7 +156,7 @@ public class SpringDependenciesConfig {
   
     @Bean
     public EvaluationMapper evaluationMapper() {
-        return new EvaluationMapper();
+        return new EvaluationMapper(customerMapper());
     }
 
     @Bean
@@ -142,7 +171,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public SweetMapper sweetMapper() {
-        return new SweetMapper();
+        return new SweetMapper(ingredientMapper(), evaluationMapper());
     }
 
     @Bean
@@ -165,7 +194,11 @@ public class SpringDependenciesConfig {
         return new RecipeMapper();
     }
 
-    // ADAPTERS
+    @Bean
+    public TrayMapper trayMapper() {
+        return new TrayMapper(sweetMapper(), evaluationMapper());
+    }
+
     // REPOSITORY ADAPTERS
 
     @Bean
@@ -189,13 +222,23 @@ public class SpringDependenciesConfig {
     }
 
     @Bean
-    public SweetsReader sweetReader() {
+    public ProductsReader<Sweet> sweetReader() {
         return new SweetReaderAdapter(sweetRepository, sweetMapper());
     }
 
     @Bean
-    public SweetsWriter sweetWriter() {
+    public ProductsWriter<Sweet> sweetWriter() {
         return new SweetWriterAdapter(sweetRepository, sweetMapper());
+    }
+
+    @Bean
+    public ProductsReader<Tray> trayReader() {
+        return new TrayReaderAdapter(trayRepository, trayMapper());
+    }
+
+    @Bean
+    public ProductsWriter<Tray> trayWriter() {
+        return new TrayWriterAdapter(trayRepository, trayMapper());
     }
 
     @Bean
@@ -269,7 +312,12 @@ public class SpringDependenciesConfig {
 
     @Bean
     public SweetService sweetService() {
-        return new SweetService(sweetWriter(), sweetReader(), evaluationService(), customerService());
+        return new SweetService(sweetWriter(), sweetReader(), evaluationService(), ingredientService());
+    }
+
+    @Bean
+    public TrayService trayService() {
+        return new TrayService(trayWriter(), trayReader(), evaluationService(), sweetService());
     }
 
     @Bean
@@ -305,6 +353,11 @@ public class SpringDependenciesConfig {
     }
 
     @Bean
+    public TrayEndPoints trayEndPoints() {
+        return new TrayEndPoints(trayService());
+    }
+
+    @Bean
     public AuthenticationEndPoints authenticationEndPoints() {
         return new AuthenticationEndPoints(authenticationService());
     }
@@ -312,6 +365,11 @@ public class SpringDependenciesConfig {
     @Bean
     public AdminSweetEndPoints adminSweetEndPoints() {
         return new AdminSweetEndPoints(sweetService(), minioClient());
+    }
+
+    @Bean
+    public AdminTrayEndPoints adminTrayEndPoints() {
+        return new AdminTrayEndPoints(trayService(), minioClient());
     }
 
     @Bean

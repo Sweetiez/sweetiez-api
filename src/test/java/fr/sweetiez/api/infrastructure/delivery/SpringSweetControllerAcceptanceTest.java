@@ -1,8 +1,7 @@
 package fr.sweetiez.api.infrastructure.delivery;
 
-import fr.sweetiez.api.core.ingredients.models.Ingredient;
-import fr.sweetiez.api.core.sweets.models.requests.CreateSweetRequest;
-import fr.sweetiez.api.core.sweets.models.sweet.details.Flavor;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.Flavor;
+import fr.sweetiez.api.core.products.models.requests.CreateSweetRequest;
 import fr.sweetiez.api.infrastructure.app.run.SpringRun;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -17,7 +16,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -50,7 +49,8 @@ public class SpringSweetControllerAcceptanceTest {
         var requestBody = new CreateSweetRequest(
                 "Sweet name",
                 BigDecimal.valueOf(1.99),
-                Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
+                5,
+                List.of(UUID.randomUUID()),
                 "Sweet description",
                 Flavor.SWEET
         );
@@ -76,7 +76,8 @@ public class SpringSweetControllerAcceptanceTest {
         var requestBody = new CreateSweetRequest(
                 "Sweet name",
                 BigDecimal.valueOf(1.99),
-                Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
+                5,
+                List.of(UUID.randomUUID()),
                 "Sweet description",
                 Flavor.SWEET
         );
@@ -119,29 +120,33 @@ public class SpringSweetControllerAcceptanceTest {
     public static Stream<CreateSweetRequest> provideInvalidCreateSweetRequestBody() {
         return Stream.of(
                 new CreateSweetRequest(
-                        "sweet name",
+                        "sweets name",
                         BigDecimal.valueOf(1.99),
-                        Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
+                        5,
+                        List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
                 ),
                 new CreateSweetRequest(
                         "",
                         BigDecimal.valueOf(1.99),
-                        Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
+                        5,
+                        List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
                 ),
                 new CreateSweetRequest(
                         null,
                         BigDecimal.valueOf(1.99),
-                        Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
+                        5,
+                        List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
                 ),
                 new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(1.99),
+                        5,
                         null,
                         "Sweet description",
                         Flavor.SWEET
@@ -149,14 +154,16 @@ public class SpringSweetControllerAcceptanceTest {
                 new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(-1.45),
-                        Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
+                        5,
+                        List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
                 ),
                 new CreateSweetRequest(
                         "Sweet name",
                         BigDecimal.valueOf(0.),
-                        Set.of(new Ingredient(UUID.randomUUID(), "Ingredient name", Set.of())),
+                        5,
+                        List.of(UUID.randomUUID()),
                         "Sweet description",
                         Flavor.SWEET
                 )

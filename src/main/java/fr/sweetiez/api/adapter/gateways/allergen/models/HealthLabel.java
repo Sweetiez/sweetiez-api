@@ -48,7 +48,8 @@ public enum HealthLabel {
     public Optional<String> getAllergen() {
         if (!value.contains("_") || this.equals(NO_OIL_ADDED) || this.equals(NO_SUGAR_ADDED) ||
                 this.equals(FAT_FREE) || this.equals(KETO_FRIENDLY) || this.equals(SPECIFIC_CARBS) ||
-                this.equals(DAIRY_FREE) || this.equals(ALCOHOL_FREE) || this.equals(GLUTEN_FREE))
+                this.equals(DAIRY_FREE) || this.equals(ALCOHOL_FREE) || this.equals(GLUTEN_FREE) ||
+                this.equals(LOW_SUGAR))
         {
             return Optional.empty();
         }

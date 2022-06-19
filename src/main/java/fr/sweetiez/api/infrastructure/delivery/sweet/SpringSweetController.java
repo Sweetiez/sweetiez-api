@@ -1,9 +1,9 @@
 package fr.sweetiez.api.infrastructure.delivery.sweet;
 
-import fr.sweetiez.api.adapter.delivery.SweetEndPoints;
-import fr.sweetiez.api.core.sweets.models.responses.BannerSweetResponse;
-import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
-import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
+import fr.sweetiez.api.adapter.delivery.sweet.SweetEndPoints;
+import fr.sweetiez.api.core.products.models.responses.DetailedSweetResponse;
+import fr.sweetiez.api.core.products.models.responses.ProductBannerResponse;
+import fr.sweetiez.api.core.products.models.responses.SimpleProductResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/sweets")
@@ -23,17 +24,17 @@ public class SpringSweetController {
     }
 
     @GetMapping("/published")
-    public ResponseEntity<Collection<SimpleSweetResponse>> retrievePublishedSweets() {
+    public ResponseEntity<Collection<SimpleProductResponse>> retrievePublishedSweets() {
         return sweetsEndPoints.retrievePublishedSweets();
     }
 
     @GetMapping("/banner")
-    public ResponseEntity<Collection<BannerSweetResponse>> retrieveBannerSweets() {
+    public ResponseEntity<Collection<ProductBannerResponse>> retrieveBannerSweets() {
         return sweetsEndPoints.retrieveBannerSweets();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DetailedSweetResponse> retrieveSweetDetails(@PathVariable("id") String id) {
+    public ResponseEntity<DetailedSweetResponse> retrieveSweetDetails(@PathVariable("id") UUID id) {
         return sweetsEndPoints.retrieveSweetDetails(id);
     }
 

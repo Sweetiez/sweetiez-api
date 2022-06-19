@@ -1,10 +1,9 @@
 package fr.sweetiez.api.infrastructure.delivery.order;
 
-import fr.sweetiez.api.adapter.delivery.OrderEndPoints;
+import fr.sweetiez.api.adapter.delivery.order.OrderEndPoints;
 import fr.sweetiez.api.core.orders.models.requests.CreateOrderRequest;
 import fr.sweetiez.api.core.orders.models.responses.DetailedOrderResponse;
 import fr.sweetiez.api.core.orders.models.responses.OrderCreatedResponse;
-import fr.sweetiez.api.core.orders.models.responses.SimpleOrderResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;

@@ -1,18 +1,16 @@
 package fr.sweetiez.api.infrastructure.delivery.sweet;
 
-import fr.sweetiez.api.adapter.delivery.AdminSweetEndPoints;
-import fr.sweetiez.api.adapter.delivery.SweetEndPoints;
-import fr.sweetiez.api.core.sweets.models.requests.*;
-import fr.sweetiez.api.core.sweets.models.responses.AdminDetailedSweetResponse;
-import fr.sweetiez.api.core.sweets.models.responses.AdminSweetSimpleResponse;
-import fr.sweetiez.api.core.sweets.models.responses.DetailedSweetResponse;
-import fr.sweetiez.api.core.sweets.models.responses.SimpleSweetResponse;
-import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
+import fr.sweetiez.api.adapter.delivery.sweet.AdminSweetEndPoints;
+import fr.sweetiez.api.core.products.models.requests.*;
+import fr.sweetiez.api.core.products.models.responses.AdminDetailedSweetResponse;
+import fr.sweetiez.api.core.products.models.responses.AdminSimpleProductResponse;
+import fr.sweetiez.api.core.products.models.responses.SimpleProductResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/admin/sweets")
@@ -30,32 +28,36 @@ public class SpringAdminSweetController {
     }
 
     @GetMapping()
-    public ResponseEntity<Collection<AdminSweetSimpleResponse>> adminRetrieveAllSweets() {
+    public ResponseEntity<Collection<AdminSimpleProductResponse>> adminRetrieveAllSweets() {
         return sweetsEndPoints.retrieveAllSweets();
     }
 
     @PutMapping("/publish")
-    public ResponseEntity<Sweet> publishSweet(@RequestBody PublishSweetRequest request) {
+    public ResponseEntity<SimpleProductResponse> publishSweet(@RequestBody PublishProductRequest request) {
         return sweetsEndPoints.publish(request);
     }
 
     @DeleteMapping("/publish")
-    public ResponseEntity<Sweet> unPublishSweet(@RequestBody UnPublishSweetRequest request) {
-        return sweetsEndPoints.unPublish(request);
+    public ResponseEntity<SimpleProductResponse> unPublishSweet(@RequestBody UnpublishProductRequest request) {
+        return sweetsEndPoints.unpublish(request);
     }
 
     @PostMapping("/{id}/image")
-    public ResponseEntity<SimpleSweetResponse> addImage(@PathVariable("id") String id, @RequestParam MultipartFile image) {
+    public ResponseEntity<SimpleProductResponse> addImage(
+            @PathVariable("id") UUID id, @RequestParam MultipartFile image)
+    {
         return sweetsEndPoints.addImage(id, image);
     }
 
     @DeleteMapping("/{id}/image")
-    public ResponseEntity<SimpleSweetResponse> deleteImage(@PathVariable("id") String id, @RequestBody DeleteImageRequest request) {
+    public ResponseEntity<SimpleProductResponse> deleteImage(
+            @PathVariable("id") UUID id, @RequestBody DeleteImageRequest request)
+    {
         return sweetsEndPoints.deleteImage(id, request);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AdminDetailedSweetResponse> adminRetrieveSweetDetails(@PathVariable("id") String id) {
+    public ResponseEntity<AdminDetailedSweetResponse> adminRetrieveSweetDetails(@PathVariable("id") UUID id) {
         return sweetsEndPoints.adminRetrieveSweetDetails(id);
     }
 

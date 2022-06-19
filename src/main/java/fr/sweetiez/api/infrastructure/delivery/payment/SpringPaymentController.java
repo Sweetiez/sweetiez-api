@@ -1,14 +1,8 @@
 package fr.sweetiez.api.infrastructure.delivery.payment;
 
-import com.stripe.exception.SignatureVerificationException;
-import com.stripe.model.EventDataObjectDeserializer;
-import com.stripe.model.StripeObject;
-import com.stripe.net.Webhook;
-import fr.sweetiez.api.adapter.delivery.OrderEndPoints;
-import fr.sweetiez.api.adapter.delivery.PaymentWebhookEndpoint;
-import fr.sweetiez.api.core.orders.models.responses.OrderStatusUpdatedResponse;
+import fr.sweetiez.api.adapter.delivery.order.OrderEndPoints;
+import fr.sweetiez.api.adapter.delivery.payment.PaymentWebhookEndpoint;
 import fr.sweetiez.api.core.orders.models.responses.PaymentIntentResponse;
-import com.stripe.model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

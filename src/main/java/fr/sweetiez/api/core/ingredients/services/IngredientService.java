@@ -10,6 +10,7 @@ import fr.sweetiez.api.core.ingredients.ports.TranslatorApi;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class IngredientService {
@@ -45,6 +46,9 @@ public class IngredientService {
         return ingredientRepository.saveIngredient(new Ingredient(null, name, ingredientProperties));
     }
 
+    public Collection<Ingredient> retrieveAllById(Collection<UUID> ingredients) {
+        return ingredientRepository.findAllById(ingredients);
+    }
     private Collection<HealthProperty> addDietsToIngredient(Collection<HealthLabel> healthLabels, Collection<HealthProperty> healthProperties) {
         var diets = HealthLabel.getDiets(healthLabels);
         var ingredientProperties = new ArrayList<HealthProperty>();
