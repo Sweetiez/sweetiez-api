@@ -1,5 +1,6 @@
 package fr.sweetiez.api.adapter.delivery;
 
+import fr.sweetiez.api.core.products.models.requests.DeleteImageRequest;
 import fr.sweetiez.api.core.recipes.models.recipes.Recipe;
 import fr.sweetiez.api.core.recipes.models.requests.*;
 import fr.sweetiez.api.core.recipes.models.responses.RecipeDetailedResponse;
@@ -7,7 +8,6 @@ import fr.sweetiez.api.core.recipes.services.RecipeService;
 import fr.sweetiez.api.core.recipes.services.exceptions.InvalidRecipeException;
 import fr.sweetiez.api.core.recipes.services.exceptions.RecipeNotFoundException;
 import fr.sweetiez.api.core.recipes.services.exceptions.StepNotFoundException;
-import fr.sweetiez.api.core.sweets.models.requests.DeleteImageRequest;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;

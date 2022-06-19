@@ -4,8 +4,6 @@ import fr.sweetiez.api.adapter.shared.EvaluationMapper;
 import fr.sweetiez.api.core.evaluations.models.Evaluation;
 import fr.sweetiez.api.core.evaluations.models.EvaluationId;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationReader;
-import fr.sweetiez.api.core.sweets.models.sweet.Sweet;
-import fr.sweetiez.api.core.sweets.models.sweet.SweetId;
 import fr.sweetiez.api.infrastructure.repository.evaluations.EvaluationRepository;
 
 import java.util.Collection;
