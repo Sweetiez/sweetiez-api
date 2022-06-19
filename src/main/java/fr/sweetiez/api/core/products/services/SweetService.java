@@ -2,7 +2,6 @@ package fr.sweetiez.api.core.products.services;
 
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
 import fr.sweetiez.api.core.ingredients.services.IngredientService;
-import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
 import fr.sweetiez.api.core.products.models.Sweet;
 import fr.sweetiez.api.core.products.models.common.ProductID;
 import fr.sweetiez.api.core.products.models.common.details.Valuation;
@@ -117,7 +116,7 @@ public class SweetService {
 
     public SimpleProductResponse addImageTo(ProductID id, String imageUrl) {
         var sweet = reader.findById(id).orElseThrow();
-        return new SimpleProductResponse(writer.save(sweet.addImage(imageUrl)), ProductType.SWEET);
+        return new SimpleProductResponse(writer.save(sweet.addImage(imageUrl)));
     }
 
     public AdminDetailedSweetResponse adminUpdateSweetDetails(UpdateSweetRequest request) {
@@ -130,7 +129,7 @@ public class SweetService {
 
     public SimpleProductResponse adminDeleteImageFrom(ProductID id, DeleteImageRequest request) {
         var sweet = reader.findById(id).orElseThrow();
-        return new SimpleProductResponse(writer.save(sweet.deleteImage(request.imageUrl())), ProductType.SWEET);
+        return new SimpleProductResponse(writer.save(sweet.deleteImage(request.imageUrl())));
     }
 
     public Collection<Sweet> retrieveAllById(Collection<UUID> ids) {

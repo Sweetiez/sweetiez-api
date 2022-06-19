@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.sweetiez.api.adapter.delivery.sweet.AdminSweetEndPoints;
 import fr.sweetiez.api.adapter.delivery.sweet.SweetEndPoints;
 import fr.sweetiez.api.adapter.shared.*;
-import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
 import fr.sweetiez.api.core.products.models.Sweet;
 import fr.sweetiez.api.core.products.models.common.Description;
 import fr.sweetiez.api.core.products.models.common.Name;
@@ -143,7 +142,7 @@ class SpringSweetControllerIntegrationTest {
     void shouldFindAllSweetWithPublishedState(Collection<Sweet> publishedSweets) throws Exception {
         Collection<SimpleProductResponse> responseBody = publishedSweets
                 .stream()
-                .map(sweet -> new SimpleProductResponse(sweet, ProductType.SWEET))
+                .map(SimpleProductResponse::new)
                 .collect(Collectors.toList());
         var response = ResponseEntity.ok(responseBody);
         var jsonResponse = jsonMapper.writeValueAsString(responseBody);
@@ -179,14 +178,6 @@ class SpringSweetControllerIntegrationTest {
     @Disabled
     void shouldChangeSweetStateToPublished() throws Exception {
         var sweetId = UUID.randomUUID();
-        var createProductRequest = new CreateSweetRequest(
-                "Sweet name",
-                BigDecimal.valueOf(1.99),
-                3,
-                List.of(UUID.randomUUID()),
-                "Sweet description",
-                Flavor.SWEET
-        );
         var sweet = new Sweet(
                 new ProductID(UUID.randomUUID()),
                 new Name("Sweet name"),
@@ -199,7 +190,7 @@ class SpringSweetControllerIntegrationTest {
                 ),
                 List.of());
         var requestBody = new PublishProductRequest(sweetId, Highlight.PROMOTED);
-        var response = ResponseEntity.ok(new SimpleProductResponse(sweet, ProductType.SWEET));
+        var response = ResponseEntity.ok(new SimpleProductResponse(sweet));
 
         when(adminSweetEndPoints.publish(any())).thenReturn(response);
         mockMvc.perform(put("/admin/sweets/publish")
