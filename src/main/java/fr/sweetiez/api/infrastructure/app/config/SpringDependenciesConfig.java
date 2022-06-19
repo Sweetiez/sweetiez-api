@@ -1,5 +1,8 @@
 package fr.sweetiez.api.infrastructure.app.config;
 
+
+import fr.sweetiez.api.infrastructure.repository.products.sweets.SweetRepository;
+import fr.sweetiez.api.infrastructure.repository.products.trays.TrayRepository;
 import fr.sweetiez.api.adapter.delivery.AdminRecipeEndPoints;
 import fr.sweetiez.api.adapter.delivery.RecipeEndPoints;
 import fr.sweetiez.api.adapter.delivery.authentication.AuthenticationEndPoints;
@@ -26,11 +29,11 @@ import fr.sweetiez.api.adapter.repository.evaluations.EvaluationWriterAdapter;
 import fr.sweetiez.api.adapter.repository.ingredients.IngredientRepositoryAdapter;
 import fr.sweetiez.api.adapter.repository.orders.OrderReaderAdapter;
 import fr.sweetiez.api.adapter.repository.orders.OrderWriterAdapter;
-import fr.sweetiez.api.adapter.repository.reports.ReportRepositoryAdapter;
 import fr.sweetiez.api.adapter.repository.products.sweet.SweetReaderAdapter;
 import fr.sweetiez.api.adapter.repository.products.sweet.SweetWriterAdapter;
 import fr.sweetiez.api.adapter.repository.products.tray.TrayReaderAdapter;
 import fr.sweetiez.api.adapter.repository.products.tray.TrayWriterAdapter;
+import fr.sweetiez.api.adapter.repository.reports.ReportRepositoryAdapter;
 import fr.sweetiez.api.adapter.shared.*;
 import fr.sweetiez.api.core.authentication.ports.AuthenticationRepository;
 import fr.sweetiez.api.core.authentication.services.AuthenticationService;
@@ -71,8 +74,6 @@ import fr.sweetiez.api.infrastructure.repository.orders.OrderRepository;
 import fr.sweetiez.api.infrastructure.repository.recipe.RecipeRepository;
 import fr.sweetiez.api.infrastructure.repository.recipe.RecipeStepRepository;
 import fr.sweetiez.api.infrastructure.repository.reports.ReportRepository;
-import fr.sweetiez.api.infrastructure.repository.products.sweets.SweetRepository;
-import fr.sweetiez.api.infrastructure.repository.products.trays.TrayRepository;
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
