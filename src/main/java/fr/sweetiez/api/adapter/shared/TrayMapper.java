@@ -49,7 +49,7 @@ public class TrayMapper {
     public Tray toDto(TrayEntity entity) {
         var sweets = entity.getSweets()
                 .stream()
-                .map(sweetQty -> new SweetWithQuantity(sweetMapper.toDto(sweetQty.sweet()), sweetQty.quantity()))
+                .map(sweetQty -> new SweetWithQuantity(sweetQty.id(), sweetMapper.toDto(sweetQty.sweet()), sweetQty.quantity()))
                 .toList();
 
         return new Tray(
