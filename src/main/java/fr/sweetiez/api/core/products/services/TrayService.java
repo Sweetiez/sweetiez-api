@@ -1,14 +1,16 @@
 package fr.sweetiez.api.core.products.services;
 
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
-import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
 import fr.sweetiez.api.core.products.models.SweetWithQuantity;
 import fr.sweetiez.api.core.products.models.Tray;
 import fr.sweetiez.api.core.products.models.common.ProductID;
 import fr.sweetiez.api.core.products.models.common.details.Valuation;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
 import fr.sweetiez.api.core.products.models.requests.*;
-import fr.sweetiez.api.core.products.models.responses.*;
+import fr.sweetiez.api.core.products.models.responses.AdminDetailedTrayResponse;
+import fr.sweetiez.api.core.products.models.responses.DetailedTrayResponse;
+import fr.sweetiez.api.core.products.models.responses.SimpleProductResponse;
+import fr.sweetiez.api.core.products.models.responses.ValuationResponse;
 import fr.sweetiez.api.core.products.ports.ProductsReader;
 import fr.sweetiez.api.core.products.ports.ProductsWriter;
 import fr.sweetiez.api.core.products.services.exceptions.InvalidFieldsException;
@@ -123,7 +125,7 @@ public class TrayService {
 
     public SimpleProductResponse addImageTo(ProductID id, String imageUrl) {
         var tray = reader.findById(id).orElseThrow();
-        return new SimpleProductResponse(writer.save(tray.addImage(imageUrl)), ProductType.TRAY);
+        return new SimpleProductResponse(writer.save(tray.addImage(imageUrl)));
     }
 
     public AdminDetailedTrayResponse adminUpdateTrayDetails(UpdateTrayRequest request) {
@@ -149,6 +151,6 @@ public class TrayService {
 
     public SimpleProductResponse adminDeleteImageFrom(ProductID id, DeleteImageRequest request) {
         var sweet = reader.findById(id).orElseThrow();
-        return new SimpleProductResponse(writer.save(sweet.deleteImage(request.imageUrl())), ProductType.TRAY);
+        return new SimpleProductResponse(writer.save(sweet.deleteImage(request.imageUrl())));
     }
 }

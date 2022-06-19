@@ -1,6 +1,5 @@
 package fr.sweetiez.api.core.products.models.responses;
 
-import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
 import fr.sweetiez.api.core.products.models.Tray;
 
 import java.util.Collection;
@@ -28,8 +27,7 @@ public record DetailedTrayResponse(
                 tray.sweets().stream()
                         .map(sweetQty -> new SimpleSweetWithQuantity(
                                 new SimpleProductResponse(
-                                        sweetQty.sweet(),
-                                        ProductType.SWEET),
+                                        sweetQty.sweet()),
                                 sweetQty.quantity() * sweetQty.sweet().price().unitPerPackage()))
                         .toList(),
                 tray.diets(),

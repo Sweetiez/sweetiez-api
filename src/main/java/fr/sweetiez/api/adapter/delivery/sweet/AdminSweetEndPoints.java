@@ -1,6 +1,5 @@
 package fr.sweetiez.api.adapter.delivery.sweet;
 
-import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
 import fr.sweetiez.api.core.products.models.common.ProductID;
 import fr.sweetiez.api.core.products.models.requests.*;
 import fr.sweetiez.api.core.products.models.responses.AdminDetailedSweetResponse;
@@ -56,7 +55,7 @@ public class AdminSweetEndPoints {
     public ResponseEntity<SimpleProductResponse> publish(PublishProductRequest request) {
         try {
             var sweet = sweetService.publish(request);
-            return ResponseEntity.ok(new SimpleProductResponse(sweet, ProductType.SWEET));
+            return ResponseEntity.ok(new SimpleProductResponse(sweet));
         }
         catch (NoSuchElementException exception) {
             return ResponseEntity.notFound().build();
@@ -66,7 +65,7 @@ public class AdminSweetEndPoints {
     public ResponseEntity<SimpleProductResponse> unpublish(UnpublishProductRequest request) {
         try {
             var sweet = sweetService.unpublish(request);
-            return ResponseEntity.ok(new SimpleProductResponse(sweet, ProductType.SWEET));
+            return ResponseEntity.ok(new SimpleProductResponse(sweet));
         }
         catch (NoSuchElementException exception) {
             return ResponseEntity.notFound().build();

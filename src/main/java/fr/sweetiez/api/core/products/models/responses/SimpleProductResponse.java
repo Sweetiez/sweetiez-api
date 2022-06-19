@@ -1,7 +1,7 @@
 package fr.sweetiez.api.core.products.models.responses;
 
-import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
 import fr.sweetiez.api.core.products.models.Product;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -14,10 +14,10 @@ public record SimpleProductResponse(
         String flavor,
         Collection<String> images,
         double rating,
-        ProductType type
+        Highlight highlight
 )
 {
-    public SimpleProductResponse(Product product, ProductType productType) {
+    public SimpleProductResponse(Product product) {
         this(
                 product.id().value(),
                 product.name().value(),
@@ -26,7 +26,7 @@ public record SimpleProductResponse(
                 product.details().characteristics().flavor().name(),
                 product.details().images(),
                 product.details().valuation().globalMark(),
-                productType
+                product.details().characteristics().highlight()
         );
     }
 }
