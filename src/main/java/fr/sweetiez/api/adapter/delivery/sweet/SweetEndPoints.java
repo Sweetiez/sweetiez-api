@@ -23,7 +23,17 @@ public class SweetEndPoints {
     public ResponseEntity<Collection<SimpleProductResponse>> retrievePublishedSweets() {
         var publishedSweets = sweetService.retrieveAllPublished()
                 .stream()
-                .map(SimpleProductResponse::new)
+                .map(sweet -> new SimpleProductResponse(
+                        sweet.id(),
+                        sweet.name(),
+                        sweet.packagedPrice(),
+                        sweet.unitPerPackage(),
+                        sweet.description(),
+                        sweet.flavor().name(),
+                        sweet.images(),
+                        sweet.valuation().mark(),
+                        sweet.highlight()
+                ))
                 .toList();
 
         return ResponseEntity.ok(publishedSweets);
@@ -41,8 +51,8 @@ public class SweetEndPoints {
     public ResponseEntity<Collection<ProductBannerResponse>> retrieveBannerSweets() {
         var bannerSweets = sweetService.retrieveAllPublished()
                 .stream()
-                .filter(sweet -> sweet.details().characteristics().highlight() == Highlight.BANNER)
-                .map(ProductBannerResponse::new)
+                .filter(sweet -> sweet.highlight() == Highlight.BANNER)
+                .map(sweet -> new ProductBannerResponse(sweet.id(), sweet.name(), sweet.images().stream().toList().get(0)))
                 .toList();
 
         return ResponseEntity.ok(bannerSweets);

@@ -80,19 +80,25 @@ public class SweetService {
         return reader.findAll();
     }
 
-    public Collection<Sweet> retrieveAllPublished() {
-        var sweets = reader.findAllPublished();
+    public Collection<DetailedSweetResponse> retrieveAllPublished() {
+        var sweets = reader.findAllPublished()
+                .stream()
+                .map(sweet -> {
+                    var evaluations = evaluationService.retrieveAllBySubject(sweet.id().value());
+                    var valuation = new Valuation(evaluations);
+                    return new DetailedSweetResponse(sweet, new ValuationResponse(valuation));})
+                .toList();
 
         var banner = sweets.stream()
-                .filter(sweet -> sweet.details().characteristics().highlight().equals(Highlight.BANNER))
+                .filter(sweet -> sweet.highlight().equals(Highlight.BANNER))
                 .toList();
 
         var promoted = sweets.stream()
-                .filter(sweet -> sweet.details().characteristics().highlight().equals(Highlight.PROMOTED))
+                .filter(sweet -> sweet.highlight().equals(Highlight.PROMOTED))
                 .toList();
 
         var common = sweets.stream()
-                .filter(sweet -> sweet.details().characteristics().highlight().equals(Highlight.COMMON))
+                .filter(sweet -> sweet.highlight().equals(Highlight.COMMON))
                 .toList();
 
         var publishedSweets = new LinkedList<>(banner);
@@ -119,7 +125,7 @@ public class SweetService {
         return new SimpleProductResponse(writer.save(sweet.addImage(imageUrl)));
     }
 
-    public AdminDetailedSweetResponse adminUpdateSweetDetails(UpdateSweetRequest request) {
+    public AdminDetailedSweetResponse adminUpdateDetails(UpdateSweetRequest request) {
         var sweet = reader.findById(new ProductID(request.id())).orElseThrow();
         var ingredients = ingredientService.retrieveAllById(request.ingredients());
         var updatedSweet = new Sweet(sweet, request, ingredients);

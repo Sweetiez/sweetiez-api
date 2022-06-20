@@ -121,7 +121,7 @@ public class AdminSweetEndPoints {
 
     public ResponseEntity<AdminDetailedSweetResponse> adminUpdateSweetDetails(UpdateSweetRequest request) {
         try {
-            return ResponseEntity.ok(sweetService.adminUpdateSweetDetails(request));
+            return ResponseEntity.ok(sweetService.adminUpdateDetails(request));
         }
         catch (NoSuchElementException exception) {
             return ResponseEntity.badRequest().build();

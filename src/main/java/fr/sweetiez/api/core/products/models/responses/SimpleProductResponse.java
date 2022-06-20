@@ -10,6 +10,7 @@ public record SimpleProductResponse(
         UUID id,
         String name,
         double price,
+        int unitPerPackage,
         String description,
         String flavor,
         Collection<String> images,
@@ -21,7 +22,8 @@ public record SimpleProductResponse(
         this(
                 product.id().value(),
                 product.name().value(),
-                product.price().unitPrice().doubleValue(),
+                product.price().packaged().doubleValue(),
+                product.price().unitPerPackage(),
                 product.description().shortContent(),
                 product.details().characteristics().flavor().name(),
                 product.details().images(),

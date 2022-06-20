@@ -2,6 +2,8 @@ package fr.sweetiez.api.core.products.models.responses;
 
 import fr.sweetiez.api.core.ingredients.models.Ingredient;
 import fr.sweetiez.api.core.products.models.Sweet;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.Flavor;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -17,7 +19,9 @@ public record DetailedSweetResponse(
         Collection<String> ingredients,
         Collection<String> diets,
         Collection<String> allergens,
-        ValuationResponse valuation
+        ValuationResponse valuation,
+        Highlight highlight,
+        Flavor flavor
 )
 {
     public DetailedSweetResponse(Sweet sweet, ValuationResponse valuation) {
@@ -32,7 +36,9 @@ public record DetailedSweetResponse(
                 sweet.ingredients().stream().map(Ingredient::name).toList(),
                 sweet.diets(),
                 sweet.allergens(),
-                valuation
+                valuation,
+                sweet.details().characteristics().highlight(),
+                sweet.details().characteristics().flavor()
         );
     }
 }

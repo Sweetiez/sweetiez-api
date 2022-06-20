@@ -1,5 +1,6 @@
 package fr.sweetiez.api.core.sweets.services;
 
+import fr.sweetiez.api.core.evaluations.services.EvaluationService;
 import fr.sweetiez.api.core.ingredients.models.Ingredient;
 import fr.sweetiez.api.core.ingredients.services.IngredientService;
 import fr.sweetiez.api.core.products.models.Sweet;
@@ -51,6 +52,9 @@ class SweetServiceTest {
 
     @Mock
     private IngredientService ingredientService;
+
+    @Mock
+    private EvaluationService evaluationService;
 
     @InjectMocks
     private SweetService sut;
@@ -250,13 +254,15 @@ class SweetServiceTest {
         );
 
         when(reader.findAllPublished()).thenReturn(List.of(publishedSweet));
+        when(evaluationService.retrieveAllBySubject(any())).thenReturn(List.of());
 
         var sweets = sut.retrieveAllPublished();
 
         assertFalse(sweets.isEmpty());
 
         verify(reader).findAllPublished();
-        verifyNoMoreInteractions(reader);
+        verify(evaluationService).retrieveAllBySubject(any());
+        verifyNoMoreInteractions(reader, evaluationService);
     }
 
 

@@ -36,6 +36,6 @@ public class SweetReaderAdapter implements ProductsReader<Sweet> {
         return repository.findAll()
                 .stream()
                 .map(sweetMapper::toDto)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 }
