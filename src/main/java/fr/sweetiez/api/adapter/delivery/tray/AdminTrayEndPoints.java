@@ -82,16 +82,16 @@ public class AdminTrayEndPoints {
         return ResponseEntity.ok(allSweets);
     }
 
-    public ResponseEntity<AdminDetailedTrayResponse> adminRetrieveTrayDetails(UUID id) {
+    public ResponseEntity<AdminDetailedTrayResponse> adminRetrieveTrayDetails(String id) {
         try {
-            return ResponseEntity.ok(trayService.adminRetrieveDetailsOf(new ProductID(id)));
+            return ResponseEntity.ok(trayService.adminRetrieveDetailsOf(new ProductID(UUID.fromString(id))));
         }
         catch (NoSuchElementException exception) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    public ResponseEntity<SimpleProductResponse> addImage(UUID id, MultipartFile image) {
+    public ResponseEntity<SimpleProductResponse> addImage(String id, MultipartFile image) {
         var imageName = String.format("tray_%s_%s", image.getOriginalFilename(), UUID.randomUUID());
         // Store the image in the minio bucket
         try {
@@ -122,7 +122,7 @@ public class AdminTrayEndPoints {
         }
 
         url = url.substring(0, url.indexOf('?'));
-        return ResponseEntity.ok(trayService.addImageTo(new ProductID(id), url));
+        return ResponseEntity.ok(trayService.addImageTo(new ProductID(UUID.fromString(id)), url));
     }
 
     public ResponseEntity<AdminDetailedTrayResponse> adminUpdateSweetDetails(UpdateTrayRequest request) {
@@ -134,7 +134,7 @@ public class AdminTrayEndPoints {
         }
     }
 
-    public ResponseEntity<SimpleProductResponse> deleteImage(UUID id, DeleteImageRequest request) {
+    public ResponseEntity<SimpleProductResponse> deleteImage(String id, DeleteImageRequest request) {
         try {
             var objectName = request.imageUrl().substring(request.imageUrl().lastIndexOf('/') + 1);
             System.out.println(objectName);
@@ -144,7 +144,7 @@ public class AdminTrayEndPoints {
                             .object(objectName)
                             .build());
 
-            return ResponseEntity.ok(trayService.adminDeleteImageFrom(new ProductID(id), request));
+            return ResponseEntity.ok(trayService.adminDeleteImageFrom(new ProductID(UUID.fromString(id)), request));
         }
         catch (Exception e) {
             return ResponseEntity.internalServerError()

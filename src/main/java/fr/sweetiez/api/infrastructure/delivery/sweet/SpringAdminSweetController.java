@@ -44,14 +44,14 @@ public class SpringAdminSweetController {
 
     @PostMapping("/{id}/image")
     public ResponseEntity<SimpleProductResponse> addImage(
-            @PathVariable("id") UUID id, @RequestParam MultipartFile image)
+            @PathVariable("id") String id, @RequestParam MultipartFile image)
     {
         return sweetsEndPoints.addImage(id, image);
     }
 
     @DeleteMapping("/{id}/image")
     public ResponseEntity<SimpleProductResponse> deleteImage(
-            @PathVariable("id") UUID id, @RequestBody DeleteImageRequest request)
+            @PathVariable("id") String id, @RequestBody DeleteImageRequest request)
     {
         return sweetsEndPoints.deleteImage(id, request);
     }

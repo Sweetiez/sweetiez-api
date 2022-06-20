@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/admin/trays")
@@ -45,20 +44,20 @@ public class SpringAdminTrayController {
 
     @PostMapping("/{id}/image")
     public ResponseEntity<SimpleProductResponse> addImage(
-            @PathVariable("id") UUID id, @RequestParam MultipartFile image)
+            @PathVariable("id") String id, @RequestParam MultipartFile image)
     {
         return trayEndPoints.addImage(id, image);
     }
 
     @DeleteMapping("/{id}/image")
     public ResponseEntity<SimpleProductResponse> deleteImage(
-            @PathVariable("id") UUID id, @RequestBody DeleteImageRequest request)
+            @PathVariable("id") String id, @RequestBody DeleteImageRequest request)
     {
         return trayEndPoints.deleteImage(id, request);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AdminDetailedTrayResponse> adminRetrieveTrayDetails(@PathVariable("id") UUID id) {
+    public ResponseEntity<AdminDetailedTrayResponse> adminRetrieveTrayDetails(@PathVariable("id") String id) {
         return trayEndPoints.adminRetrieveTrayDetails(id);
     }
 

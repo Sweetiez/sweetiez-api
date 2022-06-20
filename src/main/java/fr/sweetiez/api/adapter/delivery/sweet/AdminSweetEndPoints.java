@@ -90,7 +90,7 @@ public class AdminSweetEndPoints {
         }
     }
 
-    public ResponseEntity<SimpleProductResponse> addImage(UUID id, MultipartFile image) {
+    public ResponseEntity<SimpleProductResponse> addImage(String id, MultipartFile image) {
         var imageName = String.format("sweet_%s_%s", image.getOriginalFilename(), UUID.randomUUID());
         // Store the image in the minio bucket
         try {
@@ -116,7 +116,7 @@ public class AdminSweetEndPoints {
         }
         url = url.substring(0, url.indexOf('?'));
 
-        return ResponseEntity.ok(sweetService.addImageTo(new ProductID(id), url));
+        return ResponseEntity.ok(sweetService.addImageTo(new ProductID(UUID.fromString(id)), url));
     }
 
     public ResponseEntity<AdminDetailedSweetResponse> adminUpdateSweetDetails(UpdateSweetRequest request) {
@@ -128,7 +128,7 @@ public class AdminSweetEndPoints {
         }
     }
 
-    public ResponseEntity<SimpleProductResponse> deleteImage(UUID id, DeleteImageRequest request) {
+    public ResponseEntity<SimpleProductResponse> deleteImage(String id, DeleteImageRequest request) {
 
         try {
             var objectName = request.imageUrl().substring(request.imageUrl().lastIndexOf('/') + 1);
@@ -139,7 +139,7 @@ public class AdminSweetEndPoints {
                             .object(objectName)
                             .build());
 
-            return ResponseEntity.ok(sweetService.adminDeleteImageFrom(new ProductID(id), request));
+            return ResponseEntity.ok(sweetService.adminDeleteImageFrom(new ProductID(UUID.fromString(id)), request));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("Error", "Error while deleting file").build();
         }
