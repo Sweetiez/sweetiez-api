@@ -52,7 +52,7 @@ public class SweetEndPoints {
         var bannerSweets = sweetService.retrieveAllPublished()
                 .stream()
                 .filter(sweet -> sweet.highlight() == Highlight.BANNER)
-                .map(sweet -> new ProductBannerResponse(sweet.id(), sweet.name(), sweet.images().stream().toList().get(0)))
+                .map(sweet -> new ProductBannerResponse(sweet.id(), sweet.name(), sweet.images().stream().toList().get(0), ""))
                 .toList();
 
         return ResponseEntity.ok(bannerSweets);
