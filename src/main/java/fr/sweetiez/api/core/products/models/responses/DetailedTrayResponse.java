@@ -1,6 +1,8 @@
 package fr.sweetiez.api.core.products.models.responses;
 
 import fr.sweetiez.api.core.products.models.Tray;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.Flavor;
+import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -14,7 +16,9 @@ public record DetailedTrayResponse(
         Collection<SimpleSweetWithQuantity> sweets,
         Collection<String> diets,
         Collection<String> allergens,
-        ValuationResponse valuation
+        ValuationResponse valuation,
+        Highlight highlight,
+        Flavor flavor
 )
 {
     public DetailedTrayResponse(Tray tray, ValuationResponse valuation) {
@@ -32,7 +36,9 @@ public record DetailedTrayResponse(
                         .toList(),
                 tray.diets(),
                 tray.allergens(),
-                valuation
+                valuation,
+                tray.details().characteristics().highlight(),
+                tray.details().characteristics().flavor()
         );
     }
 }

@@ -23,7 +23,19 @@ public class TrayEndPoints {
     public ResponseEntity<Collection<SimpleProductResponse>> retrievePublishedTrays() {
         var publishedSweets = trayService.retrieveAllPublished()
                 .stream()
-                .map(SimpleProductResponse::new)
+                .map(tray -> {
+                    var mark =tray.details().valuation().globalMark();
+                    return new SimpleProductResponse(
+                            tray.id().value(),
+                            tray.name().value(),
+                            tray.price().unitPrice().doubleValue(),
+                            tray.price().unitPerPackage(),
+                            tray.description().shortContent(),
+                            tray.details().characteristics().flavor().name(),
+                            tray.details().images(),
+                            mark,
+                            tray.details().characteristics().highlight());
+                })
                 .toList();
 
         return ResponseEntity.ok(publishedSweets);

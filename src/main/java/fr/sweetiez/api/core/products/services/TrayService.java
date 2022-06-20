@@ -4,6 +4,7 @@ import fr.sweetiez.api.core.evaluations.services.EvaluationService;
 import fr.sweetiez.api.core.products.models.SweetWithQuantity;
 import fr.sweetiez.api.core.products.models.Tray;
 import fr.sweetiez.api.core.products.models.common.ProductID;
+import fr.sweetiez.api.core.products.models.common.details.Details;
 import fr.sweetiez.api.core.products.models.common.details.Valuation;
 import fr.sweetiez.api.core.products.models.common.details.characteristics.Highlight;
 import fr.sweetiez.api.core.products.models.requests.*;
@@ -89,7 +90,16 @@ public class TrayService {
     }
 
     public Collection<Tray> retrieveAllPublished() {
-        var trays = reader.findAllPublished();
+        var trays = reader.findAllPublished()
+                .stream()
+                .map(tray -> {
+                    var evaluations = evaluationService.retrieveAllBySubject(tray.id().value());
+                    var valuation = new Valuation(evaluations);
+                    return new Tray(tray, new Details(
+                            tray.details().images(),
+                            tray.details().characteristics(),
+                            valuation));})
+                .toList();
 
         var banner = trays.stream()
                 .filter(tray -> tray.details().characteristics().highlight().equals(Highlight.BANNER))
