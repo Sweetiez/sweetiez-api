@@ -3,10 +3,11 @@ package fr.sweetiez.api.adapter.delivery;
 import fr.sweetiez.api.core.loyalty.rewards.models.requests.CreateRewardRequest;
 import fr.sweetiez.api.core.loyalty.rewards.models.responses.RewardCreatedResponse;
 import fr.sweetiez.api.core.loyalty.rewards.models.responses.RewardResponse;
-import fr.sweetiez.api.core.loyalty.rewards.models.rewards.Reward;
 import fr.sweetiez.api.core.loyalty.rewards.services.RewardService;
 import fr.sweetiez.api.core.loyalty.rewards.services.exceptions.RewardNotFoundException;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Collection;
 
 public class RewardEndPoints {
     private final RewardService rewardService;
@@ -36,5 +37,12 @@ public class RewardEndPoints {
         } catch (RewardNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    public ResponseEntity<Collection<RewardResponse>> retrieveAllRewards() {
+        var rewards = rewardService.retrieveAll();
+        return ResponseEntity.ok(rewards.rewards().stream()
+                .map(RewardResponse::new)
+                .toList());
     }
 }
