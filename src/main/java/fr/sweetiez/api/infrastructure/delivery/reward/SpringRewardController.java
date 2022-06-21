@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
+
 @RestController
 @RequestMapping("/rewards")
 public class SpringRewardController {
@@ -16,6 +18,11 @@ public class SpringRewardController {
 
     public SpringRewardController(RewardEndPoints rewardEndPoints) {
         this.rewardEndPoints = rewardEndPoints;
+    }
+
+    @GetMapping()
+    public ResponseEntity<Collection<RewardResponse>> getRewards() {
+        return rewardEndPoints.retrieveAllRewards();
     }
 
     @GetMapping("/{id}")

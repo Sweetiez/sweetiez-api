@@ -2,6 +2,7 @@ package fr.sweetiez.api.adapter.repository;
 
 import fr.sweetiez.api.adapter.shared.RewardMapper;
 import fr.sweetiez.api.core.loyalty.rewards.models.rewards.Reward;
+import fr.sweetiez.api.core.loyalty.rewards.models.rewards.Rewards;
 import fr.sweetiez.api.core.loyalty.rewards.ports.RewardsReader;
 import fr.sweetiez.api.infrastructure.repository.reward.RewardRepository;
 
@@ -23,5 +24,12 @@ public class RewardReaderAdapter implements RewardsReader {
     public Reward findById(UUID id) {
         var reward = repository.findById(id);
         return mapper.toDto(reward.orElseThrow());
+    }
+
+    @Override
+    public Rewards findAll() {
+        return new Rewards(repository.findAll().stream()
+                .map(mapper::toDto)
+                .toList());
     }
 }

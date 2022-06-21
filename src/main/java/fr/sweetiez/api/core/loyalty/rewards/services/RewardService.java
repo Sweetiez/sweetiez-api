@@ -2,6 +2,7 @@ package fr.sweetiez.api.core.loyalty.rewards.services;
 
 import fr.sweetiez.api.core.loyalty.rewards.models.requests.CreateRewardRequest;
 import fr.sweetiez.api.core.loyalty.rewards.models.rewards.Reward;
+import fr.sweetiez.api.core.loyalty.rewards.models.rewards.Rewards;
 import fr.sweetiez.api.core.loyalty.rewards.ports.RewardsReader;
 import fr.sweetiez.api.core.loyalty.rewards.ports.RewardsWriter;
 import fr.sweetiez.api.core.loyalty.rewards.services.exceptions.RewardNotFoundException;
@@ -54,5 +55,18 @@ public class RewardService {
             return true;
         }
         return false;
+    }
+
+    public Rewards retrieveAll() {
+        var rewards = rewardsReader.findAll();
+        return new Rewards(rewards.rewards().stream()
+                .map(reward -> {
+                    try {
+                        return retrieveById(reward.id().value().toString());
+                    } catch (RewardNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .toList());
     }
 }
