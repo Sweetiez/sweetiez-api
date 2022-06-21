@@ -15,7 +15,7 @@ public record Reward(RewardId id, String name, Cost cost, Product product) {
     }
 
     public Reward(Reward reward, String name, String image) {
-        this(reward.id(), name, reward.cost(),
+        this(reward.id(), reward.name, reward.cost(),
                 new Product(reward.product().id(), name, reward.product().type(), image)
         );
     }
