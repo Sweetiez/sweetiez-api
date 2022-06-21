@@ -20,4 +20,9 @@ public class RewardWriterAdapter implements RewardsWriter {
     public Reward save(Reward reward) {
         return mapper.toDto(repository.save(mapper.toEntity(reward)));
     }
+
+    @Override
+    public void delete(Reward reward) {
+        repository.delete(mapper.toEntity(reward));
+    }
 }

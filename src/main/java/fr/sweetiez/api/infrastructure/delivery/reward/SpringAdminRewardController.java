@@ -3,7 +3,6 @@ package fr.sweetiez.api.infrastructure.delivery.reward;
 import fr.sweetiez.api.adapter.delivery.RewardEndPoints;
 import fr.sweetiez.api.core.loyalty.rewards.models.requests.CreateRewardRequest;
 import fr.sweetiez.api.core.loyalty.rewards.models.responses.RewardCreatedResponse;
-import fr.sweetiez.api.core.loyalty.rewards.models.responses.RewardResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +20,10 @@ public class SpringAdminRewardController {
         return rewardEndPoints.createReward(request);
     }
 
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteReward(@PathVariable String id) {
+        return rewardEndPoints.deleteReward(id);
+    }
 
 
 
