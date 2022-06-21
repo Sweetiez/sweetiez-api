@@ -81,9 +81,9 @@ public class AdminSweetEndPoints {
         return ResponseEntity.ok(allSweets);
     }
 
-    public ResponseEntity<AdminDetailedSweetResponse> adminRetrieveSweetDetails(UUID id) {
+    public ResponseEntity<AdminDetailedSweetResponse> adminRetrieveSweetDetails(String id) {
         try {
-            return ResponseEntity.ok(sweetService.adminRetrieveDetailsOf(new ProductID(id)));
+            return ResponseEntity.ok(sweetService.adminRetrieveDetailsOf(new ProductID(UUID.fromString(id))));
         }
         catch (NoSuchElementException exception) {
             return ResponseEntity.notFound().build();
