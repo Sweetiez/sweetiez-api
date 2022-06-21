@@ -39,9 +39,9 @@ public class SweetEndPoints {
         return ResponseEntity.ok(publishedSweets);
     }
 
-    public ResponseEntity<DetailedSweetResponse> retrieveSweetDetails(UUID id) {
+    public ResponseEntity<DetailedSweetResponse> retrieveSweetDetails(String id) {
         try {
-            return ResponseEntity.ok(sweetService.retrieveDetailsOf(new ProductID(id)));
+            return ResponseEntity.ok(sweetService.retrieveDetailsOf(new ProductID(UUID.fromString(id))));
         }
         catch (NoSuchElementException exception) {
             return ResponseEntity.badRequest().build();
@@ -52,7 +52,7 @@ public class SweetEndPoints {
         var bannerSweets = sweetService.retrieveAllPublished()
                 .stream()
                 .filter(sweet -> sweet.highlight() == Highlight.BANNER)
-                .map(sweet -> new ProductBannerResponse(sweet.id(), sweet.name(), sweet.images().stream().toList().get(0), ""))
+                .map(sweet -> new ProductBannerResponse(sweet.id(), sweet.name(), sweet.images().stream().toList().get(0), "sweet"))
                 .toList();
 
         return ResponseEntity.ok(bannerSweets);

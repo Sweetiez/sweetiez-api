@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/admin/sweets")
@@ -57,7 +56,7 @@ public class SpringAdminSweetController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AdminDetailedSweetResponse> adminRetrieveSweetDetails(@PathVariable("id") UUID id) {
+    public ResponseEntity<AdminDetailedSweetResponse> adminRetrieveSweetDetails(@PathVariable("id") String id) {
         return sweetsEndPoints.adminRetrieveSweetDetails(id);
     }
 

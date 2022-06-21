@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/sweets")
@@ -34,7 +33,7 @@ public class SpringSweetController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DetailedSweetResponse> retrieveSweetDetails(@PathVariable("id") UUID id) {
+    public ResponseEntity<DetailedSweetResponse> retrieveSweetDetails(@PathVariable("id") String id) {
         return sweetsEndPoints.retrieveSweetDetails(id);
     }
 
