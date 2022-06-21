@@ -47,6 +47,9 @@ import fr.sweetiez.api.core.ingredients.ports.IngredientApi;
 import fr.sweetiez.api.core.ingredients.ports.Ingredients;
 import fr.sweetiez.api.core.ingredients.ports.TranslatorApi;
 import fr.sweetiez.api.core.ingredients.services.IngredientService;
+import fr.sweetiez.api.core.loyalty.rewards.ports.RewardsReader;
+import fr.sweetiez.api.core.loyalty.rewards.ports.RewardsWriter;
+import fr.sweetiez.api.core.loyalty.rewards.services.RewardService;
 import fr.sweetiez.api.core.orders.ports.OrdersReader;
 import fr.sweetiez.api.core.orders.ports.OrdersWriter;
 import fr.sweetiez.api.core.orders.services.OrderService;
@@ -74,6 +77,8 @@ import fr.sweetiez.api.infrastructure.repository.orders.OrderRepository;
 import fr.sweetiez.api.infrastructure.repository.recipe.RecipeRepository;
 import fr.sweetiez.api.infrastructure.repository.recipe.RecipeStepRepository;
 import fr.sweetiez.api.infrastructure.repository.reports.ReportRepository;
+import fr.sweetiez.api.infrastructure.repository.reward.RewardRepository;
+import fr.sweetiez.api.infrastructure.repository.sweets.SweetRepository;
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -121,15 +126,24 @@ public class SpringDependenciesConfig {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManager;
 
-    public SpringDependenciesConfig(SweetRepository sweetRepository, TrayRepository trayRepository,
-                                    EvaluationRepository evaluationRepository, ReportRepository reportRepository,
-                                    CustomerRepository customerRepository, AccountRepository accountRepository,
-                                    RoleRepository roleRepository, IngredientRepository ingredientRepository,
-                                    HealthPropertyRepository healthPropertyRepository, OrderRepository orderRepository,
-                                    OrderDetailRepository orderDetailRepository, RecipeRepository recipeRepository,
-                                    RecipeStepRepository recipeStepRepository, TokenProvider tokenProvider,
-                                    AuthenticationManagerBuilder authenticationManager)
-    {
+    private final RecipeRepository recipeRepository;
+
+    private final RecipeStepRepository recipeStepRepository;
+
+    private final RewardRepository rewardRepository;
+
+    public SpringDependenciesConfig(SweetRepository sweetRepository, EvaluationRepository evaluationRepository,
+                                    ReportRepository reportRepository, CustomerRepository customerRepository,
+                                    AccountRepository accountRepository, RoleRepository roleRepository,
+                                    OrderRepository orderRepository, OrderDetailRepository orderDetailRepository,
+                                    RecipeRepository recipeRepository, 
+                                    RecipeStepRepository recipeStepRepository,
+                                    IngredientRepository ingredientRepository,
+                                    HealthPropertyRepository healthPropertyRepository,
+                                    TokenProvider tokenProvider,
+                                    AuthenticationManagerBuilder authenticationManager, RewardRepository rewardRepository)
+
+  {
         this.sweetRepository = sweetRepository;
         this.trayRepository = trayRepository;
         this.evaluationRepository = evaluationRepository;
@@ -143,8 +157,9 @@ public class SpringDependenciesConfig {
         this.orderDetailRepository = orderDetailRepository;
         this.recipeRepository = recipeRepository;
         this.recipeStepRepository = recipeStepRepository;
-        this.tokenProvider = tokenProvider;
-        this.authenticationManager = authenticationManager;
+        this.ingredientRepository = ingredientRepository;
+        this.healthPropertyRepository = healthPropertyRepository;
+        this.rewardRepository = rewardRepository;
     }
 
     @Bean
@@ -199,6 +214,12 @@ public class SpringDependenciesConfig {
         return new TrayMapper(sweetMapper(), evaluationMapper());
     }
 
+    @Bean
+    public RewardMapper rewardMapper() {
+        return new RewardMapper();
+    }
+
+    // ADAPTERS
     // REPOSITORY ADAPTERS
 
     @Bean
@@ -281,6 +302,16 @@ public class SpringDependenciesConfig {
         return new OrderNotifierAdapter(gmailSender());
     }
 
+    @Bean
+    public RewardsWriter rewardsWriter() {
+        return new RewardWriterAdapter(rewardRepository, rewardMapper());
+    }
+
+    @Bean
+    public RewardsReader rewardsReader() {
+        return new RewardReaderAdapter(rewardRepository, rewardMapper());
+    }
+
      // GATEWAY ADAPTERS
 
     @Bean
@@ -338,6 +369,11 @@ public class SpringDependenciesConfig {
     @Bean
     public RecipeService recipeService() {
         return new RecipeService(recipeReader(), recipeWriter());
+    }
+
+    @Bean
+    public RewardService rewardService() {
+        return new RewardService(rewardsReader(), rewardsWriter(), sweetService());
     }
 
     // END POINTS
@@ -405,6 +441,11 @@ public class SpringDependenciesConfig {
     @Bean
     public RecipeEndPoints recipeEndPoints() {
         return new RecipeEndPoints(recipeService());
+    }
+
+    @Bean
+    public RewardEndPoints rewardEndPoints() {
+        return new RewardEndPoints(rewardService());
     }
 
     // MINIO

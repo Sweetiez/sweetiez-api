@@ -4,6 +4,10 @@ import java.util.UUID;
 
 public record RewardId(UUID value) {
 
+    public RewardId() {
+        this(UUID.randomUUID());
+    }
+
     public RewardId(String value) {
         this(UUID.fromString(value));
     }
