@@ -2,6 +2,7 @@ package fr.sweetiez.api.core.loyalty.rewards.models.responses;
 
 
 import fr.sweetiez.api.core.loyalty.rewards.models.rewards.Reward;
+import fr.sweetiez.api.core.recipes.models.recipes.details.State;
 
 public record RewardResponse(String id,
                              String name,
@@ -9,7 +10,8 @@ public record RewardResponse(String id,
                              String productId,
                              String productType,
                              String productName,
-                             String productImage) {
+                             String productImage,
+                             State state) {
 
     public RewardResponse(Reward reward) {
         this(reward.id().value().toString(),
@@ -18,7 +20,8 @@ public record RewardResponse(String id,
                 reward.product().id(),
                 reward.product().type().toString(),
                 reward.product().name(),
-                reward.product().image());
+                reward.product().image(),
+                reward.state());
     }
 
 }

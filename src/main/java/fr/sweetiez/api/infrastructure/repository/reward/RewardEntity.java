@@ -1,6 +1,7 @@
 package fr.sweetiez.api.infrastructure.repository.reward;
 
 import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
+import fr.sweetiez.api.core.recipes.models.recipes.details.State;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -26,20 +27,28 @@ public class RewardEntity {
     @Column(nullable = false)
     private final ProductType productType;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private final State state;
+
     public RewardEntity() {
         this.id = null;
         this.rewardName = null;
         this.cost = null;
         this.productId = null;
         this.productType = null;
+        this.state = null;
     }
 
-    public RewardEntity(UUID id, String rewardName, Integer cost, String productId, ProductType productType) {
+    public RewardEntity(UUID id, String rewardName, Integer cost,
+                        String productId, ProductType productType,
+                        State state) {
         this.id = id;
         this.rewardName = rewardName;
         this.cost = cost;
         this.productId = productId;
         this.productType = productType;
+        this.state = state;
     }
 
     public UUID getId() {
@@ -60,5 +69,9 @@ public class RewardEntity {
 
     public ProductType getProductType() {
         return productType;
+    }
+
+    public State getState() {
+        return state;
     }
 }
