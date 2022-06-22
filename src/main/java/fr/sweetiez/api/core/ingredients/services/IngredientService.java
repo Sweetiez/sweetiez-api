@@ -4,6 +4,7 @@ import fr.sweetiez.api.adapter.gateways.allergen.models.HealthLabel;
 import fr.sweetiez.api.core.ingredients.models.HealthProperty;
 import fr.sweetiez.api.core.ingredients.models.HealthPropertyType;
 import fr.sweetiez.api.core.ingredients.models.Ingredient;
+import fr.sweetiez.api.core.ingredients.models.IngredientResponse;
 import fr.sweetiez.api.core.ingredients.ports.IngredientApi;
 import fr.sweetiez.api.core.ingredients.ports.Ingredients;
 import fr.sweetiez.api.core.ingredients.ports.TranslatorApi;
@@ -107,5 +108,12 @@ public class IngredientService {
         allergensStaying.removeAll(allergensToCompare);
 
         return allergensStaying;
+    }
+
+    public Collection<IngredientResponse> retrieveAll() {
+        return ingredientRepository.findAll()
+                .stream()
+                .map(ingredient -> new IngredientResponse(ingredient.id(), ingredient.name()))
+                .toList();
     }
 }

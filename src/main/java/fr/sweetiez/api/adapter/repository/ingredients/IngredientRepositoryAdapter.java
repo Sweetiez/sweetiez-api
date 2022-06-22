@@ -52,4 +52,11 @@ public class IngredientRepositoryAdapter implements Ingredients {
                 .map(mapper::toDto)
                 .toList();
     }
+
+    public Collection<Ingredient> findAll() {
+        return repository.findAll()
+                .stream()
+                .map(mapper::toDto)
+                .toList();
+    }
 }
