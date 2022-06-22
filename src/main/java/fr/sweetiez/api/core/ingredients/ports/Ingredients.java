@@ -13,4 +13,5 @@ public interface Ingredients {
     HealthProperty saveHealthProperty(HealthProperty dietProperty);
     Ingredient saveIngredient(Ingredient ingredient);
     Collection<Ingredient> findAllById(Collection<UUID> ingredients);
+    Collection<Ingredient> findAll();
 }
