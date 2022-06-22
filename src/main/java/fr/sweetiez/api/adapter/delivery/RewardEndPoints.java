@@ -1,6 +1,8 @@
 package fr.sweetiez.api.adapter.delivery;
 
 import fr.sweetiez.api.core.loyalty.rewards.models.requests.CreateRewardRequest;
+import fr.sweetiez.api.core.loyalty.rewards.models.requests.PublishRewardRequest;
+import fr.sweetiez.api.core.loyalty.rewards.models.requests.UnPublishRewardRequest;
 import fr.sweetiez.api.core.loyalty.rewards.models.responses.RewardCreatedResponse;
 import fr.sweetiez.api.core.loyalty.rewards.models.responses.RewardResponse;
 import fr.sweetiez.api.core.loyalty.rewards.services.RewardService;
@@ -44,5 +46,23 @@ public class RewardEndPoints {
         return ResponseEntity.ok(rewards.rewards().stream()
                 .map(RewardResponse::new)
                 .toList());
+    }
+
+    public ResponseEntity<RewardResponse> publishReward(PublishRewardRequest request) {
+        try {
+            var reward = rewardService.publishReward(request.id());
+            return ResponseEntity.ok(new RewardResponse(reward));
+        } catch (RewardNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public ResponseEntity<RewardResponse> unPublishReward(UnPublishRewardRequest request) {
+        try {
+            var reward = rewardService.unPublishReward(request.id());
+            return ResponseEntity.ok(new RewardResponse(reward));
+        } catch (RewardNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

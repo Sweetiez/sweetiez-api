@@ -7,6 +7,7 @@ import fr.sweetiez.api.core.loyalty.rewards.ports.RewardsReader;
 import fr.sweetiez.api.core.loyalty.rewards.ports.RewardsWriter;
 import fr.sweetiez.api.core.loyalty.rewards.services.exceptions.RewardNotFoundException;
 import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
+import fr.sweetiez.api.core.recipes.models.recipes.details.State;
 import fr.sweetiez.api.core.sweets.services.SweetService;
 
 import java.util.ArrayList;
@@ -68,5 +69,15 @@ public class RewardService {
                     }
                 })
                 .toList());
+    }
+
+    public Reward publishReward(String id) throws RewardNotFoundException {
+        var reward = retrieveById(id);
+        return rewardsWriter.save(new Reward(reward, State.PUBLISHED));
+    }
+
+    public Reward unPublishReward(String id) throws RewardNotFoundException {
+        var reward = retrieveById(id);
+        return rewardsWriter.save(new Reward(reward, State.NON_PUBLISHED));
     }
 }

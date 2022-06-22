@@ -14,7 +14,8 @@ public class RewardMapper {
             reward.name(),
             reward.cost().value(),
             reward.product().id(),
-            reward.product().type()
+            reward.product().type(),
+                reward.state()
         );
     }
 
@@ -23,7 +24,8 @@ public class RewardMapper {
             new RewardId(entity.getId()),
             entity.getRewardName(),
             new Cost(entity.getCost()),
-            new Product(entity.getProductId(), entity.getProductType())
+            new Product(entity.getProductId(), entity.getProductType()),
+            entity.getState()
         );
     }
 
