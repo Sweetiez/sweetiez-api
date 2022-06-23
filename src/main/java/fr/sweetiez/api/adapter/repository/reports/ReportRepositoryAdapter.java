@@ -37,4 +37,8 @@ public class ReportRepositoryAdapter implements ReportRepository {
     public void delete(UUID id) {
         reportRepository.deleteById(id);
     }
+
+    public void deleteAllByEvaluationId(UUID id) {
+        reportRepository.deleteAllByEvaluationId(id);
+    }
 }
