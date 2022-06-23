@@ -11,4 +11,5 @@ public interface ReportRepository {
     Collection<Report> retrieveAll();
     Optional<Report> findById(UUID reportId);
     void delete(UUID id);
+    void deleteAllByEvaluationId(UUID id);
 }
