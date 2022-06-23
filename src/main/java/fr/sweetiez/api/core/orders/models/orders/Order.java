@@ -7,19 +7,15 @@ import fr.sweetiez.api.core.orders.models.requests.CreateOrderRequest;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.Set;
 
 public record Order(OrderId id,
                     CustomerInfo customerInfo,
                     LocalDate pickupDate,
                     OrderStatus status,
                     Collection<Product> products,
-
                     Optional<CustomerId> customerId,
                     double totalPrice,
-
                     LocalDate createdAt,
-
                     String paymentIntent
 ) {
 
