@@ -62,7 +62,7 @@ import fr.sweetiez.api.core.recipes.services.RecipeService;
 import fr.sweetiez.api.core.reports.services.ReportService;
 import fr.sweetiez.api.infrastructure.app.security.TokenProvider;
 import fr.sweetiez.api.infrastructure.notification.email.GmailSender;
-import fr.sweetiez.api.infrastructure.payements.StripePaymentService;
+import fr.sweetiez.api.infrastructure.payments.StripePaymentService;
 import fr.sweetiez.api.infrastructure.repository.accounts.AccountRepository;
 import fr.sweetiez.api.infrastructure.repository.accounts.RoleRepository;
 import fr.sweetiez.api.infrastructure.repository.customers.CustomerRepository;

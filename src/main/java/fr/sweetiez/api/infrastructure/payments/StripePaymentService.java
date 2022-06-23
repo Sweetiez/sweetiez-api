@@ -1,4 +1,4 @@
-package fr.sweetiez.api.infrastructure.payements;
+package fr.sweetiez.api.infrastructure.payments;
 
 import com.stripe.Stripe;
 import com.stripe.exception.SignatureVerificationException;

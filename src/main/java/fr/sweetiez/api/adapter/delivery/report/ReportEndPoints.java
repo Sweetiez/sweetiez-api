@@ -1,9 +1,8 @@
 package fr.sweetiez.api.adapter.delivery.report;
 
 import fr.sweetiez.api.core.customers.services.exceptions.CustomerDoesNotExistException;
-import fr.sweetiez.api.core.reports.models.Report;
-import fr.sweetiez.api.core.reports.models.ReportEvaluationRequest;
 import fr.sweetiez.api.core.evaluations.services.EvaluationDoesNotExistException;
+import fr.sweetiez.api.core.reports.models.ReportEvaluationRequest;
 import fr.sweetiez.api.core.reports.models.responses.AdminReportResponse;
 import fr.sweetiez.api.core.reports.services.ReportAlreadyCreatedByUserException;
 import fr.sweetiez.api.core.reports.services.ReportService;
