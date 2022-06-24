@@ -8,11 +8,12 @@ public record UserProfileResponse(
         String firstName,
         String lastName,
         String email,
-        String phone
+        String phone,
+        Integer loyaltyPoints
 ) {
 
     public  UserProfileResponse(Customer customer) {
-        this(customer.id().value(), customer.firstName(), customer.lastName(), customer.email(), customer.phone());
+        this(customer.id().value(), customer.firstName(), customer.lastName(), customer.email(), customer.phone(), customer.loyaltyPoints());
     }
 
 }
