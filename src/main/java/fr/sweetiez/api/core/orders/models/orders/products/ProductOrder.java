@@ -5,9 +5,9 @@ import fr.sweetiez.api.core.products.models.common.Price;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public record Product(UUID id, UUID productId, String name, ProductType type, Quantity quantity, Price unitPrice) {
+public record ProductOrder(UUID id, UUID productId, String name, ProductType type, Quantity quantity, Price unitPrice) {
 
-    public Product(String productId, String name, ProductType type, Integer quantity, double price) {
+    public ProductOrder(String productId, String name, ProductType type, Integer quantity, double price) {
         this(
             UUID.randomUUID(),
             UUID.fromString(productId),

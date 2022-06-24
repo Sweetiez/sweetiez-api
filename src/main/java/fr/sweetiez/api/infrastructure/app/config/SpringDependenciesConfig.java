@@ -332,7 +332,7 @@ public class SpringDependenciesConfig {
   
     @Bean
     public OrderService orderService() {
-        return new OrderService(orderWriter(), orderReader(), sweetService(), customerService(), stripeService(), orderNotifierAdapter());
+        return new OrderService(orderWriter(), orderReader(), sweetService(), customerService(), stripeService(), orderNotifierAdapter(), trayService());
     }
 
     @Bean

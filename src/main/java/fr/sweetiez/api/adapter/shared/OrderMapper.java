@@ -4,7 +4,7 @@ import fr.sweetiez.api.core.customers.models.CustomerId;
 import fr.sweetiez.api.core.orders.models.orders.CustomerInfo;
 import fr.sweetiez.api.core.orders.models.orders.Order;
 import fr.sweetiez.api.core.orders.models.orders.OrderId;
-import fr.sweetiez.api.core.orders.models.orders.products.Product;
+import fr.sweetiez.api.core.orders.models.orders.products.ProductOrder;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderDetailEntity;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderEntity;
 
@@ -14,8 +14,8 @@ import java.util.UUID;
 
 public class OrderMapper {
 
-    public Product toDto(OrderDetailEntity entity) {
-        return new Product(
+    public ProductOrder toDto(OrderDetailEntity entity) {
+        return new ProductOrder(
                 entity.getProductId().toString(),
                 entity.getName(),
                 entity.getProductType(),
@@ -24,7 +24,7 @@ public class OrderMapper {
         );
     }
 
-    public OrderDetailEntity toEntity(Product product, UUID orderId) {
+    public OrderDetailEntity toEntity(ProductOrder product, UUID orderId) {
         return new OrderDetailEntity(
                 product.id(),
                 orderId,

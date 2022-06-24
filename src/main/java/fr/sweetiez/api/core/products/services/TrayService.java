@@ -1,6 +1,7 @@
 package fr.sweetiez.api.core.products.services;
 
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
+import fr.sweetiez.api.core.products.models.Product;
 import fr.sweetiez.api.core.products.models.SweetWithQuantity;
 import fr.sweetiez.api.core.products.models.Tray;
 import fr.sweetiez.api.core.products.models.common.ProductID;
@@ -20,9 +21,10 @@ import fr.sweetiez.api.core.products.services.exceptions.ProductAlreadyExistsExc
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class TrayService {
+public class TrayService implements ProductService{
 
     private final ProductsWriter<Tray> writer;
     private final ProductsReader<Tray> reader;
@@ -162,5 +164,22 @@ public class TrayService {
     public SimpleProductResponse adminDeleteImageFrom(ProductID id, DeleteImageRequest request) {
         var sweet = reader.findById(id).orElseThrow();
         return new SimpleProductResponse(writer.save(sweet.deleteImage(request.imageUrl())));
+    }
+
+    public Collection<Tray> retrieveAllById(Collection<UUID> ids) {
+        var existingTrays = reader.findAll();
+        var trays = new ArrayList<Tray>();
+
+        ids.forEach(id -> existingTrays
+                .forEach(tray -> {
+                    if (tray.id().value().equals(id)) trays.add(tray);
+                })
+        );
+
+        return trays;
+    }
+
+    public Collection<Product> retrieveAllProductsByIds(Collection<UUID> productIds) {
+        return retrieveAllById(productIds).stream().map(tray -> (Product) tray).toList();
     }
 }

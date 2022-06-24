@@ -2,6 +2,7 @@ package fr.sweetiez.api.core.products.services;
 
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
 import fr.sweetiez.api.core.ingredients.services.IngredientService;
+import fr.sweetiez.api.core.products.models.Product;
 import fr.sweetiez.api.core.products.models.Sweet;
 import fr.sweetiez.api.core.products.models.common.ProductID;
 import fr.sweetiez.api.core.products.models.common.details.Valuation;
@@ -22,7 +23,7 @@ import java.util.LinkedList;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class SweetService {
+public class SweetService implements ProductService{
 
     private final ProductsWriter<Sweet> writer;
     private final ProductsReader<Sweet> reader;
@@ -149,5 +150,9 @@ public class SweetService {
         );
 
         return sweets;
+    }
+
+    public Collection<Product> retrieveAllProductsByIds(Collection<UUID> productIds) {
+        return retrieveAllById(productIds).stream().map(sweet -> (Product) sweet).toList();
     }
 }
