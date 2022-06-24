@@ -43,6 +43,7 @@ public class PaymentWebhookEndpoint {
         }catch (Exception e) {
             // Invalid payload
             System.out.println("Invalid payload");
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Invalid payload");
         }
 

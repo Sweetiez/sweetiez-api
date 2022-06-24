@@ -10,16 +10,18 @@ public record Customer(
         String lastName,
         String email,
         String phone,
-        Optional<Account> account
+        Optional<Account> account,
+        Integer loyaltyPoints
 ) {
-    public Customer(CustomerId id, Optional<Account> account, UpdateCustomerRequest request) {
+    public Customer(Customer customer, UpdateCustomerRequest request) {
         this(
-                id,
+                customer.id,
                 request.firstName(),
                 request.lastName(),
                 request.email(),
                 request.phone(),
-                account
+                customer.account,
+                customer.loyaltyPoints
         );
     }
 }
