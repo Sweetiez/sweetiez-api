@@ -5,48 +5,45 @@ import fr.sweetiez.api.core.customers.services.CustomerService;
 import fr.sweetiez.api.core.orders.models.orders.Order;
 import fr.sweetiez.api.core.orders.models.orders.OrderStatus;
 import fr.sweetiez.api.core.orders.models.orders.PaymentService;
-import fr.sweetiez.api.core.orders.models.orders.products.Product;
+import fr.sweetiez.api.core.orders.models.orders.products.ProductOrder;
 import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
 import fr.sweetiez.api.core.orders.models.requests.CreateOrderRequest;
-import fr.sweetiez.api.core.orders.models.responses.*;
+import fr.sweetiez.api.core.orders.models.requests.ProductOrderRequest;
+import fr.sweetiez.api.core.orders.models.responses.DetailedOrderResponse;
+import fr.sweetiez.api.core.orders.models.responses.OrderCreatedResponse;
+import fr.sweetiez.api.core.orders.models.responses.OrderStatusUpdatedResponse;
+import fr.sweetiez.api.core.orders.models.responses.PaymentIntentResponse;
 import fr.sweetiez.api.core.orders.ports.OrdersNotifier;
 import fr.sweetiez.api.core.orders.ports.OrdersReader;
 import fr.sweetiez.api.core.orders.ports.OrdersWriter;
 import fr.sweetiez.api.core.orders.services.exceptions.InvalidOrderException;
 import fr.sweetiez.api.core.orders.services.exceptions.OrderNotFoundException;
 import fr.sweetiez.api.core.orders.services.exceptions.PaymentIntentException;
-import fr.sweetiez.api.core.products.models.common.ProductID;
-import fr.sweetiez.api.core.products.models.responses.DetailedSweetResponse;
 import fr.sweetiez.api.core.products.services.SweetService;
+import fr.sweetiez.api.core.products.services.TrayService;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class OrderService {
-
     private final OrdersWriter writer;
-
     private final OrdersReader reader;
-
     private final SweetService sweetService;
-
     private final CustomerService customerService;
-
     private final PaymentService paymentService;
-
     private final OrdersNotifier notifier;
+    private final TrayService trayService;
 
     public OrderService(OrdersWriter writer, OrdersReader reader, SweetService sweetService,
                         CustomerService customerService, PaymentService paymentService,
-                        OrdersNotifier notifier) {
+                        OrdersNotifier notifier, TrayService trayService) {
         this.writer = writer;
         this.reader = reader;
         this.sweetService = sweetService;
         this.customerService = customerService;
         this.paymentService = paymentService;
         this.notifier = notifier;
+        this.trayService = trayService;
     }
 
     public OrderCreatedResponse create(CreateOrderRequest request) throws InvalidOrderException {
@@ -57,7 +54,7 @@ public class OrderService {
             System.out.println("Customer not found");
         }
         // Retrieve the products by their ids
-        var sweetProducts = getSweetProducts(request);
+        var sweetProducts = getProducts(request);
         var totalPrice = computeTotalPrice(sweetProducts);
         // Create the order
         var order = new Order(request, sweetProducts, customerId, totalPrice, LocalDate.now());
@@ -84,20 +81,38 @@ public class OrderService {
                 .findFirst().orElseThrow(OrderNotFoundException::new);
     }
 
-    private List<Product> getSweetProducts(CreateOrderRequest request) {
-        return request.products().stream()
-                .filter(productRequest -> productRequest.type() == ProductType.SWEET)
-                .map(productRequest -> new TmpProcessItem(
-                        this.sweetService.retrieveDetailsOf(new ProductID(productRequest.productId())),
-                        productRequest.quantity()))
-                .map(item -> new Product(
-                        item.sweet.id().toString(),
-                        item.sweet.name(),
-                        ProductType.SWEET,
-                        item.quantity,
-                        item.sweet.price())
-                )
+    private List<ProductOrder> getProductsByType(Collection<ProductOrderRequest> requestedProducts, ProductType productType) {
+        var productsOrdered = requestedProducts
+                .stream()
+                .filter(productRequest -> productRequest.type() == productType)
                 .toList();
+
+        var service = productType == ProductType.SWEET ? sweetService : trayService;
+        var products = new ArrayList<ProductOrder>();
+
+        service.retrieveAllProductsByIds(productsOrdered.stream().map(ProductOrderRequest::productId).toList())
+                .forEach(sweet -> {
+                    for (var item : productsOrdered) {
+                        if (sweet.id().value().equals(item.productId())) {
+                            products.add(new ProductOrder(
+                                    item.productId().toString(),
+                                    sweet.name().value(),
+                                    productType,
+                                    item.quantity(),
+                                    sweet.price().packaged().doubleValue()
+                            ));
+                        }
+                    }
+                });
+
+        return products;
+    }
+
+    private List<ProductOrder> getProducts(CreateOrderRequest request) {
+        var products = getProductsByType(request.products(), ProductType.SWEET);
+        products.addAll(getProductsByType(request.products(), ProductType.TRAY));
+
+        return products;
     }
 
     public PaymentIntentResponse paymentIntent(String orderId) throws OrderNotFoundException, PaymentIntentException {
@@ -180,12 +195,9 @@ public class OrderService {
      * Computation of the total price of the order
      * @return unitPrice to pay
      */
-    private double computeTotalPrice(List<Product> products) {
+    private double computeTotalPrice(List<ProductOrder> products) {
         return products.stream()
                 .map(p -> p.unitPrice().unitPrice().doubleValue() * p.quantity().value())
                 .reduce(0.0, Double::sum);
-    }
-
-    private record TmpProcessItem(DetailedSweetResponse sweet, Integer quantity) {
     }
 }

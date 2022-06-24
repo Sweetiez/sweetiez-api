@@ -1,7 +1,7 @@
 package fr.sweetiez.api.core.orders.models.orders;
 
 import fr.sweetiez.api.core.customers.models.CustomerId;
-import fr.sweetiez.api.core.orders.models.orders.products.Product;
+import fr.sweetiez.api.core.orders.models.orders.products.ProductOrder;
 import fr.sweetiez.api.core.orders.models.requests.CreateOrderRequest;
 
 import java.time.LocalDate;
@@ -12,14 +12,14 @@ public record Order(OrderId id,
                     CustomerInfo customerInfo,
                     LocalDate pickupDate,
                     OrderStatus status,
-                    Collection<Product> products,
+                    Collection<ProductOrder> products,
                     Optional<CustomerId> customerId,
                     double totalPrice,
                     LocalDate createdAt,
                     String paymentIntent
 ) {
 
-    public Order(CreateOrderRequest request, Collection<Product> products, Optional<CustomerId> optionalCustomerId, double totalPrice, LocalDate createdAt) {
+    public Order(CreateOrderRequest request, Collection<ProductOrder> products, Optional<CustomerId> optionalCustomerId, double totalPrice, LocalDate createdAt) {
         this(
                 new OrderId(),
                 new CustomerInfo(
@@ -40,12 +40,12 @@ public record Order(OrderId id,
 
     public Order(OrderId id, CustomerInfo customerInfo, LocalDate pickupDate,
                  OrderStatus status, LocalDate createdAt, double totalPrice,
-                 Collection<Product> products, Optional<CustomerId> optionalCustomerId,
+                 Collection<ProductOrder> products, Optional<CustomerId> optionalCustomerId,
                  String paymentIntent) {
         this(id, customerInfo, pickupDate, status, products, optionalCustomerId, totalPrice, createdAt, paymentIntent);
     }
 
-    public Order(Order order, Collection<Product> products) {
+    public Order(Order order, Collection<ProductOrder> products) {
         this(order.id, order.customerInfo, order.pickupDate, order.status, products, order.customerId, order.totalPrice, order.createdAt, order.paymentIntent);
     }
 
@@ -56,6 +56,6 @@ public record Order(OrderId id,
                 && this.pickupDate != null
                 && this.status != null
                 && !this.products.isEmpty()
-                && this.products.stream().allMatch(Product::isValid);
+                && this.products.stream().allMatch(ProductOrder::isValid);
     }
 }
