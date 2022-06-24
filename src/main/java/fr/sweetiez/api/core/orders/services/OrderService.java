@@ -22,6 +22,8 @@ import fr.sweetiez.api.core.orders.services.exceptions.PaymentIntentException;
 import fr.sweetiez.api.core.products.services.SweetService;
 import fr.sweetiez.api.core.products.services.TrayService;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -57,7 +59,9 @@ public class OrderService {
         var sweetProducts = getProducts(request);
         var totalPrice = computeTotalPrice(sweetProducts);
         // Create the order
-        var order = new Order(request, sweetProducts, customerId, totalPrice, LocalDate.now());
+        var order = new Order(request, sweetProducts, customerId,
+                new BigDecimal(totalPrice).setScale(2, RoundingMode.UP).doubleValue(),
+                LocalDate.now());
 
         // Check if the order is valid
         if (!order.isValid()) {
