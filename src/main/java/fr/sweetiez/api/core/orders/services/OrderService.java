@@ -2,6 +2,9 @@ package fr.sweetiez.api.core.orders.services;
 
 import fr.sweetiez.api.core.customers.models.CustomerId;
 import fr.sweetiez.api.core.customers.services.CustomerService;
+import fr.sweetiez.api.core.loyalty.points.models.requests.AddLoyaltyPointsRequest;
+import fr.sweetiez.api.core.loyalty.points.services.LoyaltyPointService;
+import fr.sweetiez.api.core.loyalty.points.services.exceptions.InvalidLoyaltyPointsException;
 import fr.sweetiez.api.core.orders.models.orders.Order;
 import fr.sweetiez.api.core.orders.models.orders.OrderStatus;
 import fr.sweetiez.api.core.orders.models.orders.PaymentService;
@@ -36,9 +39,12 @@ public class OrderService {
     private final OrdersNotifier notifier;
     private final TrayService trayService;
 
+    private final LoyaltyPointService loyaltyPointService;
+
     public OrderService(OrdersWriter writer, OrdersReader reader, SweetService sweetService,
                         CustomerService customerService, PaymentService paymentService,
-                        OrdersNotifier notifier, TrayService trayService) {
+                        OrdersNotifier notifier, TrayService trayService,
+                        LoyaltyPointService loyaltyPointService) {
         this.writer = writer;
         this.reader = reader;
         this.sweetService = sweetService;
@@ -46,6 +52,7 @@ public class OrderService {
         this.paymentService = paymentService;
         this.notifier = notifier;
         this.trayService = trayService;
+        this.loyaltyPointService = loyaltyPointService;
     }
 
     public OrderCreatedResponse create(CreateOrderRequest request) throws InvalidOrderException {
@@ -155,6 +162,11 @@ public class OrderService {
 
         // Notify the customer
         notifier.notifyCustomer(order);
+
+        // Compute the loyalty points
+        if (updatedOrder.customerId().isPresent() && !updatedOrder.customerId().get().value().trim().equals("")) { //
+            loyaltyPointService.addLoyaltyPoints(new AddLoyaltyPointsRequest(order));
+        }
 
         return new OrderStatusUpdatedResponse(this.writer.save(updatedOrder));
     }

@@ -70,13 +70,12 @@ public class StripePaymentService implements PaymentService {
 
         // Handle the event
         switch (event.getType()) {
-            case "payment_intent.succeeded": {
+            case "payment_intent.succeeded":
                 PaymentIntent paymentIntent = (PaymentIntent) stripeObject;
+                assert paymentIntent != null;
                 return paymentIntent.getId();
-            }
             // ... handle other event types
             default:
-
                 throw new UnhandledEventType();
         }
     }

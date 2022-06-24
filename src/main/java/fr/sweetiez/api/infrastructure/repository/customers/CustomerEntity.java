@@ -28,6 +28,9 @@ public class CustomerEntity {
     @OneToOne(fetch = FetchType.EAGER)
     private final AccountEntity account;
 
+    @Column()
+    private final Integer loyaltyPoints;
+
     public CustomerEntity() {
         id = null;
         firstName = null;
@@ -35,15 +38,19 @@ public class CustomerEntity {
         email = null;
         phone = null;
         account = null;
+        loyaltyPoints = null;
     }
 
-    public CustomerEntity(UUID id, String firstName, String lastName, String email, String phone, AccountEntity account) {
+    public CustomerEntity(UUID id, String firstName, String lastName,
+                          String email, String phone, AccountEntity account,
+                          Integer loyaltyPoints) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
         this.account = account;
+        this.loyaltyPoints = loyaltyPoints;
     }
 
     public UUID getId() {
@@ -67,5 +74,9 @@ public class CustomerEntity {
 
     public AccountEntity getAccount() {
         return account;
+    }
+
+    public Integer getLoyaltyPoints() {
+        return loyaltyPoints;
     }
 }

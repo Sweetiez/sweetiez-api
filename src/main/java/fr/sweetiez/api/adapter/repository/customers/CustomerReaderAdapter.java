@@ -4,12 +4,14 @@ import fr.sweetiez.api.adapter.shared.CustomerMapper;
 import fr.sweetiez.api.core.customers.models.Customer;
 import fr.sweetiez.api.core.customers.models.CustomerId;
 import fr.sweetiez.api.core.customers.ports.CustomerReader;
+import fr.sweetiez.api.core.loyalty.points.models.loyatypoints.LoyaltyPoints;
+import fr.sweetiez.api.core.loyalty.points.ports.LoyaltyPointReader;
 import fr.sweetiez.api.infrastructure.repository.customers.CustomerRepository;
 
 import java.util.Optional;
 import java.util.UUID;
 
-public class CustomerReaderAdapter implements CustomerReader {
+public class CustomerReaderAdapter implements CustomerReader, LoyaltyPointReader {
     private final CustomerRepository repository;
     private final CustomerMapper mapper;
 
@@ -29,5 +31,10 @@ public class CustomerReaderAdapter implements CustomerReader {
 
     public Optional<Customer> findByEmail(String email) {
         return repository.findByEmail(email).map(mapper::toDto);
+    }
+
+    @Override
+    public LoyaltyPoints getLoyaltyPoints(String customerId) {
+        return mapper.toLoyaltyPoints(repository.findById(UUID.fromString(customerId)).get());
     }
 }

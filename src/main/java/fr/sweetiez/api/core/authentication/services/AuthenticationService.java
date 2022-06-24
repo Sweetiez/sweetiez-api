@@ -73,7 +73,8 @@ public class AuthenticationService {
                 request.lastName(),
                 request.email(),
                 request.phone(),
-                Optional.of(createdAccount));
+                Optional.of(createdAccount),
+                0);
 
         return customerService.save(customer);
     }

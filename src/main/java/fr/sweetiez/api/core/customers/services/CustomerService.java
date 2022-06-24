@@ -41,7 +41,7 @@ public class CustomerService {
 
     public UpdateCustomerProfileResponse updateCustomerDetails(UpdateCustomerRequest request) {
         var customer = reader.findById(new CustomerId(request.id())).orElseThrow();
-        var updatedCustomer = new Customer(customer.id(), customer.account(), request);
+        var updatedCustomer = new Customer(customer, request);
         var updated = writer.save(updatedCustomer);
 
         return new UpdateCustomerProfileResponse(updated);

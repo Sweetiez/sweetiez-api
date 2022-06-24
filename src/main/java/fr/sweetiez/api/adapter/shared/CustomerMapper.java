@@ -2,6 +2,8 @@ package fr.sweetiez.api.adapter.shared;
 
 import fr.sweetiez.api.core.customers.models.Customer;
 import fr.sweetiez.api.core.customers.models.CustomerId;
+import fr.sweetiez.api.core.loyalty.points.models.loyatypoints.LoyaltyPoints;
+import fr.sweetiez.api.core.loyalty.points.models.loyatypoints.Points;
 import fr.sweetiez.api.infrastructure.repository.customers.CustomerEntity;
 
 import java.util.Optional;
@@ -25,7 +27,8 @@ public class CustomerMapper {
                 customer.lastName(),
                 customer.email(),
                 customer.phone(),
-                account
+                account,
+                customer.loyaltyPoints()
         );
     }
 
@@ -36,7 +39,27 @@ public class CustomerMapper {
                 entity.getLastName(),
                 entity.getEmail(),
                 entity.getPhone(),
-                Optional.of(accountMapper.toDto(entity.getAccount()))
+                Optional.of(accountMapper.toDto(entity.getAccount())),
+                entity.getLoyaltyPoints()
+        );
+    }
+
+    public LoyaltyPoints toLoyaltyPoints(CustomerEntity entity) {
+        return new LoyaltyPoints(
+          entity.getId().toString(),
+          new Points(entity.getLoyaltyPoints())
+        );
+    }
+
+    public CustomerEntity toCustomerEntity(CustomerEntity customer, LoyaltyPoints loyaltyPoints) {
+        return new CustomerEntity(
+                customer.getId(),
+                customer.getFirstName(),
+                customer.getLastName(),
+                customer.getEmail(),
+                customer.getPhone(),
+                customer.getAccount(),
+                loyaltyPoints.points().points()
         );
     }
 }

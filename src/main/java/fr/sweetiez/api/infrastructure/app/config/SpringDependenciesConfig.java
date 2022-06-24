@@ -47,6 +47,9 @@ import fr.sweetiez.api.core.ingredients.ports.IngredientApi;
 import fr.sweetiez.api.core.ingredients.ports.Ingredients;
 import fr.sweetiez.api.core.ingredients.ports.TranslatorApi;
 import fr.sweetiez.api.core.ingredients.services.IngredientService;
+import fr.sweetiez.api.core.loyalty.points.ports.LoyaltyPointReader;
+import fr.sweetiez.api.core.loyalty.points.ports.LoyaltyPointWriter;
+import fr.sweetiez.api.core.loyalty.points.services.LoyaltyPointService;
 import fr.sweetiez.api.core.loyalty.rewards.ports.RewardsReader;
 import fr.sweetiez.api.core.loyalty.rewards.ports.RewardsWriter;
 import fr.sweetiez.api.core.loyalty.rewards.services.RewardService;
@@ -312,6 +315,16 @@ public class SpringDependenciesConfig {
         return new RewardReaderAdapter(rewardRepository, rewardMapper());
     }
 
+    @Bean
+    public LoyaltyPointWriter loyaltyPointWriter() {
+        return new CustomerWriterAdapter(customerRepository, customerMapper());
+    }
+
+    @Bean
+    public LoyaltyPointReader loyaltyPointReader() {
+        return new CustomerReaderAdapter(customerRepository, customerMapper());
+    }
+
      // GATEWAY ADAPTERS
 
     @Bean
@@ -363,7 +376,16 @@ public class SpringDependenciesConfig {
   
     @Bean
     public OrderService orderService() {
-        return new OrderService(orderWriter(), orderReader(), sweetService(), customerService(), stripeService(), orderNotifierAdapter(), trayService());
+        return new OrderService(
+                orderWriter(),
+                orderReader(),
+                sweetService(),
+                customerService(),
+                stripeService(),
+                orderNotifierAdapter(),
+                trayService(),
+                loyaltyPointService()
+        );
     }
 
     @Bean
@@ -374,6 +396,11 @@ public class SpringDependenciesConfig {
     @Bean
     public RewardService rewardService() {
         return new RewardService(rewardsReader(), rewardsWriter(), sweetService());
+    }
+
+    @Bean
+    public LoyaltyPointService loyaltyPointService() {
+        return new LoyaltyPointService(loyaltyPointReader(), loyaltyPointWriter());
     }
 
     // END POINTS
