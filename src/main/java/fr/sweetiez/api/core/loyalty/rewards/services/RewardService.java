@@ -7,8 +7,9 @@ import fr.sweetiez.api.core.loyalty.rewards.ports.RewardsReader;
 import fr.sweetiez.api.core.loyalty.rewards.ports.RewardsWriter;
 import fr.sweetiez.api.core.loyalty.rewards.services.exceptions.RewardNotFoundException;
 import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
+import fr.sweetiez.api.core.products.models.common.ProductID;
+import fr.sweetiez.api.core.products.services.SweetService;
 import fr.sweetiez.api.core.recipes.models.recipes.details.State;
-import fr.sweetiez.api.core.sweets.services.SweetService;
 
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
@@ -38,7 +39,7 @@ public class RewardService {
             String name = "";
             String image = "";
             if (reward.product().type() == ProductType.SWEET) {
-                var sweet = sweetService.retrieveSweetDetails(reward.product().id());
+                var sweet = sweetService.retrieveDetailsOf(new ProductID(UUID.fromString(reward.product().id())));
                 name = sweet.name();
                 image = new ArrayList<>(sweet.images()).get(0);
             }
