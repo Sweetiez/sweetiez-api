@@ -1,6 +1,5 @@
 package fr.sweetiez.api.core.products.models.responses;
 
-import fr.sweetiez.api.core.products.models.SweetWithQuantity;
 import fr.sweetiez.api.core.products.models.Tray;
 
 import java.util.Collection;
@@ -13,7 +12,7 @@ public record AdminDetailedTrayResponse(
         String description,
         String flavor,
         Collection<String> images,
-        Collection<SweetWithQuantity> sweets,
+        Collection<SimpleSweetWithQuantity> sweets,
         ValuationResponse valuations,
         String state,
         String highlight
@@ -27,7 +26,12 @@ public record AdminDetailedTrayResponse(
                 tray.description().content(),
                 tray.details().characteristics().flavor().name(),
                 tray.details().images(),
-                tray.sweets(),
+                tray.sweets().stream()
+                        .map(sweetQty -> new SimpleSweetWithQuantity(
+                                new SimpleProductResponse(
+                                        sweetQty.sweet()),
+                                sweetQty.quantity() * sweetQty.sweet().price().unitPerPackage()))
+                        .toList(),
                 new ValuationResponse(tray.details().valuation()),
                 tray.details().characteristics().state().name(),
                 tray.details().characteristics().highlight().name()
