@@ -53,7 +53,8 @@ public class OrderMapper {
                 Optional.of(new CustomerId(entity.getCustomerId())),
                 entity.getTotalPrice(),
                 entity.getCreatedAt(),
-                entity.getPaymentIntent()
+                entity.getPaymentIntent(),
+                entity.getRewardId()
         );
     }
 
@@ -69,7 +70,8 @@ public class OrderMapper {
                 order.customerId().orElse(new CustomerId("")).value(),
                 order.pickupDate(),
                 order.createdAt(),
-                order.paymentIntent()
+                order.paymentIntent(),
+                order.rewardId()
         );
     }
 

@@ -3,8 +3,10 @@ package fr.sweetiez.api.core.orders.services;
 import fr.sweetiez.api.core.customers.models.CustomerId;
 import fr.sweetiez.api.core.customers.services.CustomerService;
 import fr.sweetiez.api.core.loyalty.points.models.requests.AddLoyaltyPointsRequest;
+import fr.sweetiez.api.core.loyalty.points.models.requests.PayLoyaltyPointsRequest;
 import fr.sweetiez.api.core.loyalty.points.services.LoyaltyPointService;
-import fr.sweetiez.api.core.loyalty.points.services.exceptions.InvalidLoyaltyPointsException;
+import fr.sweetiez.api.core.loyalty.rewards.services.RewardService;
+import fr.sweetiez.api.core.loyalty.rewards.services.exceptions.RewardNotFoundException;
 import fr.sweetiez.api.core.orders.models.orders.Order;
 import fr.sweetiez.api.core.orders.models.orders.OrderStatus;
 import fr.sweetiez.api.core.orders.models.orders.PaymentService;
@@ -38,13 +40,13 @@ public class OrderService {
     private final PaymentService paymentService;
     private final OrdersNotifier notifier;
     private final TrayService trayService;
-
     private final LoyaltyPointService loyaltyPointService;
+    private final RewardService rewardService;
 
     public OrderService(OrdersWriter writer, OrdersReader reader, SweetService sweetService,
                         CustomerService customerService, PaymentService paymentService,
                         OrdersNotifier notifier, TrayService trayService,
-                        LoyaltyPointService loyaltyPointService) {
+                        LoyaltyPointService loyaltyPointService, RewardService rewardService) {
         this.writer = writer;
         this.reader = reader;
         this.sweetService = sweetService;
@@ -53,6 +55,7 @@ public class OrderService {
         this.notifier = notifier;
         this.trayService = trayService;
         this.loyaltyPointService = loyaltyPointService;
+        this.rewardService = rewardService;
     }
 
     public OrderCreatedResponse create(CreateOrderRequest request) throws InvalidOrderException {
@@ -82,7 +85,7 @@ public class OrderService {
     public List<DetailedOrderResponse> getAll() {
         var orders = this.reader.findAll();
         return orders.orders().stream()
-                .map(DetailedOrderResponse::new)
+                .map(this::responseBuilder)
                 .toList();
     }
 
@@ -139,7 +142,8 @@ public class OrderService {
                 order.totalPrice(),
                 order.products(),
                 order.customerId(),
-                removeClientSecretFromPaymentIntent(paymentIntent.clientSecret())
+                removeClientSecretFromPaymentIntent(paymentIntent.clientSecret()),
+                order.rewardId()
         );
         this.writer.save(updatedOrder);
         return  paymentIntent;
@@ -157,8 +161,23 @@ public class OrderService {
                 order.totalPrice(),
                 order.products(),
                 order.customerId(),
-                order.paymentIntent()
+                order.paymentIntent(),
+                order.rewardId()
         );
+
+        // Pay amount of loyalty points if reward is set
+        if (order.customerId().isPresent()) {
+            var customerId = order.customerId().get();
+            var rewardId = order.rewardId();
+            if (!rewardId.trim().isEmpty()) {
+                try {
+                    var reward = rewardService.retrieveById(rewardId);
+                    loyaltyPointService.pay(new PayLoyaltyPointsRequest(customerId.value(), reward.cost().value()));
+                } catch (RewardNotFoundException e) {
+                    System.out.println("Reward not found");
+                }
+            }
+        }
 
         // Notify the customer
         notifier.notifyCustomer(order);
@@ -190,7 +209,8 @@ public class OrderService {
                 order.totalPrice(),
                 order.products(),
                 customerId,
-                order.paymentIntent()
+                order.paymentIntent(),
+                order.rewardId()
         );
         return new OrderStatusUpdatedResponse(this.writer.save(updatedOrder));
     }
@@ -198,7 +218,7 @@ public class OrderService {
     public List<DetailedOrderResponse> retrieveClientOrders(String clientEmail) {
         var orders = this.reader.findByEmail(clientEmail);
         return orders.orders().stream()
-                .map(DetailedOrderResponse::new)
+                .map(this::responseBuilder)
                 .toList();
     }
 
@@ -216,4 +236,17 @@ public class OrderService {
                 .map(p -> p.unitPrice().unitPrice().doubleValue() * p.quantity().value())
                 .reduce(0.0, Double::sum);
     }
+
+    private DetailedOrderResponse responseBuilder(Order o) {
+        if (o.rewardId() != null && !o.rewardId().trim().isEmpty()) {
+            try {
+                return new DetailedOrderResponse(o, rewardService.retrieveById(o.rewardId()));
+            } catch (RewardNotFoundException e) {
+                return new DetailedOrderResponse(o);
+            }
+        } else {
+            return new DetailedOrderResponse(o);
+        }
+    }
+
 }

@@ -19,4 +19,7 @@ public record LoyaltyPoints(String customerId, Points points) {
         return new LoyaltyPoints(customerId, new Points(this.points.points() + points.points.points()));
     }
 
+    public LoyaltyPoints minus(int cost) {
+        return new LoyaltyPoints(customerId, new Points(this.points.points() - cost));
+    }
 }

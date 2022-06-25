@@ -7,5 +7,5 @@ public record CreateOrderRequest(String firstName,
                                  String email,
                                  String phone,
                                  String pickupDate,
-                                 Collection<ProductOrderRequest> products) {}
-
+                                 Collection<ProductOrderRequest> products,
+                                 String rewardId) {}
