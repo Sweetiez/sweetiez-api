@@ -378,7 +378,8 @@ public class SpringDependenciesConfig {
                 stripeService(),
                 orderNotifierAdapter(),
                 trayService(),
-                loyaltyPointService()
+                loyaltyPointService(),
+                rewardService()
         );
     }
 

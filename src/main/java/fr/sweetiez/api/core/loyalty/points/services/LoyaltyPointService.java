@@ -2,9 +2,9 @@ package fr.sweetiez.api.core.loyalty.points.services;
 
 import fr.sweetiez.api.core.loyalty.points.models.loyatypoints.LoyaltyPoints;
 import fr.sweetiez.api.core.loyalty.points.models.requests.AddLoyaltyPointsRequest;
+import fr.sweetiez.api.core.loyalty.points.models.requests.PayLoyaltyPointsRequest;
 import fr.sweetiez.api.core.loyalty.points.ports.LoyaltyPointReader;
 import fr.sweetiez.api.core.loyalty.points.ports.LoyaltyPointWriter;
-import fr.sweetiez.api.core.loyalty.points.services.exceptions.InvalidLoyaltyPointsException;
 
 public class LoyaltyPointService {
 
@@ -24,6 +24,16 @@ public class LoyaltyPointService {
 
         // Add new loyalty points to customer loyalty points
         var updatedLoyaltyPoints = customerLoyaltyPoints.add(newLoyaltyPoints);
+
+        return writer.save(updatedLoyaltyPoints);
+    }
+
+    public LoyaltyPoints pay(PayLoyaltyPointsRequest request) {
+        // Get customer loyalty points
+        var customerLoyaltyPoints = reader.getLoyaltyPoints(request.customerId());
+
+        // Subtract loyalty points from customer loyalty points
+        var updatedLoyaltyPoints = customerLoyaltyPoints.minus(request.cost());
 
         return writer.save(updatedLoyaltyPoints);
     }

@@ -45,6 +45,9 @@ public class OrderEntity {
     @Column(columnDefinition = "text")
     private final String paymentIntent;
 
+    @Column()
+    private final String rewardId;
+
     public OrderEntity() {
         this.id = null;
         this.firstName = null;
@@ -57,6 +60,7 @@ public class OrderEntity {
         this.pickupDate = null;
         this.createdAt = null;
         this.paymentIntent = null;
+        this.rewardId = null;
     }
 
     public OrderEntity(UUID id, String firstName,
@@ -64,7 +68,7 @@ public class OrderEntity {
                        String phone, double totalPrice,
                        OrderStatus status, String customerId,
                        LocalDate pickupDate, LocalDate createdAt,
-                       String paymentIntent) {
+                       String paymentIntent, String rewardId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -76,6 +80,7 @@ public class OrderEntity {
         this.pickupDate = pickupDate;
         this.createdAt = createdAt;
         this.paymentIntent = paymentIntent;
+        this.rewardId = rewardId;
     }
 
     public UUID getId() {
@@ -120,6 +125,10 @@ public class OrderEntity {
 
     public String getPaymentIntent() {
         return paymentIntent;
+    }
+
+    public String getRewardId() {
+        return rewardId;
     }
 
     @Override
