@@ -22,7 +22,7 @@ public class SpringRewardController {
 
     @GetMapping()
     public ResponseEntity<Collection<RewardResponse>> getRewards() {
-        return rewardEndPoints.retrieveAllRewards();
+        return rewardEndPoints.retrieveAllPublishedRewards();
     }
 
     @GetMapping("/{id}")
