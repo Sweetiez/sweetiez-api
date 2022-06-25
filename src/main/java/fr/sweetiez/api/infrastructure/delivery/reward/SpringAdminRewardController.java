@@ -6,11 +6,10 @@ import fr.sweetiez.api.core.loyalty.rewards.models.requests.PublishRewardRequest
 import fr.sweetiez.api.core.loyalty.rewards.models.requests.UnPublishRewardRequest;
 import fr.sweetiez.api.core.loyalty.rewards.models.responses.RewardCreatedResponse;
 import fr.sweetiez.api.core.loyalty.rewards.models.responses.RewardResponse;
-import fr.sweetiez.api.core.recipes.models.requests.PublishRecipeRequest;
-import fr.sweetiez.api.core.recipes.models.requests.UnPublishRecipeRequest;
-import fr.sweetiez.api.core.recipes.models.responses.RecipeDetailedResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/admin/rewards")
@@ -24,6 +23,11 @@ public class SpringAdminRewardController {
     @PostMapping()
     public ResponseEntity<RewardCreatedResponse> addReward(@RequestBody CreateRewardRequest request) {
         return rewardEndPoints.createReward(request);
+    }
+
+    @GetMapping()
+    public ResponseEntity<Collection<RewardResponse>> getRewards() {
+        return rewardEndPoints.retrieveAllRewards();
     }
 
     @DeleteMapping("/{id}")
