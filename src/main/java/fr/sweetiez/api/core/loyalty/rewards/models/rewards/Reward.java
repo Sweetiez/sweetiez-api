@@ -1,6 +1,7 @@
 package fr.sweetiez.api.core.loyalty.rewards.models.rewards;
 
 import fr.sweetiez.api.core.loyalty.rewards.models.requests.CreateRewardRequest;
+import fr.sweetiez.api.core.loyalty.rewards.models.requests.UpdateRewardRequest;
 import fr.sweetiez.api.core.recipes.models.recipes.details.State;
 
 public record Reward(RewardId id, String name, Cost cost, Product product, State state) {
@@ -25,6 +26,18 @@ public record Reward(RewardId id, String name, Cost cost, Product product, State
 
     public Reward(Reward reward, State state) {
         this(reward.id(), reward.name, reward.cost(), reward.product(), state);
+    }
+
+    public Reward(UpdateRewardRequest request, Reward reward) {
+        this(reward.id(),
+                request.rewardName(),
+                new Cost(request.cost()),
+                new Product(
+                        request.productId(),
+                        request.productType()
+                ),
+                request.state()
+        );
     }
 
     public boolean isValid() {

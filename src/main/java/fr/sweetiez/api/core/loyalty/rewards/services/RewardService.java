@@ -1,6 +1,7 @@
 package fr.sweetiez.api.core.loyalty.rewards.services;
 
 import fr.sweetiez.api.core.loyalty.rewards.models.requests.CreateRewardRequest;
+import fr.sweetiez.api.core.loyalty.rewards.models.requests.UpdateRewardRequest;
 import fr.sweetiez.api.core.loyalty.rewards.models.rewards.Reward;
 import fr.sweetiez.api.core.loyalty.rewards.models.rewards.Rewards;
 import fr.sweetiez.api.core.loyalty.rewards.ports.RewardsReader;
@@ -80,5 +81,11 @@ public class RewardService {
     public Reward unPublishReward(String id) throws RewardNotFoundException {
         var reward = retrieveById(id);
         return rewardsWriter.save(new Reward(reward, State.NON_PUBLISHED));
+    }
+
+    public Reward updateReward(UpdateRewardRequest request) throws RewardNotFoundException {
+        var reward = retrieveById(request.id());
+        var updateReward = new Reward(request, reward);
+        return rewardsWriter.save(updateReward);
     }
 }
