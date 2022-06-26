@@ -30,7 +30,7 @@ public record AdminDetailedTrayResponse(
                         .map(sweetQty -> new SimpleSweetWithQuantity(
                                 new SimpleProductResponse(
                                         sweetQty.sweet()),
-                                sweetQty.quantity() * sweetQty.sweet().price().unitPerPackage()))
+                                sweetQty.quantity()))
                         .toList(),
                 new ValuationResponse(tray.details().valuation()),
                 tray.details().characteristics().state().name(),
