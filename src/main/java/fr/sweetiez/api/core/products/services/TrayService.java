@@ -148,14 +148,9 @@ public class TrayService implements ProductService{
         var sweetsWithQuantity = new ArrayList<SweetWithQuantity>();
         for (int i = 0; i < sweets.size(); i++) {
             var sweet = sweets.stream().toList().get(i);
-
-            if (tray.sweets().stream().map(SweetWithQuantity::sweet).toList().contains(sweet)) {
-                var quantity = request.sweets().stream().toList().get(i).quantity();
-                sweetsWithQuantity.add(new SweetWithQuantity(null, sweet, quantity));
-            }
+            var quantity = request.sweets().stream().toList().get(i).quantity();
+            sweetsWithQuantity.add(new SweetWithQuantity(null, sweet, quantity));
         }
-
-        sweetsWithQuantity.addAll(tray.sweets());
         var updatedTray = new Tray(tray, request, sweetsWithQuantity);
 
         return new AdminDetailedTrayResponse(writer.save(updatedTray));
