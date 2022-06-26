@@ -2,15 +2,13 @@ package fr.sweetiez.api.infrastructure.repository.events.animator;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
-import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-public class ReservedAnimatorEntity implements Serializable {
+public class ReservedAnimatorEntity {
 
     @Id
     private final UUID id;

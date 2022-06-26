@@ -13,20 +13,21 @@ import java.util.UUID;
 
 public class Event {
     private final EventID id;
+    private final String title;
     private final Animator animator;
     private final Schedule schedule;
     private final StatusEvent status;
     private final Space space;
     private final List<Customer> subscribers;
 
-
-    public Event(Animator animator, Space space, LocalDateTime startDateTime, Duration duration) {
+    public Event(String title, Animator animator, Space space, LocalDateTime startDateTime, Duration duration) {
         Schedule eventSchedule = new Schedule(startDateTime, duration);
 
         animator.book(eventSchedule);
         space.book(eventSchedule);
 
         this.id = new EventID(UUID.randomUUID());
+        this.title = title;
         this.status = StatusEvent.CREATED;
         this.animator = animator;
         this.schedule = eventSchedule;
@@ -34,8 +35,36 @@ public class Event {
         this.subscribers = List.of();
     }
 
+    public Event(EventDto dto) {
+        this.id = new EventID(dto.id());
+        this.title = dto.title();
+        this.animator = dto.animator();
+        this.schedule = dto.schedule();
+        this.status = dto.status();
+        this.space = dto.space();
+        this.subscribers = dto.subscribers();
+    }
+
+    private Event(Event event) {
+        this.id = event.id;
+        this.title = event.title;
+        this.status = StatusEvent.PUBLISHED;
+        this.animator = event.animator;
+        this.schedule = event.schedule;
+        this.space = event.space;
+        this.subscribers = event.subscribers;
+    }
+
+    public static Event publish(Event event) {
+        return new Event(event);
+    }
+
     public EventID getId() {
         return id;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public Animator getAnimator() {

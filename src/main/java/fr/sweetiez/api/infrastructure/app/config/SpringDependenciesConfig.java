@@ -263,7 +263,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public Events faceToFaceEvents() {
-        return new FaceToFaceEventsAdapter(faceToFaceEventRepository, faceToFaceEventMapper());
+        return new FaceToFaceEventsAdapter(faceToFaceEventRepository, animators(),spaces(), faceToFaceEventMapper());
     }
 
     @Bean
