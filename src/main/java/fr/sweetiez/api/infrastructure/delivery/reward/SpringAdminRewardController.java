@@ -4,6 +4,7 @@ import fr.sweetiez.api.adapter.delivery.RewardEndPoints;
 import fr.sweetiez.api.core.loyalty.rewards.models.requests.CreateRewardRequest;
 import fr.sweetiez.api.core.loyalty.rewards.models.requests.PublishRewardRequest;
 import fr.sweetiez.api.core.loyalty.rewards.models.requests.UnPublishRewardRequest;
+import fr.sweetiez.api.core.loyalty.rewards.models.requests.UpdateRewardRequest;
 import fr.sweetiez.api.core.loyalty.rewards.models.responses.RewardCreatedResponse;
 import fr.sweetiez.api.core.loyalty.rewards.models.responses.RewardResponse;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,11 @@ public class SpringAdminRewardController {
     @GetMapping()
     public ResponseEntity<Collection<RewardResponse>> getRewards() {
         return rewardEndPoints.retrieveAllRewards();
+    }
+
+    @PutMapping()
+    public ResponseEntity<RewardCreatedResponse> updateReward(@RequestBody UpdateRewardRequest request) {
+        return rewardEndPoints.updateReward(request);
     }
 
     @DeleteMapping("/{id}")

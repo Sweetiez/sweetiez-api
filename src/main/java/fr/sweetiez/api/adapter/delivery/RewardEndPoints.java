@@ -3,8 +3,10 @@ package fr.sweetiez.api.adapter.delivery;
 import fr.sweetiez.api.core.loyalty.rewards.models.requests.CreateRewardRequest;
 import fr.sweetiez.api.core.loyalty.rewards.models.requests.PublishRewardRequest;
 import fr.sweetiez.api.core.loyalty.rewards.models.requests.UnPublishRewardRequest;
+import fr.sweetiez.api.core.loyalty.rewards.models.requests.UpdateRewardRequest;
 import fr.sweetiez.api.core.loyalty.rewards.models.responses.RewardCreatedResponse;
 import fr.sweetiez.api.core.loyalty.rewards.models.responses.RewardResponse;
+import fr.sweetiez.api.core.loyalty.rewards.models.rewards.Reward;
 import fr.sweetiez.api.core.loyalty.rewards.services.RewardService;
 import fr.sweetiez.api.core.loyalty.rewards.services.exceptions.RewardNotFoundException;
 import fr.sweetiez.api.core.recipes.models.recipes.details.State;
@@ -70,6 +72,15 @@ public class RewardEndPoints {
         try {
             var reward = rewardService.unPublishReward(request.id());
             return ResponseEntity.ok(new RewardResponse(reward));
+        } catch (RewardNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public ResponseEntity<RewardCreatedResponse> updateReward(UpdateRewardRequest request) {
+        try {
+            var reward = rewardService.updateReward(request);
+            return ResponseEntity.ok(new RewardCreatedResponse(reward));
         } catch (RewardNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
