@@ -45,10 +45,10 @@ public class Event {
         this.subscribers = dto.subscribers();
     }
 
-    private Event(Event event) {
+    private Event(Event event, StatusEvent status) {
         this.id = event.id;
         this.title = event.title;
-        this.status = StatusEvent.PUBLISHED;
+        this.status = status;
         this.animator = event.animator;
         this.schedule = event.schedule;
         this.space = event.space;
@@ -56,7 +56,11 @@ public class Event {
     }
 
     public static Event publish(Event event) {
-        return new Event(event);
+        return new Event(event, StatusEvent.PUBLISHED);
+    }
+
+    public static Event cancel(Event event) {
+        return new Event(event, StatusEvent.CANCELLED);
     }
 
     public EventID getId() {

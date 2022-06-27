@@ -4,6 +4,7 @@ import fr.sweetiez.api.core.events.animator.Animators;
 import fr.sweetiez.api.core.events.event.Event;
 import fr.sweetiez.api.core.events.event.Events;
 import fr.sweetiez.api.core.events.space.Spaces;
+import fr.sweetiez.api.core.events.use_case.CancelEvent;
 import fr.sweetiez.api.core.events.use_case.CreateEvent;
 import fr.sweetiez.api.core.events.use_case.PublishEvent;
 import fr.sweetiez.api.core.events.use_case.models.CreateEventRequestDTO;
@@ -39,6 +40,18 @@ public class FaceToFaceEventEndPoints {
         try {
             var useCase = new PublishEvent(events);
             var event = useCase.publish(id);
+
+            return ResponseEntity.ok(event);
+        }
+        catch (Exception exception) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    public ResponseEntity<Event> cancelEvent(UUID id) {
+        try {
+            var useCase = new CancelEvent(events);
+            var event = useCase.cancel(id);
 
             return ResponseEntity.ok(event);
         }

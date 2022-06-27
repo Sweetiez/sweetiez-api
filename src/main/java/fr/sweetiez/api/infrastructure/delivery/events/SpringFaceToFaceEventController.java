@@ -23,7 +23,12 @@ public class SpringFaceToFaceEventController {
     }
 
     @PutMapping("/admin/events/face-to-face/publish/{id}")
-    public ResponseEntity<Event> create(@PathVariable UUID id) {
+    public ResponseEntity<Event> publish(@PathVariable UUID id) {
         return endPoints.publishEvent(id);
+    }
+
+    @PutMapping("/admin/events/face-to-face/cancel/{id}")
+    public ResponseEntity<Event> cancel(@PathVariable UUID id) {
+        return endPoints.cancelEvent(id);
     }
 }
