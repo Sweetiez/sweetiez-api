@@ -91,7 +91,7 @@ public class OrderService {
 
     public DetailedOrderResponse getById(String id) throws OrderNotFoundException {
         return this.reader.findById(id).stream()
-                .map(DetailedOrderResponse::new)
+                .map(this::responseBuilder)
                 .findFirst().orElseThrow(OrderNotFoundException::new);
     }
 
@@ -180,10 +180,10 @@ public class OrderService {
         }
 
         // Notify the customer
-        notifier.notifyCustomer(order);
+        notifier.notifyCustomer(getById(order.id().value().toString()));
 
         // Compute the loyalty points
-        if (updatedOrder.customerId().isPresent() && !updatedOrder.customerId().get().value().trim().equals("")) { //
+        if (updatedOrder.customerId().isPresent() && !updatedOrder.customerId().get().value().trim().equals("")) {
             loyaltyPointService.addLoyaltyPoints(new AddLoyaltyPointsRequest(order));
         }
 

@@ -20,6 +20,8 @@ public class GmailSender implements EmailNotifier {
         MustacheFactory mf = new DefaultMustacheFactory();
         Mustache m = mf.compile("mustache/order_client.mustache");
 
+        System.out.println(emailDto.toString());
+
         StringWriter writer = new StringWriter();
         String messageText = "";
         try {
