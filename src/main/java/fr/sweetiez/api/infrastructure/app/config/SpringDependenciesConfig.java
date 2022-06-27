@@ -234,11 +234,6 @@ public class SpringDependenciesConfig {
     }
 
     @Bean
-    public AnimatorMapper animatorMapper() {
-        return new AnimatorMapper();
-    }
-
-    @Bean
     public SpaceMapper spaceMapper() {
         return new SpaceMapper();
     }
@@ -448,7 +443,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public FaceToFaceEventEndPoints faceToFaceEventEndPoints() {
-        return new FaceToFaceEventEndPoints(animators(), spaces(), faceToFaceEvents());
+        return new FaceToFaceEventEndPoints(animators(), spaces(), faceToFaceEvents(), customerReader());
     }
   
     @Bean

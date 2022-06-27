@@ -4,14 +4,14 @@ import fr.sweetiez.api.core.events.schedule.Schedule;
 import fr.sweetiez.api.core.events.use_case.exception.OverlappingScheduleException;
 import fr.sweetiez.api.core.events.use_case.exception.SpaceNotAvailableException;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public class Space {
     private final SpaceID id;
-    private final Set<Schedule> reservations;
+    private final List<Schedule> reservations;
 
-    public Space(SpaceID id, Set<Schedule> reservations) {
+    public Space(SpaceID id, List<Schedule> reservations) {
         this.id = id;
         this.reservations = reservations;
     }
@@ -26,11 +26,22 @@ public class Space {
         }
     }
 
+    public void reschedule(Schedule currentSchedule, Schedule newSchedule){
+        try {
+            newSchedule.checkAvailability(reservations);
+            reservations.remove(currentSchedule);
+            reservations.add(newSchedule);
+        }
+        catch (OverlappingScheduleException exception){
+            throw new SpaceNotAvailableException();
+        }
+    }
+
     public SpaceID getId() {
         return id;
     }
 
-    public Set<Schedule> getReservations() {
+    public List<Schedule> getReservations() {
         return reservations;
     }
 

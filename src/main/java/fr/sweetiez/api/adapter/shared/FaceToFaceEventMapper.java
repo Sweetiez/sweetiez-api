@@ -8,6 +8,7 @@ import fr.sweetiez.api.core.events.space.Space;
 import fr.sweetiez.api.infrastructure.repository.events.event.FaceToFaceEventEntity;
 
 import java.time.Duration;
+import java.util.stream.Collectors;
 
 public class FaceToFaceEventMapper {
 
@@ -26,7 +27,7 @@ public class FaceToFaceEventMapper {
                 event.getSchedule().getEnd(),
                 event.getStatus(),
                 event.getSpace().getId().getSpaceID(),
-                event.getSubscribers().stream().map(customerMapper::toEntity).toList());
+                event.getSubscribers().stream().map(customerMapper::toEntity).collect(Collectors.toList()));
     }
 
     public Event toDto(FaceToFaceEventEntity entity, Animator animator, Space space) {
@@ -37,7 +38,7 @@ public class FaceToFaceEventMapper {
                 new Schedule(entity.getStart(), Duration.between(entity.getStart(), entity.getEnd())),
                 entity.getStatus(),
                 space,
-                entity.getSubscribers().stream().map(customerMapper::toDto).toList());
+                entity.getSubscribers().stream().map(customerMapper::toDto).collect(Collectors.toList()));
 
         return new Event(dto);
     }

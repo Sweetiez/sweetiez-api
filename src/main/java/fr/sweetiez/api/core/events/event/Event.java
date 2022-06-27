@@ -58,8 +58,8 @@ public class Event {
     public Event(Event event, LocalDateTime newStart, Duration newDuration) {
         Schedule eventSchedule = new Schedule(newStart, newDuration);
 
-        event.animator.book(eventSchedule);
-        event.space.book(eventSchedule);
+        event.animator.reschedule(event.schedule, eventSchedule);
+        event.space.reschedule(event.schedule, eventSchedule);
 
         this.id = event.id;
         this.title = event.title;

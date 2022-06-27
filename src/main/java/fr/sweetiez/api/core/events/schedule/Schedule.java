@@ -5,8 +5,8 @@ import fr.sweetiez.api.core.events.use_case.exception.OverlappingScheduleExcepti
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public class Schedule {
     private final LocalDateTime start;
@@ -32,7 +32,7 @@ public class Schedule {
         }
     }
 
-    public void checkAvailability(Set<Schedule> schedules) throws OverlappingScheduleException {
+    public void checkAvailability(List<Schedule> schedules) throws OverlappingScheduleException {
         checkDateAnterior();
 
         for (Schedule schedule : schedules) {

@@ -3,15 +3,16 @@ package fr.sweetiez.api.core.events.animator;
 import fr.sweetiez.api.core.events.schedule.Schedule;
 import fr.sweetiez.api.core.events.use_case.exception.AnimatorNotAvailableException;
 import fr.sweetiez.api.core.events.use_case.exception.OverlappingScheduleException;
+import fr.sweetiez.api.core.events.use_case.exception.SpaceNotAvailableException;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public class Animator {
     private final AnimatorID id;
-    private final Set<Schedule> busySchedules;
+    private final List<Schedule> busySchedules;
 
-    public Animator(AnimatorID id, Set<Schedule> busySchedules) {
+    public Animator(AnimatorID id, List<Schedule> busySchedules) {
         this.id = id;
         this.busySchedules = busySchedules;
     }
@@ -26,11 +27,22 @@ public class Animator {
         }
     }
 
+    public void reschedule(Schedule currentSchedule, Schedule newSchedule){
+        try {
+            newSchedule.checkAvailability(busySchedules);
+            busySchedules.remove(currentSchedule);
+            busySchedules.add(newSchedule);
+        }
+        catch (OverlappingScheduleException exception){
+            throw new SpaceNotAvailableException();
+        }
+    }
+
     public AnimatorID getId() {
         return id;
     }
 
-    public Set<Schedule> getBusySchedules() {
+    public List<Schedule> getBusySchedules() {
         return busySchedules;
     }
 

@@ -31,7 +31,7 @@ public class AnimatorsAdapter implements Animators {
                         reservedAnimator.getStart(),
                         reservedAnimator.getDuration())
                 )
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
 
         return customer.isPresent()
                 ? Optional.of(new Animator(new AnimatorID(id), reservations))
@@ -39,6 +39,13 @@ public class AnimatorsAdapter implements Animators {
     }
 
     public void book(Animator animator, Schedule schedule) {
+        animatorRepository.save(new ReservedAnimatorEntity(
+                animator.getId().getAnimatorId(),
+                schedule.getStart(),
+                Duration.between(schedule.getStart(), schedule.getEnd())));
+    }
+
+    public void reschedule(Animator animator, Schedule schedule) {
         animatorRepository.save(new ReservedAnimatorEntity(
                 animator.getId().getAnimatorId(),
                 schedule.getStart(),

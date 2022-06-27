@@ -4,6 +4,7 @@ import fr.sweetiez.api.adapter.delivery.event.FaceToFaceEventEndPoints;
 import fr.sweetiez.api.core.events.event.Event;
 import fr.sweetiez.api.core.events.use_case.models.CreateEventRequestDTO;
 import fr.sweetiez.api.core.events.use_case.models.RescheduleEventRequest;
+import fr.sweetiez.api.core.events.use_case.models.SubscribeEventRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +35,12 @@ public class SpringFaceToFaceEventController {
     }
 
     @PutMapping("/admin/events/face-to-face/reschedule")
-    public ResponseEntity<Event> cancel(@RequestBody RescheduleEventRequest request) {
+    public ResponseEntity<Event> reschedule(@RequestBody RescheduleEventRequest request) {
         return endPoints.rescheduleEvent(request);
+    }
+
+    @PutMapping("/admin/events/face-to-face/subscribe")
+    public ResponseEntity<Event> subscribe(@RequestBody SubscribeEventRequest request) {
+        return endPoints.subscribeEvent(request);
     }
 }

@@ -1,15 +1,14 @@
 package fr.sweetiez.api.adapter.delivery.event;
 
+import fr.sweetiez.api.core.customers.ports.CustomerReader;
 import fr.sweetiez.api.core.events.animator.Animators;
 import fr.sweetiez.api.core.events.event.Event;
 import fr.sweetiez.api.core.events.event.Events;
 import fr.sweetiez.api.core.events.space.Spaces;
-import fr.sweetiez.api.core.events.use_case.CancelEvent;
-import fr.sweetiez.api.core.events.use_case.CreateEvent;
-import fr.sweetiez.api.core.events.use_case.PublishEvent;
-import fr.sweetiez.api.core.events.use_case.RescheduleEvent;
+import fr.sweetiez.api.core.events.use_case.*;
 import fr.sweetiez.api.core.events.use_case.models.CreateEventRequestDTO;
 import fr.sweetiez.api.core.events.use_case.models.RescheduleEventRequest;
+import fr.sweetiez.api.core.events.use_case.models.SubscribeEventRequest;
 import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
@@ -19,11 +18,13 @@ public class FaceToFaceEventEndPoints {
     private final Animators animators;
     private final Spaces spaces;
     private final Events events;
+    private final CustomerReader customers;
 
-    public FaceToFaceEventEndPoints(Animators animators, Spaces spaces, Events events) {
+    public FaceToFaceEventEndPoints(Animators animators, Spaces spaces, Events events, CustomerReader customers) {
         this.animators = animators;
         this.spaces = spaces;
         this.events = events;
+        this.customers = customers;
     }
 
     public ResponseEntity<Object> createEvent(CreateEventRequestDTO request) {
@@ -64,12 +65,26 @@ public class FaceToFaceEventEndPoints {
 
     public ResponseEntity<Event> rescheduleEvent(RescheduleEventRequest request) {
         try {
-            var useCase = new RescheduleEvent(events);
+            var useCase = new RescheduleEvent(animators, spaces, events);
             var event = useCase.reschedule(request);
 
             return ResponseEntity.ok(event);
         }
         catch (Exception exception) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    public ResponseEntity<Event> subscribeEvent(SubscribeEventRequest request) {
+        try {
+            var useCase = new SubscribeEvent(events, customers);
+            var event = useCase.subscribe(request);
+
+            return ResponseEntity.ok(event);
+        }
+        catch (Exception exception) {
+            exception.printStackTrace();
+            System.out.println(exception.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }

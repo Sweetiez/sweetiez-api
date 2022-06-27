@@ -15,7 +15,7 @@ public class SpaceMapper {
         var reservations = entities
                 .stream()
                 .map(entity -> new Schedule(entity.start(), entity.duration()))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
         return new Space(new SpaceID(entities.get(0).id()), reservations);
     }
 

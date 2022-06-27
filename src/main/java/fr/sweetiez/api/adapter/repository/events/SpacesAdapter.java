@@ -31,7 +31,7 @@ public class SpacesAdapter implements Spaces {
                         reservedSpace.start(),
                         reservedSpace.duration())
                 )
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
 
         return customer.isPresent()
                 ? Optional.of(new Space(new SpaceID(id), reservations))
