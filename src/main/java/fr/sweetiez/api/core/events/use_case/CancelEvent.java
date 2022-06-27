@@ -15,9 +15,9 @@ public class CancelEvent {
     }
 
     public Event cancel(UUID id) {
-        var optionalEvent = events.findById(id).orElseThrow();
+        var event = events.findById(id).orElseThrow();
 
-        var cancelledEvent = Event.cancel(optionalEvent);
+        var cancelledEvent = Event.cancel(event);
         events.save(cancelledEvent);
 
         return cancelledEvent;

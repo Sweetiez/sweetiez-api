@@ -55,12 +55,31 @@ public class Event {
         this.subscribers = event.subscribers;
     }
 
+    public Event(Event event, LocalDateTime newStart, Duration newDuration) {
+        Schedule eventSchedule = new Schedule(newStart, newDuration);
+
+        event.animator.book(eventSchedule);
+        event.space.book(eventSchedule);
+
+        this.id = event.id;
+        this.title = event.title;
+        this.status = StatusEvent.PUBLISHED;
+        this.animator = event.animator;
+        this.schedule = eventSchedule;
+        this.space = event.space;
+        this.subscribers = List.of();
+    }
+
     public static Event publish(Event event) {
         return new Event(event, StatusEvent.PUBLISHED);
     }
 
     public static Event cancel(Event event) {
         return new Event(event, StatusEvent.CANCELLED);
+    }
+
+    public static Event reschedule(Event event, LocalDateTime start, Duration duration) {
+        return new Event(event, start, duration);
     }
 
     public EventID getId() {

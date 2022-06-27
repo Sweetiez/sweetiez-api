@@ -7,7 +7,9 @@ import fr.sweetiez.api.core.events.space.Spaces;
 import fr.sweetiez.api.core.events.use_case.CancelEvent;
 import fr.sweetiez.api.core.events.use_case.CreateEvent;
 import fr.sweetiez.api.core.events.use_case.PublishEvent;
+import fr.sweetiez.api.core.events.use_case.RescheduleEvent;
 import fr.sweetiez.api.core.events.use_case.models.CreateEventRequestDTO;
+import fr.sweetiez.api.core.events.use_case.models.RescheduleEventRequest;
 import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
@@ -52,6 +54,18 @@ public class FaceToFaceEventEndPoints {
         try {
             var useCase = new CancelEvent(events);
             var event = useCase.cancel(id);
+
+            return ResponseEntity.ok(event);
+        }
+        catch (Exception exception) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    public ResponseEntity<Event> rescheduleEvent(RescheduleEventRequest request) {
+        try {
+            var useCase = new RescheduleEvent(events);
+            var event = useCase.reschedule(request);
 
             return ResponseEntity.ok(event);
         }

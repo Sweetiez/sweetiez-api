@@ -3,6 +3,7 @@ package fr.sweetiez.api.infrastructure.delivery.events;
 import fr.sweetiez.api.adapter.delivery.event.FaceToFaceEventEndPoints;
 import fr.sweetiez.api.core.events.event.Event;
 import fr.sweetiez.api.core.events.use_case.models.CreateEventRequestDTO;
+import fr.sweetiez.api.core.events.use_case.models.RescheduleEventRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,5 +31,10 @@ public class SpringFaceToFaceEventController {
     @PutMapping("/admin/events/face-to-face/cancel/{id}")
     public ResponseEntity<Event> cancel(@PathVariable UUID id) {
         return endPoints.cancelEvent(id);
+    }
+
+    @PutMapping("/admin/events/face-to-face/reschedule")
+    public ResponseEntity<Event> cancel(@RequestBody RescheduleEventRequest request) {
+        return endPoints.rescheduleEvent(request);
     }
 }
