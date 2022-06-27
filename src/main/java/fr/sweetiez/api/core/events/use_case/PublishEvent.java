@@ -14,12 +14,7 @@ public class PublishEvent {
     }
 
     public Event publish(UUID id) {
-
-        System.out.println(id);
-
         var existingEvent = events.findById(id).orElseThrow();
-
-
         var publishedEvent = Event.publish(existingEvent);
 
         events.save(publishedEvent);

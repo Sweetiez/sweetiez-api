@@ -43,7 +43,6 @@ public class FaceToFaceEventEndPoints {
             return ResponseEntity.ok(event);
         }
         catch (Exception exception) {
-            System.out.println(exception.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }

@@ -37,7 +37,6 @@ public class FaceToFaceEventsAdapter implements Events {
             var space = spaceRepository.findById(entity.getSpace()).orElseThrow();
 
             return Optional.of(mapper.toDto(entity, animator, space));
-
         }
 
         return Optional.empty();
