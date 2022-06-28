@@ -4,9 +4,13 @@ import fr.sweetiez.api.adapter.shared.FaceToFaceEventMapper;
 import fr.sweetiez.api.core.events.animator.Animators;
 import fr.sweetiez.api.core.events.event.Event;
 import fr.sweetiez.api.core.events.event.Events;
+import fr.sweetiez.api.core.events.event.StatusEvent;
 import fr.sweetiez.api.core.events.space.Spaces;
+import fr.sweetiez.api.infrastructure.repository.events.event.FaceToFaceEventEntity;
 import fr.sweetiez.api.infrastructure.repository.events.event.FaceToFaceEventRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,5 +44,31 @@ public class FaceToFaceEventsAdapter implements Events {
         }
 
         return Optional.empty();
+    }
+
+    public List<Event> findAllPublished() {
+        var entities = repository.findAll()
+                .stream()
+                .filter(entity -> entity.getStatus() == StatusEvent.PUBLISHED)
+                .toList();
+
+        return mapEvents(entities);
+    }
+
+    public List<Event> findAll() {
+        var entities = repository.findAll();
+        return mapEvents(entities);
+    }
+
+    private ArrayList<Event> mapEvents(List<FaceToFaceEventEntity> entities) {
+        var events = new ArrayList<Event>();
+
+        entities.forEach(entity -> {
+            var animator = animatorRepository.findById(entity.getAnimator()).orElseThrow();
+            var space = spaceRepository.findById(entity.getSpace()).orElseThrow();
+            events.add(mapper.toDto(entity, animator, space));
+        });
+
+        return events;
     }
 }

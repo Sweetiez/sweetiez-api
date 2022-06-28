@@ -34,7 +34,6 @@ public class AdminRecipeEndPoints {
     }
 
     public ResponseEntity<RecipeDetailedResponse> create(CreateRecipeRequest request) {
-        System.out.println(request);
         var recipe = recipeService.createRecipe(request);
 
         return ResponseEntity.ok(new RecipeDetailedResponse(recipe));

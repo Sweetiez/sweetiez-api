@@ -49,8 +49,6 @@ public class StripePaymentService implements PaymentService {
     }
 
     public String webhookPayment(String payload, String sigHeader) throws UnhandledEventType, SignatureVerificationFailedException {
-//        System.out.println(payload);
-//        System.out.println(sigHeader);
         Event event;
 
         try {

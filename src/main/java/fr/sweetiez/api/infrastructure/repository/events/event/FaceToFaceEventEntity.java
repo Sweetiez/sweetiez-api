@@ -20,6 +20,8 @@ public class FaceToFaceEventEntity {
 
     private final String title;
 
+    private final String description;
+
     private final UUID animator;
 
     @Column(columnDefinition = "TIMESTAMP")
@@ -41,6 +43,7 @@ public class FaceToFaceEventEntity {
     public FaceToFaceEventEntity() {
         this.id = null;
         this.title = null;
+        this.description = null;
         this.animator = null;
         this.start = null;
         this.endDate = null;
@@ -49,11 +52,12 @@ public class FaceToFaceEventEntity {
         this.subscribers = null;
     }
 
-    public FaceToFaceEventEntity(UUID id, String title, UUID animator, LocalDateTime start, LocalDateTime end,
-                                 StatusEvent status, UUID space, List<CustomerEntity> subscribers)
+    public FaceToFaceEventEntity(UUID id, String title, String description, UUID animator, LocalDateTime start,
+                                 LocalDateTime end, StatusEvent status, UUID space, List<CustomerEntity> subscribers)
     {
         this.id = id;
         this.title = title;
+        this.description = description;
         this.animator = animator;
         this.start = start;
         this.endDate = end;
@@ -68,6 +72,10 @@ public class FaceToFaceEventEntity {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public List<CustomerEntity> getSubscribers() {

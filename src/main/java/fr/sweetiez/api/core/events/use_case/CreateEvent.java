@@ -10,6 +10,8 @@ import fr.sweetiez.api.core.events.use_case.exception.AnyAnimatorFoundException;
 import fr.sweetiez.api.core.events.use_case.exception.AnySpaceFoundException;
 import fr.sweetiez.api.core.events.use_case.models.CreateEventRequestDTO;
 
+import java.time.Duration;
+
 public class CreateEvent {
     private final Animators animators;
     private final Spaces spaces;
@@ -21,14 +23,14 @@ public class CreateEvent {
         this.events = events;
     }
 
-    public Event create(CreateEventRequestDTO createEventRequestDTO) {
-        Animator animator = animators.findById(createEventRequestDTO.getAnimatorId())
+    public Event create(CreateEventRequestDTO request) {
+        Animator animator = animators.findById(request.animatorId())
                 .orElseThrow(AnyAnimatorFoundException::new);
-        Space space = spaces.findById(createEventRequestDTO.getSpaceId())
+        Space space = spaces.findById(request.spaceId())
                 .orElseThrow(AnySpaceFoundException::new);
 
-        Event event = new Event(createEventRequestDTO.getTitle(), animator, space,
-                createEventRequestDTO.getStartDateTime(), createEventRequestDTO.getDuration());
+        Event event = new Event(request.title(), request.description(), animator, space,
+                request.startDateTime(), Duration.ofHours(request.duration()));
 
         animators.book(event.getAnimator(), event.getSchedule());
         spaces.book(space, event.getSchedule());

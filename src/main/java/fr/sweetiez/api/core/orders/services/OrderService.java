@@ -56,11 +56,11 @@ public class OrderService {
     }
 
     public OrderCreatedResponse create(CreateOrderRequest request) throws InvalidOrderException {
-        Optional<CustomerId> customerId = Optional.empty();
+        Optional<CustomerId> customerId;
         try {
             customerId = Optional.of(customerService.findByEmail(request.email()).id());
         } catch (Exception e) {
-            System.out.println("Customer not found");
+            customerId = Optional.empty();
         }
         // Retrieve the products by their ids
         var sweetProducts = getProducts(request);
@@ -174,11 +174,11 @@ public class OrderService {
     public OrderStatusUpdatedResponse updateOrderStatus(String orderId, OrderStatus status) throws OrderNotFoundException {
         var order = new Order(this.reader.findById(orderId).orElseThrow(OrderNotFoundException::new), Set.of());
 
-        Optional<CustomerId> customerId = Optional.empty();
+        Optional<CustomerId> customerId;
         try {
             customerId = Optional.of(customerService.findByEmail(order.customerInfo().email()).id());
         } catch (Exception e) {
-            System.out.println("Customer not found");
+            customerId = Optional.empty();
         }
 
         var updatedOrder = new Order(

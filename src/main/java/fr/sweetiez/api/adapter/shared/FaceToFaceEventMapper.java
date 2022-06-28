@@ -22,6 +22,7 @@ public class FaceToFaceEventMapper {
         return new FaceToFaceEventEntity(
                 event.getId().getEventId(),
                 event.getTitle(),
+                event.getDescription(),
                 event.getAnimator().getId().getAnimatorId(),
                 event.getSchedule().getStart(),
                 event.getSchedule().getEnd(),
@@ -34,6 +35,7 @@ public class FaceToFaceEventMapper {
         var dto = new EventDto(
                 entity.getId(),
                 entity.getTitle(),
+                entity.getDescription(),
                 animator,
                 new Schedule(entity.getStart(), Duration.between(entity.getStart(), entity.getEnd())),
                 entity.getStatus(),

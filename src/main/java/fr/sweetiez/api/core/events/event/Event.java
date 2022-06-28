@@ -14,13 +14,14 @@ import java.util.UUID;
 public class Event {
     private final EventID id;
     private final String title;
+    private final String description;
     private final Animator animator;
     private final Schedule schedule;
     private final StatusEvent status;
     private final Space space;
     private final List<Customer> subscribers;
 
-    public Event(String title, Animator animator, Space space, LocalDateTime startDateTime, Duration duration) {
+    public Event(String title, String description, Animator animator, Space space, LocalDateTime startDateTime, Duration duration) {
         Schedule eventSchedule = new Schedule(startDateTime, duration);
 
         animator.book(eventSchedule);
@@ -28,6 +29,7 @@ public class Event {
 
         this.id = new EventID(UUID.randomUUID());
         this.title = title;
+        this.description = description;
         this.status = StatusEvent.CREATED;
         this.animator = animator;
         this.schedule = eventSchedule;
@@ -38,6 +40,7 @@ public class Event {
     public Event(EventDto dto) {
         this.id = new EventID(dto.id());
         this.title = dto.title();
+        this.description = dto.description();
         this.animator = dto.animator();
         this.schedule = dto.schedule();
         this.status = dto.status();
@@ -48,6 +51,7 @@ public class Event {
     private Event(Event event, StatusEvent status) {
         this.id = event.id;
         this.title = event.title;
+        this.description = event.description;
         this.status = status;
         this.animator = event.animator;
         this.schedule = event.schedule;
@@ -63,11 +67,12 @@ public class Event {
 
         this.id = event.id;
         this.title = event.title;
-        this.status = StatusEvent.PUBLISHED;
+        this.description = event.description;
+        this.status = event.status;
         this.animator = event.animator;
         this.schedule = eventSchedule;
         this.space = event.space;
-        this.subscribers = List.of();
+        this.subscribers = event.subscribers;
     }
 
     public static Event publish(Event event) {
@@ -88,6 +93,10 @@ public class Event {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public Animator getAnimator() {
