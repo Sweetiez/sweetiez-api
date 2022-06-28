@@ -4,8 +4,8 @@ import fr.sweetiez.api.core.orders.models.orders.Order;
 import fr.sweetiez.api.core.orders.models.responses.DetailedOrderResponse;
 import fr.sweetiez.api.core.orders.ports.OrdersNotifier;
 import fr.sweetiez.api.infrastructure.notification.email.EmailNotifier;
-import fr.sweetiez.api.infrastructure.notification.email.OrderEmailDto;
-import fr.sweetiez.api.infrastructure.notification.email.ProductEmailDto;
+import fr.sweetiez.api.infrastructure.notification.email.dtos.OrderEmailDto;
+import fr.sweetiez.api.infrastructure.notification.email.dtos.ProductEmailDto;
 
 import java.math.BigDecimal;
 

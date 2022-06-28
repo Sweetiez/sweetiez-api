@@ -1,4 +1,4 @@
-package fr.sweetiez.api.infrastructure.notification.email;
+package fr.sweetiez.api.infrastructure.notification.email.dtos;
 
 import java.math.BigDecimal;
 
