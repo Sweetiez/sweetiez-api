@@ -48,6 +48,6 @@ public class SpringAuthenticationController {
 
     @PostMapping("/me/password/reset")
     public ResponseEntity<Object> resetPassword(@RequestBody ResetPasswordRequest request) {
-        return authenticationEndPoints.resertPassword(request);
+        return authenticationEndPoints.resetPassword(request);
     }
 }

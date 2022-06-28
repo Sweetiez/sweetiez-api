@@ -1,5 +1,7 @@
 package fr.sweetiez.api.core.authentication.ports;
 
+import fr.sweetiez.api.core.customers.models.Customer;
+
 public interface AccountNotifier {
 
     /**
@@ -18,7 +20,8 @@ public interface AccountNotifier {
     /**
      * Notify the user that his account has been created.
      * @param email
+     * @param customer
      */
-    void notifyAccountCreation(String email);
+    void notifyAccountCreation(String email, Customer customer);
 
 }

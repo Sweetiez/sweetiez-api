@@ -8,6 +8,7 @@ import fr.sweetiez.api.core.authentication.models.requests.ResetPasswordRequest;
 import fr.sweetiez.api.core.authentication.models.requests.UpdatePasswordRequest;
 import fr.sweetiez.api.core.authentication.ports.AccountNotifier;
 import fr.sweetiez.api.core.authentication.ports.AuthenticationRepository;
+import fr.sweetiez.api.core.authentication.services.exceptions.AccountAlreadyExistsException;
 import fr.sweetiez.api.core.customers.models.Customer;
 import fr.sweetiez.api.core.customers.services.CustomerService;
 import fr.sweetiez.api.infrastructure.app.security.TokenProvider;
@@ -84,7 +85,9 @@ public class AuthenticationService {
                 Optional.of(createdAccount),
                 0);
 
-        return customerService.save(customer);
+        var savedCustomer = customerService.save(customer);
+        notifier.notifyAccountCreation(account.username(), savedCustomer);
+        return savedCustomer;
     }
 
     public HttpHeaders refreshToken(HttpServletRequest request) {

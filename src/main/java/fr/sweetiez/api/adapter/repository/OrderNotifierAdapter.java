@@ -21,7 +21,7 @@ public class OrderNotifierAdapter implements OrdersNotifier {
     public void notifyCustomer(DetailedOrderResponse order) {
         notifier.send(new OrderEmailDto(
                 order.email(),
-                String.format("FI-Sweets.fr - Votre commande %s", order.id()),
+                String.format("FI-Sweets.fr - 🧁 Votre commande %s ", order.id()),
                 order.firstName(),
                 order.lastName(),
                 order.id(),
