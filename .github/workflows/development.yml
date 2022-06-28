@@ -3,8 +3,6 @@ name: DEV CI/CD
 on:
   push:
     branches: [ develop ]
-  pull_request:
-    branches: [ develop ]
 
   workflow_dispatch:
 
@@ -21,18 +19,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Tag name
-        id: tag_name
-        run: echo ::set-output name=TAG_NAME::${GITHUB_REF/refs\/tags\//}
-
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/api:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/api:${{ steps.get_tag.outputs.tag }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/api:latest-dev
+
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
@@ -41,3 +35,5 @@ jobs:
         with:
           url: ${{ secrets.WEBHOOK_DEV_SERVER_URL }}
           method: POST
+          username: ${{ secrets.DEV_CRED_USER }}
+          password: ${{ secrets.DEV_CRED_PWD }}
