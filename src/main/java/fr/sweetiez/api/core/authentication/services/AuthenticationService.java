@@ -4,6 +4,7 @@ import fr.sweetiez.api.core.authentication.models.Account;
 import fr.sweetiez.api.core.authentication.models.LoginRequest;
 import fr.sweetiez.api.core.authentication.models.SubscriptionRequest;
 import fr.sweetiez.api.core.authentication.models.requests.ChangePasswordRequest;
+import fr.sweetiez.api.core.authentication.models.requests.ResetPasswordRequest;
 import fr.sweetiez.api.core.authentication.models.requests.UpdatePasswordRequest;
 import fr.sweetiez.api.core.authentication.ports.AccountNotifier;
 import fr.sweetiez.api.core.authentication.ports.AuthenticationRepository;
@@ -128,6 +129,21 @@ public class AuthenticationService {
         if (!passwordEncoder.matches(request.currentPassword(), account.password())) {
             throw new AuthenticationServiceException("Password invalid");
         }
+
+        var newPassword = new BCryptPasswordEncoder().encode(request.newPassword());
+        var updatedAccount = new Account(account.id(),
+                account.username(),
+                newPassword,
+                account.roles(),
+                null);
+        repository.registerAccount(updatedAccount);
+    }
+
+    public void resetPassword(ResetPasswordRequest request) {
+        if (!request.newPassword().equals(request.confirmPassword())) {
+            throw new AuthenticationServiceException("Password invalid");
+        }
+        var account = repository.findByResetPasswordToken(request.token()).orElseThrow();
 
         var newPassword = new BCryptPasswordEncoder().encode(request.newPassword());
         var updatedAccount = new Account(account.id(),

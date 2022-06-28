@@ -3,6 +3,7 @@ package fr.sweetiez.api.adapter.delivery.authentication;
 import fr.sweetiez.api.core.authentication.models.LoginRequest;
 import fr.sweetiez.api.core.authentication.models.SubscriptionRequest;
 import fr.sweetiez.api.core.authentication.models.requests.ChangePasswordRequest;
+import fr.sweetiez.api.core.authentication.models.requests.ResetPasswordRequest;
 import fr.sweetiez.api.core.authentication.models.requests.UpdatePasswordRequest;
 import fr.sweetiez.api.core.authentication.services.AccountAlreadyExistsException;
 import fr.sweetiez.api.core.authentication.services.AuthenticationService;
@@ -65,6 +66,16 @@ public class AuthenticationEndPoints {
     public ResponseEntity<Object> requestPasswordChange(UpdatePasswordRequest request) {
         try {
             authenticationService.updatePasswordRequest(request);
+            return ResponseEntity.ok().build();
+        }
+        catch (NoSuchElementException exception) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    public ResponseEntity<Object> resertPassword(ResetPasswordRequest request) {
+        try {
+            authenticationService.resetPassword(request);
             return ResponseEntity.ok().build();
         }
         catch (NoSuchElementException exception) {

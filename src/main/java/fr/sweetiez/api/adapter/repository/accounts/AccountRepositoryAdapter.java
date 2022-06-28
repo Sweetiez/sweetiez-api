@@ -38,4 +38,9 @@ public class AccountRepositoryAdapter implements AuthenticationRepository {
         return accountRepository.findByUsername(username)
                 .map(mapper::toDto);
     }
+
+    public Optional<Account> findByResetPasswordToken(String token) {
+        return accountRepository.findByPasswordUpdateToken(token)
+                .map(mapper::toDto);
+    }
 }
