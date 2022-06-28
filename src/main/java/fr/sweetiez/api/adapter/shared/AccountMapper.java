@@ -23,7 +23,8 @@ public class AccountMapper {
                 account.roles()
                         .stream()
                         .map(this::toEntity)
-                        .toList()
+                        .toList(),
+                account.updatePasswordToken()
         );
     }
 
@@ -35,7 +36,8 @@ public class AccountMapper {
                 entity.getRoles()
                         .stream()
                         .map(this::toDto)
-                        .toList()
+                        .toList(),
+                entity.getPasswordUpdateToken()
         );
     }
 }

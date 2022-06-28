@@ -319,6 +319,11 @@ public class SpringDependenciesConfig {
         return new CustomerReaderAdapter(customerRepository, customerMapper());
     }
 
+    @Bean
+    public AccountNotifierAdapter accountNotifierAdapter() {
+        return new AccountNotifierAdapter(gmailSender());
+    }
+
      // GATEWAY ADAPTERS
 
     @Bean
@@ -340,7 +345,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public AuthenticationService authenticationService() {
-        return new AuthenticationService(authenticationRepository(), customerService(), tokenProvider, authenticationManager);
+        return new AuthenticationService(authenticationRepository(), customerService(), tokenProvider, authenticationManager, accountNotifierAdapter());
     }
 
     @Bean

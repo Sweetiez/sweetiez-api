@@ -21,18 +21,23 @@ public class AccountEntity {
     @ManyToMany(fetch = FetchType.EAGER)
     private final Collection<RoleEntity> roles;
 
+    @Column(columnDefinition = "text")
+    private final String passwordUpdateToken;
+
     public AccountEntity() {
         id = null;
         username = null;
         password = null;
         roles = null;
+        passwordUpdateToken = null;
     }
 
-    public AccountEntity(UUID id, String username, String password, Collection<RoleEntity> roles) {
+    public AccountEntity(UUID id, String username, String password, Collection<RoleEntity> roles, String passwordUpdateToken) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.roles = roles;
+        this.passwordUpdateToken = passwordUpdateToken;
     }
 
     public UUID getId() {
@@ -49,5 +54,9 @@ public class AccountEntity {
 
     public Collection<RoleEntity> getRoles() {
         return roles;
+    }
+
+    public String getPasswordUpdateToken() {
+        return passwordUpdateToken;
     }
 }
