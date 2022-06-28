@@ -3,6 +3,7 @@ package fr.sweetiez.api.infrastructure.notification.email;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
+import fr.sweetiez.api.infrastructure.notification.email.dtos.AccountCreationConfirmationDto;
 import fr.sweetiez.api.infrastructure.notification.email.dtos.ConfirmPasswordChangeDto;
 import fr.sweetiez.api.infrastructure.notification.email.dtos.OrderEmailDto;
 import fr.sweetiez.api.infrastructure.notification.email.dtos.ResetPasswordEmailDto;
@@ -63,7 +64,7 @@ public class GmailSender implements EmailNotifier {
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(dto.email());
-        message.setSubject("Fi-Sweets - Réinitialisation du mot de passe");
+        message.setSubject("FI-Sweets.fr - Réinitialisation du mot de passe");
 
         message.setText(messageText);
 
@@ -86,7 +87,30 @@ public class GmailSender implements EmailNotifier {
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(confirmPasswordChangeDto.email());
-        message.setSubject("Fi-Sweets - Changement de mot de passe confirmé");
+        message.setSubject("FI-Sweets.fr - Changement de mot de passe confirmé ✅");
+
+        message.setText(messageText);
+
+        mailSender.send(message);
+    }
+
+    @Override
+    public void send(AccountCreationConfirmationDto accountCreationConfirmationDto) {
+        MustacheFactory mf = new DefaultMustacheFactory();
+        Mustache m = mf.compile("mustache/account_creation.mustache");
+
+        StringWriter writer = new StringWriter();
+        String messageText = "";
+        try {
+            m.execute(writer, accountCreationConfirmationDto).flush();
+            messageText = writer.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(accountCreationConfirmationDto.email());
+        message.setSubject("🎉 FI-Sweets.fr - Votre compte bien a été créé 🎉");
 
         message.setText(messageText);
 
