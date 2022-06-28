@@ -3,6 +3,7 @@ package fr.sweetiez.api.infrastructure.notification.email;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
+import fr.sweetiez.api.infrastructure.notification.email.dtos.ConfirmPasswordChangeDto;
 import fr.sweetiez.api.infrastructure.notification.email.dtos.OrderEmailDto;
 import fr.sweetiez.api.infrastructure.notification.email.dtos.ResetPasswordEmailDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,29 @@ public class GmailSender implements EmailNotifier {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(dto.email());
         message.setSubject("Fi-Sweets - Réinitialisation du mot de passe");
+
+        message.setText(messageText);
+
+        mailSender.send(message);
+    }
+
+    @Override
+    public void send(ConfirmPasswordChangeDto confirmPasswordChangeDto) {
+        MustacheFactory mf = new DefaultMustacheFactory();
+        Mustache m = mf.compile("mustache/change_password.mustache");
+
+        StringWriter writer = new StringWriter();
+        String messageText = "";
+        try {
+            m.execute(writer, confirmPasswordChangeDto).flush();
+            messageText = writer.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(confirmPasswordChangeDto.email());
+        message.setSubject("Fi-Sweets - Changement de mot de passe confirmé");
 
         message.setText(messageText);
 

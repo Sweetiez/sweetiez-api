@@ -2,6 +2,7 @@ package fr.sweetiez.api.adapter.repository;
 
 import fr.sweetiez.api.core.authentication.ports.AccountNotifier;
 import fr.sweetiez.api.infrastructure.notification.email.EmailNotifier;
+import fr.sweetiez.api.infrastructure.notification.email.dtos.ConfirmPasswordChangeDto;
 import fr.sweetiez.api.infrastructure.notification.email.dtos.ResetPasswordEmailDto;
 
 public class AccountNotifierAdapter implements AccountNotifier {
@@ -19,7 +20,7 @@ public class AccountNotifierAdapter implements AccountNotifier {
 
     @Override
     public void notifyPasswordChange(String email) {
-
+        notifier.send(new ConfirmPasswordChangeDto(email, email));
     }
 
     @Override

@@ -137,6 +137,7 @@ public class AuthenticationService {
                 account.roles(),
                 null);
         repository.registerAccount(updatedAccount);
+        notifier.notifyPasswordChange(account.username());
     }
 
     public void resetPassword(ResetPasswordRequest request) {
@@ -152,5 +153,6 @@ public class AuthenticationService {
                 account.roles(),
                 null);
         repository.registerAccount(updatedAccount);
+        notifier.notifyPasswordChange(account.username());
     }
 }
