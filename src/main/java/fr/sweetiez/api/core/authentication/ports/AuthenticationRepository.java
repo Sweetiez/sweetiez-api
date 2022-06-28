@@ -10,4 +10,5 @@ public interface AuthenticationRepository {
     Account registerAccount(Account account);
     Role getUserRole();
     Optional<Account> findByUsername(String username);
+    Optional<Account> findByResetPasswordToken(String token);
 }

@@ -4,6 +4,7 @@ import fr.sweetiez.api.adapter.delivery.authentication.AuthenticationEndPoints;
 import fr.sweetiez.api.core.authentication.models.LoginRequest;
 import fr.sweetiez.api.core.authentication.models.SubscriptionRequest;
 import fr.sweetiez.api.core.authentication.models.requests.ChangePasswordRequest;
+import fr.sweetiez.api.core.authentication.models.requests.ResetPasswordRequest;
 import fr.sweetiez.api.core.authentication.models.requests.UpdatePasswordRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +44,10 @@ public class SpringAuthenticationController {
     @PostMapping("/me/password")
     public ResponseEntity<Object> updateMyProfile(@RequestBody ChangePasswordRequest request) {
         return authenticationEndPoints.updatePassword(request);
+    }
+
+    @PostMapping("/me/password/reset")
+    public ResponseEntity<Object> resetPassword(@RequestBody ResetPasswordRequest request) {
+        return authenticationEndPoints.resertPassword(request);
     }
 }
