@@ -2,12 +2,11 @@ package fr.sweetiez.api.infrastructure.delivery.events;
 
 import fr.sweetiez.api.adapter.delivery.event.FaceToFaceEventEndPoints;
 import fr.sweetiez.api.core.events.event.Event;
-import fr.sweetiez.api.core.events.use_case.models.CreateEventRequestDTO;
-import fr.sweetiez.api.core.events.use_case.models.RescheduleEventRequest;
-import fr.sweetiez.api.core.events.use_case.models.SubscribeEventRequest;
+import fr.sweetiez.api.core.events.use_case.models.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @RestController
@@ -39,8 +38,18 @@ public class SpringFaceToFaceEventController {
         return endPoints.rescheduleEvent(request);
     }
 
-    @PutMapping("/admin/events/face-to-face/subscribe")
+    @PutMapping("/events/face-to-face/subscribe")
     public ResponseEntity<Event> subscribe(@RequestBody SubscribeEventRequest request) {
         return endPoints.subscribeEvent(request);
+    }
+
+    @GetMapping("/events/face-to-face")
+    public ResponseEntity<Collection<EventResponse>> retrieveAllPublished() {
+        return endPoints.retrieveAllPublished();
+    }
+
+    @GetMapping("/admin/events/face-to-face")
+    public ResponseEntity<Collection<EventAdminResponse>> retrieveAll() {
+        return endPoints.retrieveAll();
     }
 }

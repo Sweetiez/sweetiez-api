@@ -6,12 +6,11 @@ import fr.sweetiez.api.core.events.event.Event;
 import fr.sweetiez.api.core.events.event.Events;
 import fr.sweetiez.api.core.events.space.Spaces;
 import fr.sweetiez.api.core.events.use_case.*;
-import fr.sweetiez.api.core.events.use_case.models.CreateEventRequestDTO;
-import fr.sweetiez.api.core.events.use_case.models.RescheduleEventRequest;
-import fr.sweetiez.api.core.events.use_case.models.SubscribeEventRequest;
+import fr.sweetiez.api.core.events.use_case.models.*;
 import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.UUID;
 
 public class FaceToFaceEventEndPoints {
@@ -71,20 +70,44 @@ public class FaceToFaceEventEndPoints {
             return ResponseEntity.ok(event);
         }
         catch (Exception exception) {
+            exception.printStackTrace();
+
             return ResponseEntity.badRequest().build();
         }
     }
 
     public ResponseEntity<Event> subscribeEvent(SubscribeEventRequest request) {
         try {
-            var useCase = new SubscribeEvent(events, customers);
+            var useCase = new SubscribeEvent(events, spaces, customers);
             var event = useCase.subscribe(request);
 
             return ResponseEntity.ok(event);
         }
         catch (Exception exception) {
-            exception.printStackTrace();
-            System.out.println(exception.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    public ResponseEntity<Collection<EventResponse>> retrieveAllPublished() {
+        try {
+            var useCase = new RetrieveEvents(events, spaces, customers);
+            var event = useCase.retrievePublished();
+
+            return ResponseEntity.ok(event);
+        }
+        catch (Exception exception) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    public ResponseEntity<Collection<EventAdminResponse>> retrieveAll() {
+        try {
+            var useCase = new RetrieveEvents(events, spaces, customers);
+            var event = useCase.retrieveAll();
+
+            return ResponseEntity.ok(event);
+        }
+        catch (Exception exception) {
             return ResponseEntity.badRequest().build();
         }
     }

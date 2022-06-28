@@ -2,6 +2,7 @@ package fr.sweetiez.api.adapter.repository.events;
 
 import fr.sweetiez.api.core.events.schedule.Schedule;
 import fr.sweetiez.api.core.events.space.Space;
+import fr.sweetiez.api.core.events.space.SpaceDTO;
 import fr.sweetiez.api.core.events.space.SpaceID;
 import fr.sweetiez.api.core.events.space.Spaces;
 import fr.sweetiez.api.infrastructure.repository.events.space.ReservedSpaceEntity;
@@ -43,5 +44,14 @@ public class SpacesAdapter implements Spaces {
                 space.getId().getSpaceID(),
                 schedule.getStart(),
                 Duration.between(schedule.getStart(), schedule.getEnd())));
+    }
+
+    public Optional<SpaceDTO> getInfo(UUID id) {
+        return spaceRepository.findById(id).map(entity -> new SpaceDTO(
+                entity.id(),
+                entity.address(),
+                entity.zipCode(),
+                entity.city(),
+                entity.places()));
     }
 }

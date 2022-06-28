@@ -9,4 +9,6 @@ public interface Spaces {
 
     Optional<Space> findById(UUID id);
     void book(Space space, Schedule schedule);
+    Optional<SpaceDTO> getInfo(UUID id);
+
 }

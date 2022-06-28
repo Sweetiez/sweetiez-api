@@ -11,6 +11,7 @@ import java.util.UUID;
 public record EventDto(
         UUID id,
         String title,
+        String description,
         Animator animator,
         Schedule schedule,
         StatusEvent status,
