@@ -137,7 +137,7 @@ public class AdminTrayEndPoints {
     public ResponseEntity<SimpleProductResponse> deleteImage(String id, DeleteImageRequest request) {
         try {
             var objectName = request.imageUrl().substring(request.imageUrl().lastIndexOf('/') + 1);
-            System.out.println(objectName);
+
             minioClient.removeObject(
                     RemoveObjectArgs.builder()
                             .bucket(bucketName)

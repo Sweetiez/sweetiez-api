@@ -29,21 +29,13 @@ public class PaymentWebhookEndpoint {
                 }
                 return ResponseEntity.status(418).body("Fail to confirm order");
             } catch (OrderNotFoundException e) {
-                System.out.println("Order not found");
                 return ResponseEntity.status(404).body("Order not found");
             }
         } catch (SignatureVerificationFailedException e) {
-            // Invalid signature
-            System.out.println("Invalid signature");
             return ResponseEntity.badRequest().body("Invalid signature");
         } catch (UnhandledEventType e) {
-            // Unhandled event type
-            System.out.println("UnhandledEventType");
             return ResponseEntity.ok().build();
         }catch (Exception e) {
-            // Invalid payload
-            System.out.println("Invalid payload");
-            e.printStackTrace();
             return ResponseEntity.badRequest().body("Invalid payload");
         }
 
