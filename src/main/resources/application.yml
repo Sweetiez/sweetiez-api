@@ -58,3 +58,6 @@ apis:
   edamam:
     app-id: ${EDAMAM_APP_ID}
     app-key: ${EDAMAM_APP_KEY}
+
+front:
+  base-url: ${FRONT_BASE_URL}

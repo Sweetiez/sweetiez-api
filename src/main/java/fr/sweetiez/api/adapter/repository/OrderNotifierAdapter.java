@@ -1,9 +1,13 @@
 package fr.sweetiez.api.adapter.repository;
 
 import fr.sweetiez.api.core.orders.models.orders.Order;
+import fr.sweetiez.api.core.orders.models.responses.DetailedOrderResponse;
 import fr.sweetiez.api.core.orders.ports.OrdersNotifier;
 import fr.sweetiez.api.infrastructure.notification.email.EmailNotifier;
-import fr.sweetiez.api.infrastructure.notification.email.OrderEmailDto;
+import fr.sweetiez.api.infrastructure.notification.email.dtos.OrderEmailDto;
+import fr.sweetiez.api.infrastructure.notification.email.dtos.ProductEmailDto;
+
+import java.math.BigDecimal;
 
 public class OrderNotifierAdapter implements OrdersNotifier {
 
@@ -14,14 +18,28 @@ public class OrderNotifierAdapter implements OrdersNotifier {
     }
 
     @Override
-    public void notifyCustomer(Order order) {
+    public void notifyCustomer(DetailedOrderResponse order) {
         notifier.send(new OrderEmailDto(
-                order.customerInfo().email(),
-                String.format("FI-Sweets.fr - Votre commande %s", order.id().value().toString()),
-                order.customerInfo().firstName(),
-                order.customerInfo().lastName(),
-                order.id().value().toString(),
-                order.totalPrice()));
+                order.email(),
+                String.format("FI-Sweets.fr - 🧁 Votre commande %s ", order.id()),
+                order.firstName(),
+                order.lastName(),
+                order.id(),
+                order.pickupDate().toString(),
+                order.totalPrice(),
+                order.products().stream()
+                        .map(p -> new ProductEmailDto(
+                                p.name(),
+                                p.quantity(),
+                                p.unitPerPackage(),
+                                p.unitPrice(),
+                                p.total().multiply(new BigDecimal(p.quantity()))
+                                )
+                        )
+                        .toList(),
+                order.rewardName()
+                )
+        );
     }
 
     @Override

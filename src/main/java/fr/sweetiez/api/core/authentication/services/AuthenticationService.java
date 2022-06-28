@@ -3,8 +3,12 @@ package fr.sweetiez.api.core.authentication.services;
 import fr.sweetiez.api.core.authentication.models.Account;
 import fr.sweetiez.api.core.authentication.models.LoginRequest;
 import fr.sweetiez.api.core.authentication.models.SubscriptionRequest;
-import fr.sweetiez.api.core.authentication.models.UpdateAccountPasswordRequest;
+import fr.sweetiez.api.core.authentication.models.requests.ChangePasswordRequest;
+import fr.sweetiez.api.core.authentication.models.requests.ResetPasswordRequest;
+import fr.sweetiez.api.core.authentication.models.requests.UpdatePasswordRequest;
+import fr.sweetiez.api.core.authentication.ports.AccountNotifier;
 import fr.sweetiez.api.core.authentication.ports.AuthenticationRepository;
+import fr.sweetiez.api.core.authentication.services.exceptions.AccountAlreadyExistsException;
 import fr.sweetiez.api.core.customers.models.Customer;
 import fr.sweetiez.api.core.customers.services.CustomerService;
 import fr.sweetiez.api.infrastructure.app.security.TokenProvider;
@@ -19,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -30,12 +35,16 @@ public class AuthenticationService {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManager;
 
+    private final AccountNotifier notifier;
+
     public AuthenticationService(AuthenticationRepository repository, CustomerService customerService,
-                                 TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManager) {
+                                 TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManager,
+                                 AccountNotifier notifier) {
         this.repository = repository;
         this.customerService = customerService;
         this.tokenProvider = tokenProvider;
         this.authenticationManager = authenticationManager;
+        this.notifier = notifier;
     }
 
     public HttpHeaders login(LoginRequest request) {
@@ -65,7 +74,7 @@ public class AuthenticationService {
         }
 
         var password = new BCryptPasswordEncoder().encode(request.password());
-        var account = new Account(null, request.email(), password, List.of(repository.getUserRole()));
+        var account = new Account(null, request.email(), password, List.of(repository.getUserRole()), null);
         var createdAccount = repository.registerAccount(account);
         var customer = new Customer(
                 null,
@@ -76,7 +85,9 @@ public class AuthenticationService {
                 Optional.of(createdAccount),
                 0);
 
-        return customerService.save(customer);
+        var savedCustomer = customerService.save(customer);
+        notifier.notifyAccountCreation(account.username(), savedCustomer);
+        return savedCustomer;
     }
 
     public HttpHeaders refreshToken(HttpServletRequest request) {
@@ -97,7 +108,24 @@ public class AuthenticationService {
         return httpHeaders;
     }
 
-    public void updatePassword(UpdateAccountPasswordRequest request) {
+    public void updatePasswordRequest(UpdatePasswordRequest request) {
+        // Retrieve account from id
+        var account = repository.findByUsername(request.email()).orElseThrow();
+        // Generate update password token
+        var updatePasswordToken = UUID.randomUUID().toString();
+        var updatedAccount = new Account(account.id(),
+                                        account.username(),
+                                        account.password(),
+                                        account.roles(),
+                updatePasswordToken);
+
+        repository.registerAccount(updatedAccount);
+
+        // Send email with update password token
+        notifier.sendResetPasswordLink(request.email(), updatePasswordToken);
+    }
+
+    public void updatePassword(ChangePasswordRequest request) {
         var account = repository.findByUsername(request.email()).orElseThrow();
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -106,7 +134,28 @@ public class AuthenticationService {
         }
 
         var newPassword = new BCryptPasswordEncoder().encode(request.newPassword());
-        var updatedAccount = new Account(account.id(), account.username(), newPassword, account.roles());
+        var updatedAccount = new Account(account.id(),
+                account.username(),
+                newPassword,
+                account.roles(),
+                null);
         repository.registerAccount(updatedAccount);
+        notifier.notifyPasswordChange(account.username());
+    }
+
+    public void resetPassword(ResetPasswordRequest request) {
+        if (!request.newPassword().equals(request.confirmPassword())) {
+            throw new AuthenticationServiceException("Password invalid");
+        }
+        var account = repository.findByResetPasswordToken(request.token()).orElseThrow();
+
+        var newPassword = new BCryptPasswordEncoder().encode(request.newPassword());
+        var updatedAccount = new Account(account.id(),
+                account.username(),
+                newPassword,
+                account.roles(),
+                null);
+        repository.registerAccount(updatedAccount);
+        notifier.notifyPasswordChange(account.username());
     }
 }

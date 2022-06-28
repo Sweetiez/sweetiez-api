@@ -132,7 +132,7 @@ public class AdminSweetEndPoints {
 
         try {
             var objectName = request.imageUrl().substring(request.imageUrl().lastIndexOf('/') + 1);
-            System.out.println(objectName);
+
             minioClient.removeObject(
                     RemoveObjectArgs.builder()
                             .bucket(bucketName)

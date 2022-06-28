@@ -59,11 +59,11 @@ public class OrderService {
     }
 
     public OrderCreatedResponse create(CreateOrderRequest request) throws InvalidOrderException {
-        Optional<CustomerId> customerId = Optional.empty();
+        Optional<CustomerId> customerId;
         try {
             customerId = Optional.of(customerService.findByEmail(request.email()).id());
         } catch (Exception e) {
-            System.out.println("Customer not found");
+            customerId = Optional.empty();
         }
         // Retrieve the products by their ids
         var sweetProducts = getProducts(request);
@@ -91,7 +91,7 @@ public class OrderService {
 
     public DetailedOrderResponse getById(String id) throws OrderNotFoundException {
         return this.reader.findById(id).stream()
-                .map(DetailedOrderResponse::new)
+                .map(this::responseBuilder)
                 .findFirst().orElseThrow(OrderNotFoundException::new);
     }
 
@@ -180,10 +180,10 @@ public class OrderService {
         }
 
         // Notify the customer
-        notifier.notifyCustomer(order);
+        notifier.notifyCustomer(getById(order.id().value().toString()));
 
         // Compute the loyalty points
-        if (updatedOrder.customerId().isPresent() && !updatedOrder.customerId().get().value().trim().equals("")) { //
+        if (updatedOrder.customerId().isPresent() && !updatedOrder.customerId().get().value().trim().equals("")) {
             loyaltyPointService.addLoyaltyPoints(new AddLoyaltyPointsRequest(order));
         }
 
@@ -193,11 +193,11 @@ public class OrderService {
     public OrderStatusUpdatedResponse updateOrderStatus(String orderId, OrderStatus status) throws OrderNotFoundException {
         var order = new Order(this.reader.findById(orderId).orElseThrow(OrderNotFoundException::new), Set.of());
 
-        Optional<CustomerId> customerId = Optional.empty();
+        Optional<CustomerId> customerId;
         try {
             customerId = Optional.of(customerService.findByEmail(order.customerInfo().email()).id());
         } catch (Exception e) {
-            System.out.println("Customer not found");
+            customerId = Optional.empty();
         }
 
         var updatedOrder = new Order(

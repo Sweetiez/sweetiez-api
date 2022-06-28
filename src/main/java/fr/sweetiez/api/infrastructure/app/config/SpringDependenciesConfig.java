@@ -1,14 +1,12 @@
 package fr.sweetiez.api.infrastructure.app.config;
 
 
-import fr.sweetiez.api.adapter.delivery.RewardEndPoints;
-import fr.sweetiez.api.adapter.repository.*;
-import fr.sweetiez.api.infrastructure.repository.products.sweets.SweetRepository;
-import fr.sweetiez.api.infrastructure.repository.products.trays.TrayRepository;
 import fr.sweetiez.api.adapter.delivery.AdminRecipeEndPoints;
 import fr.sweetiez.api.adapter.delivery.RecipeEndPoints;
+import fr.sweetiez.api.adapter.delivery.RewardEndPoints;
 import fr.sweetiez.api.adapter.delivery.authentication.AuthenticationEndPoints;
 import fr.sweetiez.api.adapter.delivery.evaluation.EvaluationEndPoints;
+import fr.sweetiez.api.adapter.delivery.event.FaceToFaceEventEndPoints;
 import fr.sweetiez.api.adapter.delivery.ingredient.IngredientEndPoints;
 import fr.sweetiez.api.adapter.delivery.order.OrderEndPoints;
 import fr.sweetiez.api.adapter.delivery.payment.PaymentWebhookEndpoint;
@@ -20,11 +18,15 @@ import fr.sweetiez.api.adapter.delivery.tray.TrayEndPoints;
 import fr.sweetiez.api.adapter.delivery.user.UserEndPoints;
 import fr.sweetiez.api.adapter.gateways.allergen.EdamamApi;
 import fr.sweetiez.api.adapter.gateways.translator.LibreTranslateApi;
+import fr.sweetiez.api.adapter.repository.*;
 import fr.sweetiez.api.adapter.repository.accounts.AccountRepositoryAdapter;
+import fr.sweetiez.api.adapter.repository.events.AnimatorsAdapter;
 import fr.sweetiez.api.adapter.repository.customers.CustomerReaderAdapter;
 import fr.sweetiez.api.adapter.repository.customers.CustomerWriterAdapter;
 import fr.sweetiez.api.adapter.repository.evaluations.EvaluationReaderAdapter;
 import fr.sweetiez.api.adapter.repository.evaluations.EvaluationWriterAdapter;
+import fr.sweetiez.api.adapter.repository.events.FaceToFaceEventsAdapter;
+import fr.sweetiez.api.adapter.repository.events.SpacesAdapter;
 import fr.sweetiez.api.adapter.repository.ingredients.IngredientRepositoryAdapter;
 import fr.sweetiez.api.adapter.repository.orders.OrderReaderAdapter;
 import fr.sweetiez.api.adapter.repository.orders.OrderWriterAdapter;
@@ -42,6 +44,9 @@ import fr.sweetiez.api.core.customers.services.CustomerService;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationReader;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationWriter;
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
+import fr.sweetiez.api.core.events.animator.Animators;
+import fr.sweetiez.api.core.events.event.Events;
+import fr.sweetiez.api.core.events.space.Spaces;
 import fr.sweetiez.api.core.ingredients.ports.IngredientApi;
 import fr.sweetiez.api.core.ingredients.ports.Ingredients;
 import fr.sweetiez.api.core.ingredients.ports.TranslatorApi;
@@ -72,10 +77,16 @@ import fr.sweetiez.api.infrastructure.repository.accounts.AccountRepository;
 import fr.sweetiez.api.infrastructure.repository.accounts.RoleRepository;
 import fr.sweetiez.api.infrastructure.repository.customers.CustomerRepository;
 import fr.sweetiez.api.infrastructure.repository.evaluations.EvaluationRepository;
+import fr.sweetiez.api.infrastructure.repository.events.animator.AnimatorRepository;
+import fr.sweetiez.api.infrastructure.repository.events.event.FaceToFaceEventRepository;
+import fr.sweetiez.api.infrastructure.repository.events.space.ReservedSpaceRepository;
+import fr.sweetiez.api.infrastructure.repository.events.space.SpaceRepository;
 import fr.sweetiez.api.infrastructure.repository.ingredients.HealthPropertyRepository;
 import fr.sweetiez.api.infrastructure.repository.ingredients.IngredientRepository;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderDetailRepository;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderRepository;
+import fr.sweetiez.api.infrastructure.repository.products.sweets.SweetRepository;
+import fr.sweetiez.api.infrastructure.repository.products.trays.TrayRepository;
 import fr.sweetiez.api.infrastructure.repository.recipe.RecipeRepository;
 import fr.sweetiez.api.infrastructure.repository.recipe.RecipeStepRepository;
 import fr.sweetiez.api.infrastructure.repository.reports.ReportRepository;
@@ -125,22 +136,24 @@ public class SpringDependenciesConfig {
     private final RecipeStepRepository recipeStepRepository;
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManager;
-
-
     private final RewardRepository rewardRepository;
+    private final AnimatorRepository animatorRepository;
+    private final SpaceRepository spaceRepository;
+    private final ReservedSpaceRepository reservedSpaceRepository;
+    private final FaceToFaceEventRepository faceToFaceEventRepository;
 
-    public SpringDependenciesConfig(SweetRepository sweetRepository, EvaluationRepository evaluationRepository,
-                                    ReportRepository reportRepository, CustomerRepository customerRepository,
-                                    AccountRepository accountRepository, RoleRepository roleRepository,
-                                    OrderRepository orderRepository, OrderDetailRepository orderDetailRepository,
-                                    RecipeRepository recipeRepository, 
-                                    RecipeStepRepository recipeStepRepository,
-                                    IngredientRepository ingredientRepository,
-                                    HealthPropertyRepository healthPropertyRepository,
-                                    TokenProvider tokenProvider, TrayRepository trayRepository,
-                                    AuthenticationManagerBuilder authenticationManager, RewardRepository rewardRepository)
-
-  {
+    public SpringDependenciesConfig(SweetRepository sweetRepository, TrayRepository trayRepository,
+                                    EvaluationRepository evaluationRepository, ReportRepository reportRepository,
+                                    CustomerRepository customerRepository, AccountRepository accountRepository,
+                                    RoleRepository roleRepository, IngredientRepository ingredientRepository,
+                                    HealthPropertyRepository healthPropertyRepository, OrderRepository orderRepository,
+                                    OrderDetailRepository orderDetailRepository, RecipeRepository recipeRepository,
+                                    RecipeStepRepository recipeStepRepository, TokenProvider tokenProvider,
+                                    AuthenticationManagerBuilder authenticationManager, RewardRepository rewardRepository,
+                                    AnimatorRepository animatorRepository, SpaceRepository spaceRepository,
+                                    ReservedSpaceRepository reservedSpaceRepository,
+                                    FaceToFaceEventRepository faceToFaceEventRepository)
+    {
         this.sweetRepository = sweetRepository;
         this.trayRepository = trayRepository;
         this.evaluationRepository = evaluationRepository;
@@ -148,15 +161,19 @@ public class SpringDependenciesConfig {
         this.customerRepository = customerRepository;
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
+        this.ingredientRepository = ingredientRepository;
+        this.healthPropertyRepository = healthPropertyRepository;
         this.orderRepository = orderRepository;
         this.orderDetailRepository = orderDetailRepository;
         this.recipeRepository = recipeRepository;
         this.recipeStepRepository = recipeStepRepository;
-        this.ingredientRepository = ingredientRepository;
-        this.healthPropertyRepository = healthPropertyRepository;
-        this.rewardRepository = rewardRepository;
         this.tokenProvider = tokenProvider;
         this.authenticationManager = authenticationManager;
+        this.rewardRepository = rewardRepository;
+        this.animatorRepository = animatorRepository;
+        this.spaceRepository = spaceRepository;
+        this.reservedSpaceRepository = reservedSpaceRepository;
+        this.faceToFaceEventRepository = faceToFaceEventRepository;
     }
 
     @Bean
@@ -216,8 +233,33 @@ public class SpringDependenciesConfig {
         return new RewardMapper();
     }
 
+    @Bean
+    public SpaceMapper spaceMapper() {
+        return new SpaceMapper();
+    }
+
+    @Bean
+    public FaceToFaceEventMapper faceToFaceEventMapper() {
+        return new FaceToFaceEventMapper(customerMapper());
+    }
+
     // ADAPTERS
     // REPOSITORY ADAPTERS
+
+    @Bean
+    public Animators animators() {
+        return new AnimatorsAdapter(animatorRepository, customerRepository);
+    }
+
+    @Bean
+    public Spaces spaces() {
+        return new SpacesAdapter(spaceRepository, reservedSpaceRepository);
+    }
+
+    @Bean
+    public Events faceToFaceEvents() {
+        return new FaceToFaceEventsAdapter(faceToFaceEventRepository, animators(), spaces(), faceToFaceEventMapper());
+    }
 
     @Bean
     public EvaluationReader evaluationReader() {
@@ -319,6 +361,11 @@ public class SpringDependenciesConfig {
         return new CustomerReaderAdapter(customerRepository, customerMapper());
     }
 
+    @Bean
+    public AccountNotifierAdapter accountNotifierAdapter() {
+        return new AccountNotifierAdapter(gmailSender());
+    }
+
      // GATEWAY ADAPTERS
 
     @Bean
@@ -340,7 +387,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public AuthenticationService authenticationService() {
-        return new AuthenticationService(authenticationRepository(), customerService(), tokenProvider, authenticationManager);
+        return new AuthenticationService(authenticationRepository(), customerService(), tokenProvider, authenticationManager, accountNotifierAdapter());
     }
 
     @Bean
@@ -399,6 +446,11 @@ public class SpringDependenciesConfig {
     }
 
     // END POINTS
+
+    @Bean
+    public FaceToFaceEventEndPoints faceToFaceEventEndPoints() {
+        return new FaceToFaceEventEndPoints(animators(), spaces(), faceToFaceEvents(), customerReader());
+    }
   
     @Bean
     public EvaluationEndPoints evaluationEndPoints() {

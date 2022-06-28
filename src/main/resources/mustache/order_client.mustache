@@ -1,6 +1,15 @@
 Bonjour {{firstName}},
 
-Votre commande (référence: {{commandId}}) a été traitée avec succès pour un montant de {{total}}€.
+Voici la facture pour votre commande (référence: {{commandId}}) a été traitée avec succès pour un montant de {{total}}€.
+Votre commande sera préparée pour le {{pickupDate}}.
+
+Contenu de la commande:
+{{#products}}
+    - {{name}} x {{quantity}}
+{{/products}}
+{{#rewardName}}
+    - {{rewardName}}
+{{/rewardName}}
 
 Nous vous remercions pour votre commande.
 

@@ -1,6 +1,7 @@
-package fr.sweetiez.api.infrastructure.notification.email;
+package fr.sweetiez.api.infrastructure.notification.email.dtos;
 
 import javax.validation.constraints.Email;
+import java.util.List;
 
 public record OrderEmailDto(
         @Email
@@ -9,8 +10,8 @@ public record OrderEmailDto(
         String firstName,
         String lastName,
         String commandId,
-        double total
-) {
-
-
+        String pickupDate,
+        double total,
+        List<ProductEmailDto> products,
+        String rewardName){
 }

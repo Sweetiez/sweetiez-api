@@ -12,7 +12,7 @@ public record Steps(Collection<Step> steps) {
 
     public Steps addStep(Step step) {
         var newSteps = new ArrayList<>(steps);
-        System.out.println(newSteps);
+
         if (steps.size() == 1 && steps.toArray()[0].equals("")) {
             newSteps = new ArrayList<>();
         }

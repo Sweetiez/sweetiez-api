@@ -35,3 +35,6 @@ stripe:
 security:
   token:
     secret: secret_jwt_token_test
+
+front:
+  base-url: ""

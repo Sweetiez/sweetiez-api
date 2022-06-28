@@ -35,7 +35,10 @@ public record DetailedOrderResponse(
                 order.products().stream()
                         .map(product -> new ProductOrderedResponse(
                                 product.name(),
-                                product.quantity().value()
+                                product.quantity().value(),
+                                product.unitPrice().unitPerPackage(),
+                                product.unitPrice().unitPrice(),
+                                product.unitPrice().packaged()
                         ))
                         .toList(),
                 "",
@@ -56,7 +59,10 @@ public record DetailedOrderResponse(
                 order.products().stream()
                         .map(product -> new ProductOrderedResponse(
                                 product.name(),
-                                product.quantity().value()
+                                product.quantity().value(),
+                                product.unitPrice().unitPerPackage(),
+                                product.unitPrice().unitPrice(),
+                                product.unitPrice().packaged()
                         ))
                         .toList(),
                 reward.name(),
