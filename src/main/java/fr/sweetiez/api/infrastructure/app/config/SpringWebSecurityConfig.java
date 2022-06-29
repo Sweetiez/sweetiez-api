@@ -80,7 +80,8 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/sweets/published",
                         "/sweets/{\\d+}",
                         "/trays/{\\d+}",
-                        "/events/**"
+                        "/events/**",
+                        "/actuator/**"
                         ).permitAll()
                 .anyRequest().authenticated();
 
