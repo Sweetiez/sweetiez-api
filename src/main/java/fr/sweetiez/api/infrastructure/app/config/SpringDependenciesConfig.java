@@ -5,6 +5,7 @@ import fr.sweetiez.api.adapter.delivery.AdminRecipeEndPoints;
 import fr.sweetiez.api.adapter.delivery.RecipeEndPoints;
 import fr.sweetiez.api.adapter.delivery.RewardEndPoints;
 import fr.sweetiez.api.adapter.delivery.authentication.AuthenticationEndPoints;
+import fr.sweetiez.api.adapter.delivery.dashboard.DashboardEndPoints;
 import fr.sweetiez.api.adapter.delivery.evaluation.EvaluationEndPoints;
 import fr.sweetiez.api.adapter.delivery.event.FaceToFaceEventEndPoints;
 import fr.sweetiez.api.adapter.delivery.ingredient.IngredientEndPoints;
@@ -20,6 +21,7 @@ import fr.sweetiez.api.adapter.gateways.allergen.EdamamApi;
 import fr.sweetiez.api.adapter.gateways.translator.LibreTranslateApi;
 import fr.sweetiez.api.adapter.repository.*;
 import fr.sweetiez.api.adapter.repository.accounts.AccountRepositoryAdapter;
+import fr.sweetiez.api.adapter.repository.dashboard.DashboardReaderAdapter;
 import fr.sweetiez.api.adapter.repository.events.AnimatorsAdapter;
 import fr.sweetiez.api.adapter.repository.customers.CustomerReaderAdapter;
 import fr.sweetiez.api.adapter.repository.customers.CustomerWriterAdapter;
@@ -41,6 +43,8 @@ import fr.sweetiez.api.core.authentication.services.AuthenticationService;
 import fr.sweetiez.api.core.customers.ports.CustomerReader;
 import fr.sweetiez.api.core.customers.ports.CustomerWriter;
 import fr.sweetiez.api.core.customers.services.CustomerService;
+import fr.sweetiez.api.core.dashboard.ports.DashboardReader;
+import fr.sweetiez.api.core.dashboard.services.DashboardService;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationReader;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationWriter;
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
@@ -362,6 +366,20 @@ public class SpringDependenciesConfig {
     }
 
     @Bean
+    public DashboardReader dashboardReader() {
+        return new DashboardReaderAdapter(
+                sweetRepository,
+                trayRepository,
+                orderRepository,
+                recipeRepository,
+                accountRepository,
+                orderMapper(),
+                sweetMapper(),
+                trayMapper(),
+                orderDetailRepository);
+    }
+
+    @Bean
     public AccountNotifierAdapter accountNotifierAdapter() {
         return new AccountNotifierAdapter(gmailSender());
     }
@@ -445,8 +463,12 @@ public class SpringDependenciesConfig {
         return new LoyaltyPointService(loyaltyPointReader(), loyaltyPointWriter());
     }
 
-    // END POINTS
+    @Bean
+    public DashboardService dashboardService() {
+        return new DashboardService(dashboardReader());
+    }
 
+    // END POINTS
     @Bean
     public FaceToFaceEventEndPoints faceToFaceEventEndPoints() {
         return new FaceToFaceEventEndPoints(animators(), spaces(), faceToFaceEvents(), customerReader());
@@ -520,6 +542,11 @@ public class SpringDependenciesConfig {
     @Bean
     public RewardEndPoints rewardEndPoints() {
         return new RewardEndPoints(rewardService());
+    }
+
+    @Bean
+    public DashboardEndPoints dashboardEndPoints() {
+        return new DashboardEndPoints(dashboardService());
     }
 
     // MINIO

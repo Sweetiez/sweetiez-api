@@ -8,6 +8,7 @@ import fr.sweetiez.api.core.orders.models.orders.products.ProductOrder;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderDetailEntity;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderEntity;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
@@ -50,6 +51,26 @@ public class OrderMapper {
                 orderDetails.stream()
                         .map(this::toDto)
                         .toList(),
+                Optional.of(new CustomerId(entity.getCustomerId())),
+                entity.getTotalPrice(),
+                entity.getCreatedAt(),
+                entity.getPaymentIntent(),
+                entity.getRewardId()
+        );
+    }
+
+    public Order toSimpleDto(OrderEntity entity) {
+        return new Order(
+                new OrderId(entity.getId()),
+                new CustomerInfo(
+                        entity.getFirstName(),
+                        entity.getLastName(),
+                        entity.getEmail(),
+                        entity.getPhone()
+                ),
+                entity.getPickupDate(),
+                entity.getStatus(),
+                new ArrayList<>(),
                 Optional.of(new CustomerId(entity.getCustomerId())),
                 entity.getTotalPrice(),
                 entity.getCreatedAt(),
