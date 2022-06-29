@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface SweetRepository extends JpaRepository<SweetEntity, UUID> {
     List<SweetEntity> findAllByState(State state);
+
+    Integer countByState(State state);
 }

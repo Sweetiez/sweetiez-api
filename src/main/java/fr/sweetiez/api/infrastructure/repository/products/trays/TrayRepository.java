@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface TrayRepository extends JpaRepository<TrayEntity, UUID> {
     List<TrayEntity> findAllByState(State state);
+
+    Integer countByState(State state);
 }
