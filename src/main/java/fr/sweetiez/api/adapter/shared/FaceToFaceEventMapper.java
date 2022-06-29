@@ -1,11 +1,11 @@
 package fr.sweetiez.api.adapter.shared;
 
 import fr.sweetiez.api.core.events.animator.Animator;
-import fr.sweetiez.api.core.events.event.Event;
-import fr.sweetiez.api.core.events.event.EventDto;
+import fr.sweetiez.api.core.events.events.face_to_face_event.FaceToFaceEvent;
+import fr.sweetiez.api.core.events.events.face_to_face_event.FaceToFaceEventDto;
 import fr.sweetiez.api.core.events.schedule.Schedule;
 import fr.sweetiez.api.core.events.space.Space;
-import fr.sweetiez.api.infrastructure.repository.events.event.FaceToFaceEventEntity;
+import fr.sweetiez.api.infrastructure.repository.events.event.face_to_face.FaceToFaceEventEntity;
 
 import java.time.Duration;
 import java.util.stream.Collectors;
@@ -18,9 +18,9 @@ public class FaceToFaceEventMapper {
         this.customerMapper = customerMapper;
     }
 
-    public FaceToFaceEventEntity toEntity(Event event) {
+    public FaceToFaceEventEntity toEntity(FaceToFaceEvent event) {
         return new FaceToFaceEventEntity(
-                event.getId().getEventId(),
+                event.getId().eventId(),
                 event.getTitle(),
                 event.getDescription(),
                 event.getAnimator().getId().getAnimatorId(),
@@ -31,8 +31,8 @@ public class FaceToFaceEventMapper {
                 event.getSubscribers().stream().map(customerMapper::toEntity).collect(Collectors.toList()));
     }
 
-    public Event toDto(FaceToFaceEventEntity entity, Animator animator, Space space) {
-        var dto = new EventDto(
+    public FaceToFaceEvent toDto(FaceToFaceEventEntity entity, Animator animator, Space space) {
+        var dto = new FaceToFaceEventDto(
                 entity.getId(),
                 entity.getTitle(),
                 entity.getDescription(),
@@ -42,6 +42,6 @@ public class FaceToFaceEventMapper {
                 space,
                 entity.getSubscribers().stream().map(customerMapper::toDto).collect(Collectors.toList()));
 
-        return new Event(dto);
+        return new FaceToFaceEvent(dto);
     }
 }

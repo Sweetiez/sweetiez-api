@@ -5,8 +5,10 @@ import fr.sweetiez.api.adapter.delivery.AdminRecipeEndPoints;
 import fr.sweetiez.api.adapter.delivery.RecipeEndPoints;
 import fr.sweetiez.api.adapter.delivery.RewardEndPoints;
 import fr.sweetiez.api.adapter.delivery.authentication.AuthenticationEndPoints;
+import fr.sweetiez.api.adapter.delivery.dashboard.DashboardEndPoints;
 import fr.sweetiez.api.adapter.delivery.evaluation.EvaluationEndPoints;
 import fr.sweetiez.api.adapter.delivery.event.FaceToFaceEventEndPoints;
+import fr.sweetiez.api.adapter.delivery.event.StreamingEventEndPoints;
 import fr.sweetiez.api.adapter.delivery.ingredient.IngredientEndPoints;
 import fr.sweetiez.api.adapter.delivery.order.OrderEndPoints;
 import fr.sweetiez.api.adapter.delivery.payment.PaymentWebhookEndpoint;
@@ -20,13 +22,15 @@ import fr.sweetiez.api.adapter.gateways.allergen.EdamamApi;
 import fr.sweetiez.api.adapter.gateways.translator.LibreTranslateApi;
 import fr.sweetiez.api.adapter.repository.*;
 import fr.sweetiez.api.adapter.repository.accounts.AccountRepositoryAdapter;
+import fr.sweetiez.api.adapter.repository.dashboard.DashboardReaderAdapter;
 import fr.sweetiez.api.adapter.repository.events.AnimatorsAdapter;
 import fr.sweetiez.api.adapter.repository.customers.CustomerReaderAdapter;
 import fr.sweetiez.api.adapter.repository.customers.CustomerWriterAdapter;
 import fr.sweetiez.api.adapter.repository.evaluations.EvaluationReaderAdapter;
 import fr.sweetiez.api.adapter.repository.evaluations.EvaluationWriterAdapter;
-import fr.sweetiez.api.adapter.repository.events.FaceToFaceEventsAdapter;
-import fr.sweetiez.api.adapter.repository.events.SpacesAdapter;
+import fr.sweetiez.api.adapter.repository.events.face_to_face.FaceToFaceEventsAdapter;
+import fr.sweetiez.api.adapter.repository.events.face_to_face.SpacesAdapter;
+import fr.sweetiez.api.adapter.repository.events.streaming.StreamingEventsAdapter;
 import fr.sweetiez.api.adapter.repository.ingredients.IngredientRepositoryAdapter;
 import fr.sweetiez.api.adapter.repository.orders.OrderReaderAdapter;
 import fr.sweetiez.api.adapter.repository.orders.OrderWriterAdapter;
@@ -41,11 +45,14 @@ import fr.sweetiez.api.core.authentication.services.AuthenticationService;
 import fr.sweetiez.api.core.customers.ports.CustomerReader;
 import fr.sweetiez.api.core.customers.ports.CustomerWriter;
 import fr.sweetiez.api.core.customers.services.CustomerService;
+import fr.sweetiez.api.core.dashboard.ports.DashboardReader;
+import fr.sweetiez.api.core.dashboard.services.DashboardService;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationReader;
 import fr.sweetiez.api.core.evaluations.ports.EvaluationWriter;
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
 import fr.sweetiez.api.core.events.animator.Animators;
-import fr.sweetiez.api.core.events.event.Events;
+import fr.sweetiez.api.core.events.events.face_to_face_event.FaceToFaceEvents;
+import fr.sweetiez.api.core.events.events.streaming_event.StreamingEvents;
 import fr.sweetiez.api.core.events.space.Spaces;
 import fr.sweetiez.api.core.ingredients.ports.IngredientApi;
 import fr.sweetiez.api.core.ingredients.ports.Ingredients;
@@ -78,7 +85,8 @@ import fr.sweetiez.api.infrastructure.repository.accounts.RoleRepository;
 import fr.sweetiez.api.infrastructure.repository.customers.CustomerRepository;
 import fr.sweetiez.api.infrastructure.repository.evaluations.EvaluationRepository;
 import fr.sweetiez.api.infrastructure.repository.events.animator.AnimatorRepository;
-import fr.sweetiez.api.infrastructure.repository.events.event.FaceToFaceEventRepository;
+import fr.sweetiez.api.infrastructure.repository.events.event.face_to_face.FaceToFaceEventRepository;
+import fr.sweetiez.api.infrastructure.repository.events.event.streaming.StreamingEventRepository;
 import fr.sweetiez.api.infrastructure.repository.events.space.ReservedSpaceRepository;
 import fr.sweetiez.api.infrastructure.repository.events.space.SpaceRepository;
 import fr.sweetiez.api.infrastructure.repository.ingredients.HealthPropertyRepository;
@@ -141,6 +149,7 @@ public class SpringDependenciesConfig {
     private final SpaceRepository spaceRepository;
     private final ReservedSpaceRepository reservedSpaceRepository;
     private final FaceToFaceEventRepository faceToFaceEventRepository;
+    private final StreamingEventRepository streamingEventRepository;
 
     public SpringDependenciesConfig(SweetRepository sweetRepository, TrayRepository trayRepository,
                                     EvaluationRepository evaluationRepository, ReportRepository reportRepository,
@@ -152,6 +161,7 @@ public class SpringDependenciesConfig {
                                     AuthenticationManagerBuilder authenticationManager, RewardRepository rewardRepository,
                                     AnimatorRepository animatorRepository, SpaceRepository spaceRepository,
                                     ReservedSpaceRepository reservedSpaceRepository,
+                                    StreamingEventRepository streamingEventRepository,
                                     FaceToFaceEventRepository faceToFaceEventRepository)
     {
         this.sweetRepository = sweetRepository;
@@ -174,6 +184,7 @@ public class SpringDependenciesConfig {
         this.spaceRepository = spaceRepository;
         this.reservedSpaceRepository = reservedSpaceRepository;
         this.faceToFaceEventRepository = faceToFaceEventRepository;
+        this.streamingEventRepository = streamingEventRepository;
     }
 
     @Bean
@@ -243,6 +254,11 @@ public class SpringDependenciesConfig {
         return new FaceToFaceEventMapper(customerMapper());
     }
 
+    @Bean
+    public StreamingEventMapper streamingEventMapper() {
+        return new StreamingEventMapper(customerMapper());
+    }
+
     // ADAPTERS
     // REPOSITORY ADAPTERS
 
@@ -257,8 +273,13 @@ public class SpringDependenciesConfig {
     }
 
     @Bean
-    public Events faceToFaceEvents() {
+    public FaceToFaceEvents faceToFaceEvents() {
         return new FaceToFaceEventsAdapter(faceToFaceEventRepository, animators(), spaces(), faceToFaceEventMapper());
+    }
+
+    @Bean
+    public StreamingEvents streamingEvents() {
+        return new StreamingEventsAdapter(streamingEventRepository, animators(), streamingEventMapper());
     }
 
     @Bean
@@ -362,6 +383,18 @@ public class SpringDependenciesConfig {
     }
 
     @Bean
+    public DashboardReader dashboardReader() {
+        return new DashboardReaderAdapter(
+                sweetRepository,
+                trayRepository,
+                orderRepository,
+                recipeRepository,
+                accountRepository,
+                orderMapper(),
+                orderDetailRepository);
+    }
+
+    @Bean
     public AccountNotifierAdapter accountNotifierAdapter() {
         return new AccountNotifierAdapter(gmailSender());
     }
@@ -445,7 +478,16 @@ public class SpringDependenciesConfig {
         return new LoyaltyPointService(loyaltyPointReader(), loyaltyPointWriter());
     }
 
+    @Bean
+    public DashboardService dashboardService() {
+        return new DashboardService(dashboardReader());
+    }
+
     // END POINTS
+    @Bean
+    public StreamingEventEndPoints streamingEventEndPoints() {
+        return new StreamingEventEndPoints(animators(), streamingEvents(), customerReader());
+    }
 
     @Bean
     public FaceToFaceEventEndPoints faceToFaceEventEndPoints() {
@@ -520,6 +562,11 @@ public class SpringDependenciesConfig {
     @Bean
     public RewardEndPoints rewardEndPoints() {
         return new RewardEndPoints(rewardService());
+    }
+
+    @Bean
+    public DashboardEndPoints dashboardEndPoints() {
+        return new DashboardEndPoints(dashboardService());
     }
 
     // MINIO
