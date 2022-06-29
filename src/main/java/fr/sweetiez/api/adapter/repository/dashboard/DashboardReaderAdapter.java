@@ -38,16 +38,12 @@ public class DashboardReaderAdapter implements DashboardReader {
      * Mappers
      */
     private final OrderMapper orderMapper;
-    private final SweetMapper sweetMapper;
-    private final TrayMapper trayMapper;
 
     public DashboardReaderAdapter(SweetRepository sweetRepository,
                                   TrayRepository trayRepository,
                                   OrderRepository orderRepository,
                                   RecipeRepository recipeRepository, AccountRepository accountRepository,
                                   OrderMapper orderMapper,
-                                  SweetMapper sweetMapper,
-                                  TrayMapper trayMapper,
                                   OrderDetailRepository orderDetailRepository) {
         this.sweetRepository = sweetRepository;
         this.trayRepository = trayRepository;
@@ -55,8 +51,6 @@ public class DashboardReaderAdapter implements DashboardReader {
         this.recipeRepository = recipeRepository;
         this.accountRepository = accountRepository;
         this.orderMapper = orderMapper;
-        this.sweetMapper = sweetMapper;
-        this.trayMapper = trayMapper;
         this.orderDetailRepository = orderDetailRepository;
     }
 
@@ -79,13 +73,6 @@ public class DashboardReaderAdapter implements DashboardReader {
 
         var chart = getChart(chartCurrentMonth);
 
-//        System.out.println(clientsNumber);
-//        System.out.println(publishedSweets);
-//        System.out.println(publishedTrays);
-//        System.out.println(publishedRecipes);
-//        System.out.println(monthSales);
-//        System.out.println(orders.size());
-
         return new Dashboard(
                 chart,
                 orders,
@@ -101,28 +88,21 @@ public class DashboardReaderAdapter implements DashboardReader {
         // Get dates from 6 months ago
         var date = LocalDate.now();
         var firstOfCurrentMonth = date.minusDays(date.getDayOfMonth() -1);
-        var oneMonthsAgo = firstOfCurrentMonth.minusMonths(1);
-        var twoMonthsAgo = firstOfCurrentMonth.minusMonths(2);
-        var threeMonthsAgo = firstOfCurrentMonth.minusMonths(3);
-        var fourMonthsAgo = firstOfCurrentMonth.minusMonths(4);
-        var fiveMonthsAgo = firstOfCurrentMonth.minusMonths(5);
-        var sixMonthsAgo = firstOfCurrentMonth.minusMonths(6);
 
+        var dates = new ArrayList<LocalDate>();
+        dates.add(firstOfCurrentMonth);
 
-        var salesFromCurrentMonth = this.orderRepository.findAllByCreatedAtAfter(firstOfCurrentMonth);
-        var salesFromLastMonth = computeMonthSales(this.orderRepository.findAllByCreatedAtAfterAndCreatedAtBefore(oneMonthsAgo, firstOfCurrentMonth));
-        var salesFromTwoMonthAgo = computeMonthSales(this.orderRepository.findAllByCreatedAtAfterAndCreatedAtBefore(twoMonthsAgo, oneMonthsAgo));
-        var salesFromThreeMonthAgo = computeMonthSales(this.orderRepository.findAllByCreatedAtAfterAndCreatedAtBefore(threeMonthsAgo, twoMonthsAgo));
-        var salesFromFourMonthAgo = computeMonthSales(this.orderRepository.findAllByCreatedAtAfterAndCreatedAtBefore(fourMonthsAgo, threeMonthsAgo));
-        var salesFromFiveMonthAgo = computeMonthSales(this.orderRepository.findAllByCreatedAtAfterAndCreatedAtBefore(fiveMonthsAgo, fourMonthsAgo));
-        var salesFromSixMonthAgo = computeMonthSales(this.orderRepository.findAllByCreatedAtAfterAndCreatedAtBefore(sixMonthsAgo, fiveMonthsAgo));
+        for (var i = 0; i < 7; i++) {
+            dates.add(firstOfCurrentMonth.minusMonths(i));
+        }
 
-        chart.add(new ChartElement(oneMonthsAgo, salesFromLastMonth));
-        chart.add(new ChartElement(twoMonthsAgo, salesFromTwoMonthAgo));
-        chart.add(new ChartElement(threeMonthsAgo, salesFromThreeMonthAgo));
-        chart.add(new ChartElement(fourMonthsAgo, salesFromFourMonthAgo));
-        chart.add(new ChartElement(fiveMonthsAgo, salesFromFiveMonthAgo));
-        chart.add(new ChartElement(sixMonthsAgo, salesFromSixMonthAgo));
+        for (var i = 1; i < 7; i++) {
+
+            chart.add(new ChartElement(
+                    dates.get(i+1),
+                    computeMonthSales(this.orderRepository.findAllByCreatedAtAfterAndCreatedAtBefore(dates.get(i+1), dates.get(i)))
+            ));
+        }
 
         return chart;
     }
