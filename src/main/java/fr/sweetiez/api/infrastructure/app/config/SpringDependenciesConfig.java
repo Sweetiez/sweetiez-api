@@ -374,8 +374,6 @@ public class SpringDependenciesConfig {
                 recipeRepository,
                 accountRepository,
                 orderMapper(),
-                sweetMapper(),
-                trayMapper(),
                 orderDetailRepository);
     }
 
