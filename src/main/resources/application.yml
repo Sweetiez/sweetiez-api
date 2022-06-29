@@ -32,6 +32,18 @@ spring:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
 
+# Metrics related configurations
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+
 minio:
   url: ${MINIO_HOST}
   bucket:
