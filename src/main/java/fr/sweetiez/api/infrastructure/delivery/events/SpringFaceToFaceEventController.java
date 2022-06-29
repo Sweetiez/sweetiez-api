@@ -1,8 +1,8 @@
 package fr.sweetiez.api.infrastructure.delivery.events;
 
 import fr.sweetiez.api.adapter.delivery.event.FaceToFaceEventEndPoints;
-import fr.sweetiez.api.core.events.event.Event;
-import fr.sweetiez.api.core.events.use_case.models.*;
+import fr.sweetiez.api.core.events.events.face_to_face_event.FaceToFaceEvent;
+import fr.sweetiez.api.core.events.use_case.face_to_face.models.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,22 +24,22 @@ public class SpringFaceToFaceEventController {
     }
 
     @PutMapping("/admin/events/face-to-face/publish/{id}")
-    public ResponseEntity<Event> publish(@PathVariable UUID id) {
+    public ResponseEntity<FaceToFaceEvent> publish(@PathVariable UUID id) {
         return endPoints.publishEvent(id);
     }
 
     @PutMapping("/admin/events/face-to-face/cancel/{id}")
-    public ResponseEntity<Event> cancel(@PathVariable UUID id) {
+    public ResponseEntity<FaceToFaceEvent> cancel(@PathVariable UUID id) {
         return endPoints.cancelEvent(id);
     }
 
     @PutMapping("/admin/events/face-to-face/reschedule")
-    public ResponseEntity<Event> reschedule(@RequestBody RescheduleEventRequest request) {
+    public ResponseEntity<FaceToFaceEvent> reschedule(@RequestBody RescheduleEventRequest request) {
         return endPoints.rescheduleEvent(request);
     }
 
     @PutMapping("/events/face-to-face/subscribe")
-    public ResponseEntity<Event> subscribe(@RequestBody SubscribeEventRequest request) {
+    public ResponseEntity<FaceToFaceEvent> subscribe(@RequestBody SubscribeEventRequest request) {
         return endPoints.subscribeEvent(request);
     }
 
