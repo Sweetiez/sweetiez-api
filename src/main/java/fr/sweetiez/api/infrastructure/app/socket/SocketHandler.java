@@ -18,6 +18,7 @@ public class SocketHandler extends TextWebSocketHandler {
 
     public void afterConnectionEstablished(@NotNull WebSocketSession session) {
         sessions.add(session);
+        System.out.println("SESSION NUMBER: " + sessions.size());
     }
 
     public void afterConnectionClosed(@NotNull WebSocketSession session, @NotNull CloseStatus status) {
@@ -27,6 +28,7 @@ public class SocketHandler extends TextWebSocketHandler {
     public void handleTextMessage(@NotNull WebSocketSession session, @NotNull TextMessage message) throws IOException {
         for (WebSocketSession webSocketSession : sessions) {
             if (!session.equals(webSocketSession)) {
+                System.out.println("I WAS HERE !!");
                 webSocketSession.sendMessage(message);
             }
         }
