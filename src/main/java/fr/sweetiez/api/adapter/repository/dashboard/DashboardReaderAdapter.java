@@ -61,7 +61,7 @@ public class DashboardReaderAdapter implements DashboardReader {
         var publishedTrays = this.trayRepository.countByState(State.PUBLISHED);
         var publishedRecipes = this.recipeRepository.countByState(fr.sweetiez.api.core.recipes.models.recipes.details.State.PUBLISHED);
         var date = LocalDate.now();
-        var ordersFromLastMonth = this.orderRepository.findAllByCreatedAtAfter(date.minusDays(date.getDayOfMonth() -1));
+        var ordersFromLastMonth = this.orderRepository.findAllByCreatedAtAfter(date.minusDays(date.getDayOfMonth() == 1 ? date.getDayOfMonth() : date.getDayOfMonth() -1));
 
 
         var monthSales = computeMonthSales(ordersFromLastMonth);
@@ -128,12 +128,12 @@ public class DashboardReaderAdapter implements DashboardReader {
         ordersFromLastMonth.forEach(entity -> {
             // Retrieve ordered products
             var orderDetails = this.orderDetailRepository.findAllByOrderId(entity.getId());
-
             orderDetails.forEach(orderDetail -> {
                 if (topSalesMap.containsKey(orderDetail.getName())) {
-                    topSalesMap.put(orderDetail.getName(), topSalesMap.get(orderDetail.getName()) + 1);
+                    System.out.println(orderDetail);
+                    topSalesMap.put(orderDetail.getName(), topSalesMap.get(orderDetail.getName()) + orderDetail.getQuantity());
                 } else {
-                    topSalesMap.put(orderDetail.getName(), 1);
+                    topSalesMap.put(orderDetail.getName(), orderDetail.getQuantity());
                 }
             });
         });
