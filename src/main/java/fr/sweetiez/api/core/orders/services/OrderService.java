@@ -14,10 +14,7 @@ import fr.sweetiez.api.core.orders.models.orders.products.ProductOrder;
 import fr.sweetiez.api.core.orders.models.orders.products.ProductType;
 import fr.sweetiez.api.core.orders.models.requests.CreateOrderRequest;
 import fr.sweetiez.api.core.orders.models.requests.ProductOrderRequest;
-import fr.sweetiez.api.core.orders.models.responses.DetailedOrderResponse;
-import fr.sweetiez.api.core.orders.models.responses.OrderCreatedResponse;
-import fr.sweetiez.api.core.orders.models.responses.OrderStatusUpdatedResponse;
-import fr.sweetiez.api.core.orders.models.responses.PaymentIntentResponse;
+import fr.sweetiez.api.core.orders.models.responses.*;
 import fr.sweetiez.api.core.orders.ports.OrdersNotifier;
 import fr.sweetiez.api.core.orders.ports.OrdersReader;
 import fr.sweetiez.api.core.orders.ports.OrdersWriter;
@@ -31,6 +28,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class OrderService {
     private final OrdersWriter writer;
@@ -220,6 +218,17 @@ public class OrderService {
         return orders.orders().stream()
                 .map(this::responseBuilder)
                 .toList();
+    }
+
+    public VerifyPurchaseResponse verifyPurchase(String clientEmail, UUID productId) {
+        var orders = this.reader.findByEmailIfPaid(clientEmail);
+        var res = orders.orders().stream()
+                .map(Order::products)
+                .flatMap(Collection::stream)
+                .map(ProductOrder::productId)
+                .filter(id -> id.equals(productId)).toList();
+
+        return new VerifyPurchaseResponse(res.size() >= 1);
     }
 
     private String removeClientSecretFromPaymentIntent(String paymentIntent){

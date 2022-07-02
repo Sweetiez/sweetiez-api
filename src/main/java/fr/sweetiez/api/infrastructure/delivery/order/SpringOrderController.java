@@ -2,8 +2,10 @@ package fr.sweetiez.api.infrastructure.delivery.order;
 
 import fr.sweetiez.api.adapter.delivery.order.OrderEndPoints;
 import fr.sweetiez.api.core.orders.models.requests.CreateOrderRequest;
+import fr.sweetiez.api.core.orders.models.requests.VerifyPurchaseRequest;
 import fr.sweetiez.api.core.orders.models.responses.DetailedOrderResponse;
 import fr.sweetiez.api.core.orders.models.responses.OrderCreatedResponse;
+import fr.sweetiez.api.core.orders.models.responses.VerifyPurchaseResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -30,4 +32,8 @@ public class SpringOrderController {
         return orderEndPoints.retrieveClientOrder(authentication.getName());
     }
 
+    @PostMapping("/me")
+    public ResponseEntity<VerifyPurchaseResponse> verifyPurchase(@RequestBody VerifyPurchaseRequest request) {
+        return orderEndPoints.verifyPurchase(request.email(), request.productId());
+    }
 }

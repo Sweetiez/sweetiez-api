@@ -11,6 +11,7 @@ import fr.sweetiez.api.core.orders.services.exceptions.PaymentIntentException;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.UUID;
 
 public class OrderEndPoints {
 
@@ -30,6 +31,10 @@ public class OrderEndPoints {
 
     public ResponseEntity<List<DetailedOrderResponse>> retrieveClientOrder(String clientEmail) {
         return ResponseEntity.ok().body(orderService.retrieveClientOrders(clientEmail));
+    }
+
+    public ResponseEntity<VerifyPurchaseResponse> verifyPurchase(String clientEmail, UUID productId) {
+        return ResponseEntity.ok().body(orderService.verifyPurchase(clientEmail, productId));
     }
 
     public ResponseEntity<List<DetailedOrderResponse>> getOrders() {
