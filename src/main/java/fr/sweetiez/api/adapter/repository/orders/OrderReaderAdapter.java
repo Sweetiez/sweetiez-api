@@ -2,6 +2,7 @@ package fr.sweetiez.api.adapter.repository.orders;
 
 import fr.sweetiez.api.adapter.shared.OrderMapper;
 import fr.sweetiez.api.core.orders.models.orders.Order;
+import fr.sweetiez.api.core.orders.models.orders.OrderStatus;
 import fr.sweetiez.api.core.orders.models.orders.Orders;
 import fr.sweetiez.api.core.orders.ports.OrdersReader;
 import fr.sweetiez.api.infrastructure.repository.orders.OrderDetailRepository;
@@ -57,6 +58,13 @@ public class OrderReaderAdapter implements OrdersReader {
     @Override
     public Orders findByEmail(String clientEmail) {
         var entityOrders = this.repository.findByEmail(clientEmail);
+        return new Orders(entityOrders.stream()
+                .map(entity -> this.mapper.toDto(entity, this.detailRepository.findAllByOrderId(entity.getId())))
+                .toList());
+    }
+    @Override
+    public Orders findByEmailIfPaid(String clientEmail) {
+        var entityOrders = this.repository.findByEmailAndStatusEquals(clientEmail, OrderStatus.PAID);
         return new Orders(entityOrders.stream()
                 .map(entity -> this.mapper.toDto(entity, this.detailRepository.findAllByOrderId(entity.getId())))
                 .toList());
