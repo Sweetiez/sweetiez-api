@@ -61,7 +61,7 @@ public class DashboardReaderAdapter implements DashboardReader {
         var publishedTrays = this.trayRepository.countByState(State.PUBLISHED);
         var publishedRecipes = this.recipeRepository.countByState(fr.sweetiez.api.core.recipes.models.recipes.details.State.PUBLISHED);
         var date = LocalDate.now();
-        var ordersFromLastMonth = this.orderRepository.findAllByCreatedAtAfter(date.minusDays(date.getDayOfMonth() == 1 ? date.getDayOfMonth() : date.getDayOfMonth() -1));
+        var ordersFromLastMonth = this.orderRepository.findAllByCreatedAtAfter(date.minusDays(date.getDayOfMonth()));
 
 
         var monthSales = computeMonthSales(ordersFromLastMonth);
