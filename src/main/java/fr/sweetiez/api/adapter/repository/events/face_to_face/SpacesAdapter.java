@@ -7,9 +7,11 @@ import fr.sweetiez.api.core.events.space.SpaceID;
 import fr.sweetiez.api.core.events.space.Spaces;
 import fr.sweetiez.api.infrastructure.repository.events.space.ReservedSpaceEntity;
 import fr.sweetiez.api.infrastructure.repository.events.space.ReservedSpaceRepository;
+import fr.sweetiez.api.infrastructure.repository.events.space.SpaceEntity;
 import fr.sweetiez.api.infrastructure.repository.events.space.SpaceRepository;
 
 import java.time.Duration;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -54,4 +56,28 @@ public class SpacesAdapter implements Spaces {
                 entity.city(),
                 entity.places()));
     }
+
+    public SpaceDTO save(SpaceDTO space) {
+        var entity = spaceRepository.save(new SpaceEntity(
+                space.id(),
+                space.address(),
+                space.city(),
+                space.zipCode(),
+                space.places()));
+        return new SpaceDTO(entity.id(), entity.address(), entity.city(), entity.zipCode(), entity.places());
+    }
+
+    @Override
+    public Collection<SpaceDTO> findAll() {
+        return spaceRepository.findAll().stream()
+                .map(entity -> new SpaceDTO(
+                        entity.id(),
+                        entity.address(),
+                        entity.city(),
+                        entity.zipCode(),
+                        entity.places()))
+                .collect(Collectors.toList());
+    }
+
+
 }

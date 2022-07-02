@@ -4,6 +4,7 @@ import fr.sweetiez.api.core.customers.ports.CustomerReader;
 import fr.sweetiez.api.core.events.animator.Animators;
 import fr.sweetiez.api.core.events.events.face_to_face_event.FaceToFaceEvent;
 import fr.sweetiez.api.core.events.events.face_to_face_event.FaceToFaceEvents;
+import fr.sweetiez.api.core.events.space.SpaceDTO;
 import fr.sweetiez.api.core.events.space.Spaces;
 import fr.sweetiez.api.core.events.use_case.face_to_face.*;
 import fr.sweetiez.api.core.events.use_case.face_to_face.models.*;
@@ -18,12 +19,15 @@ public class FaceToFaceEventEndPoints {
     private final Spaces spaces;
     private final FaceToFaceEvents events;
     private final CustomerReader customers;
+    private final SpaceService spaceService;
 
-    public FaceToFaceEventEndPoints(Animators animators, Spaces spaces, FaceToFaceEvents events, CustomerReader customers) {
+    public FaceToFaceEventEndPoints(Animators animators, Spaces spaces, FaceToFaceEvents events,
+                                    CustomerReader customers, SpaceService spaceService) {
         this.animators = animators;
         this.spaces = spaces;
         this.events = events;
         this.customers = customers;
+        this.spaceService = spaceService;
     }
 
     public ResponseEntity<Object> createEvent(CreateEventRequestDTO request) {
@@ -110,5 +114,23 @@ public class FaceToFaceEventEndPoints {
         catch (Exception exception) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    public ResponseEntity<SpaceDTO> createSpace(CreateSpaceRequest request) {
+        try {
+            var space = spaceService.create(request);
+            return ResponseEntity.ok(space);
+        }
+        catch (Exception exception) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    public ResponseEntity<Collection<SpaceDTO>> retrieveSpaces() {
+        return ResponseEntity.ok(spaceService.retrieveSpaces());
+    }
+
+    public ResponseEntity<Collection<AnimatorAdminResponse>> retrieveAnimators() {
+        return ResponseEntity.ok(spaceService.retrieveAnimators());
     }
 }
