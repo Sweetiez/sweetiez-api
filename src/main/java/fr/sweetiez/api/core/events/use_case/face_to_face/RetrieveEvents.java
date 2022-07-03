@@ -36,7 +36,9 @@ public class RetrieveEvents {
                         event.getDescription(),
                         new Location(space.id(), space.address(), space.zipCode(), space.city()),
                         new ScheduleResponse(event.getSchedule().getStart(), event.getSchedule().getEnd()),
-                        new Availability(space.places(), event.getSubscribers().size())));
+                        new Availability(space.places(), event.getSubscribers().size()),
+                        event.getSubscribers().stream().map(c -> c.id().value()).toList()
+                ));
             }
         });
 
