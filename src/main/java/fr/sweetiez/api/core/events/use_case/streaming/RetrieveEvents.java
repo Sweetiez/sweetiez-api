@@ -7,7 +7,9 @@ import fr.sweetiez.api.core.events.events.streaming_event.StreamingEvents;
 import fr.sweetiez.api.core.events.use_case.streaming.models.responses.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class RetrieveEvents {
 
@@ -57,4 +59,26 @@ public class RetrieveEvents {
                 })
                 .toList();
     }
+
+    public List<EventResponse> retrieveMyEvents(UUID userId) {
+        var events = this.events.findAll();
+        var response = new ArrayList<EventResponse>();
+
+        events.forEach(event -> {
+            var subscribersId = event.subscribers().stream().map(Customer::id).toList();
+            if (subscribersId.contains(new CustomerId(userId.toString()))) {
+                response.add(new EventResponse(
+                        event.id().eventId(),
+                        event.title(),
+                        event.description(),
+                        new ScheduleResponse(event.schedule().getStart(), event.schedule().getEnd()),
+                        new Availability(event.places(), event.subscribers().size()),
+                        event.subscribers().stream().map(c -> c.id().value()).toList()
+                ));
+            }
+        });
+
+        return response;
+    }
+
 }

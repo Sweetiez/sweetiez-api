@@ -112,4 +112,16 @@ public class StreamingEventEndPoints {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    public ResponseEntity<Collection<EventResponse>> retrieveMyEvents(UUID id) {
+        try {
+            var useCase = new RetrieveEvents(events, customers);
+            var event = useCase.retrieveMyEvents(id);
+
+            return ResponseEntity.ok(event);
+        }
+        catch (Exception exception) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
