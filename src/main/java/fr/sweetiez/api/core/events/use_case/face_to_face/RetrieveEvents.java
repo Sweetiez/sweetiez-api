@@ -62,7 +62,9 @@ public class RetrieveEvents {
                         new Location(space.id(), space.address(), space.zipCode(), space.city()),
                         new ScheduleResponse(event.getSchedule().getStart(), event.getSchedule().getEnd()),
                         new Availability(space.places(), event.getSubscribers().size()),
-                        new AnimatorResponse(animator.id().value(), animator.firstName(), animator.lastName())));
+                        new AnimatorResponse(animator.id().value(), animator.firstName(), animator.lastName()),
+                        event.getStatus())
+                );
             }
         });
 
