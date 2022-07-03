@@ -48,7 +48,9 @@ public class RetrieveEvents {
                             event.description(),
                             new ScheduleResponse(event.schedule().getStart(), event.schedule().getEnd()),
                             new Availability(event.places(), event.subscribers().size()),
-                            new AnimatorResponse(animator.id().value(), animator.firstName(), animator.lastName()));
+                            new AnimatorResponse(animator.id().value(), animator.firstName(), animator.lastName()),
+                            event.status()
+                    );
                 })
                 .toList();
     }

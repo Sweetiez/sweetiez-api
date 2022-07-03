@@ -1,5 +1,7 @@
 package fr.sweetiez.api.core.events.use_case.streaming.models.responses;
 
+import fr.sweetiez.api.core.events.events.StatusEvent;
+
 import java.util.UUID;
 
 public record EventAdminResponse(
@@ -8,5 +10,6 @@ public record EventAdminResponse(
         String description,
         ScheduleResponse schedule,
         Availability availability,
-        AnimatorResponse animator
+        AnimatorResponse animator,
+        StatusEvent status
 ) {}
