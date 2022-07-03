@@ -1,4 +1,6 @@
-package fr.sweetiez.api.core.roles;
+package fr.sweetiez.api.core.roles.ports;
+
+import fr.sweetiez.api.core.roles.models.Role;
 
 import java.util.Collection;
 import java.util.Optional;

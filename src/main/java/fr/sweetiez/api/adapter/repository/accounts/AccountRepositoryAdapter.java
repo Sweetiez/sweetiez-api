@@ -2,7 +2,7 @@ package fr.sweetiez.api.adapter.repository.accounts;
 
 import fr.sweetiez.api.adapter.shared.AccountMapper;
 import fr.sweetiez.api.core.authentication.models.Account;
-import fr.sweetiez.api.core.roles.Role;
+import fr.sweetiez.api.core.roles.models.Role;
 import fr.sweetiez.api.core.authentication.ports.AuthenticationRepository;
 import fr.sweetiez.api.infrastructure.repository.accounts.AccountRepository;
 import fr.sweetiez.api.infrastructure.repository.accounts.RoleRepository;

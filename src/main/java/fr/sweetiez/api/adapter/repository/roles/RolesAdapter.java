@@ -1,8 +1,8 @@
 package fr.sweetiez.api.adapter.repository.roles;
 
 import fr.sweetiez.api.adapter.shared.RoleMapper;
-import fr.sweetiez.api.core.roles.Role;
-import fr.sweetiez.api.core.roles.Roles;
+import fr.sweetiez.api.core.roles.models.Role;
+import fr.sweetiez.api.core.roles.ports.Roles;
 import fr.sweetiez.api.infrastructure.repository.accounts.RoleRepository;
 
 import java.util.Collection;
