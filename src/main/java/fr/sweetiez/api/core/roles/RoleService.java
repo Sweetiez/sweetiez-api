@@ -1,7 +1,5 @@
 package fr.sweetiez.api.core.roles;
 
-import org.springframework.http.ResponseEntity;
-
 import java.util.Collection;
 
 public class RoleService {
