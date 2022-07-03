@@ -1,5 +1,6 @@
 package fr.sweetiez.api.core.events.use_case.streaming;
 
+import fr.sweetiez.api.core.customers.models.Customer;
 import fr.sweetiez.api.core.customers.models.CustomerId;
 import fr.sweetiez.api.core.customers.ports.CustomerReader;
 import fr.sweetiez.api.core.events.events.streaming_event.StreamingEvents;
@@ -29,7 +30,9 @@ public class RetrieveEvents {
                         event.title(),
                         event.description(),
                         new ScheduleResponse(event.schedule().getStart(), event.schedule().getEnd()),
-                        new Availability(event.places(), event.subscribers().size())))
+                        new Availability(event.places(), event.subscribers().size()),
+                        event.subscribers().stream().map(c -> c.id().value()).toList()
+                ))
                 .toList();
     }
 
