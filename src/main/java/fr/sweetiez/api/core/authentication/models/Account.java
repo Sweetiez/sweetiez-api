@@ -1,5 +1,7 @@
 package fr.sweetiez.api.core.authentication.models;
 
+import fr.sweetiez.api.core.roles.Role;
+
 import java.util.Collection;
 import java.util.UUID;
 
