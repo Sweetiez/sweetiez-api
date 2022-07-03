@@ -64,6 +64,11 @@ public class SpringFaceToFaceEventController {
         return endPoints.retrieveAllPublished();
     }
 
+    @GetMapping("/events/face-to-face/subscribers/{id}")
+    public ResponseEntity<Collection<EventResponse>> retrieveMyEvents(@PathVariable UUID id) {
+        return endPoints.retrieveMyEvents(id);
+    }
+
     @GetMapping("/admin/events/face-to-face")
     public ResponseEntity<Collection<EventAdminResponse>> retrieveAll() {
         return endPoints.retrieveAll();

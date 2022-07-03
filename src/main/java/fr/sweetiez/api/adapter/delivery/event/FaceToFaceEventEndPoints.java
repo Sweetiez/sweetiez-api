@@ -104,6 +104,18 @@ public class FaceToFaceEventEndPoints {
         }
     }
 
+    public ResponseEntity<Collection<EventResponse>> retrieveMyEvents(UUID userId) {
+        try {
+            var useCase = new RetrieveEvents(events, spaces, customers);
+            var event = useCase.retrieveMyEvents(userId);
+
+            return ResponseEntity.ok(event);
+        }
+        catch (Exception exception) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     public ResponseEntity<Collection<EventAdminResponse>> retrieveAll() {
         try {
             var useCase = new RetrieveEvents(events, spaces, customers);
