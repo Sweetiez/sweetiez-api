@@ -1,7 +1,5 @@
 package fr.sweetiez.api.core.roles;
 
-import org.springframework.http.ResponseEntity;
-
 import java.util.Collection;
 
 public class RoleService {
@@ -12,7 +10,19 @@ public class RoleService {
         this.roles = roles;
     }
 
-    public ResponseEntity<Collection<Role>> retrieveAll() {
-        return ResponseEntity.ok(roles.findAll());
+    public Collection<Role> retrieveAll() {
+        return roles.findAll();
+    }
+
+    public Role create(String name) {
+        var existingRoles = retrieveAll();
+
+        existingRoles.stream()
+                .map(Role::name)
+                .filter(value -> value.equals(name))
+                .findFirst()
+                .orElseThrow();
+
+        return roles.save(new Role(null, name));
     }
 }
