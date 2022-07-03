@@ -13,6 +13,7 @@ import fr.sweetiez.api.adapter.delivery.ingredient.IngredientEndPoints;
 import fr.sweetiez.api.adapter.delivery.order.OrderEndPoints;
 import fr.sweetiez.api.adapter.delivery.payment.PaymentWebhookEndpoint;
 import fr.sweetiez.api.adapter.delivery.report.ReportEndPoints;
+import fr.sweetiez.api.adapter.delivery.role.RoleEndPoints;
 import fr.sweetiez.api.adapter.delivery.sweet.AdminSweetEndPoints;
 import fr.sweetiez.api.adapter.delivery.sweet.SweetEndPoints;
 import fr.sweetiez.api.adapter.delivery.tray.AdminTrayEndPoints;
@@ -39,6 +40,7 @@ import fr.sweetiez.api.adapter.repository.products.sweet.SweetWriterAdapter;
 import fr.sweetiez.api.adapter.repository.products.tray.TrayReaderAdapter;
 import fr.sweetiez.api.adapter.repository.products.tray.TrayWriterAdapter;
 import fr.sweetiez.api.adapter.repository.reports.ReportRepositoryAdapter;
+import fr.sweetiez.api.adapter.repository.roles.RolesAdapter;
 import fr.sweetiez.api.adapter.shared.*;
 import fr.sweetiez.api.core.authentication.ports.AuthenticationRepository;
 import fr.sweetiez.api.core.authentication.services.AuthenticationService;
@@ -78,6 +80,8 @@ import fr.sweetiez.api.core.recipes.ports.RecipeReader;
 import fr.sweetiez.api.core.recipes.ports.RecipeWriter;
 import fr.sweetiez.api.core.recipes.services.RecipeService;
 import fr.sweetiez.api.core.reports.services.ReportService;
+import fr.sweetiez.api.core.roles.RoleService;
+import fr.sweetiez.api.core.roles.Roles;
 import fr.sweetiez.api.infrastructure.app.security.TokenProvider;
 import fr.sweetiez.api.infrastructure.notification.email.GmailSender;
 import fr.sweetiez.api.infrastructure.payments.StripePaymentService;
@@ -260,6 +264,11 @@ public class SpringDependenciesConfig {
         return new StreamingEventMapper(customerMapper());
     }
 
+    @Bean
+    public RoleMapper roleMapper() {
+        return new RoleMapper();
+    }
+
     // ADAPTERS
     // REPOSITORY ADAPTERS
 
@@ -396,6 +405,11 @@ public class SpringDependenciesConfig {
     }
 
     @Bean
+    public Roles roles() {
+        return new RolesAdapter(roleRepository, roleMapper());
+    }
+
+    @Bean
     public AccountNotifierAdapter accountNotifierAdapter() {
         return new AccountNotifierAdapter(gmailSender());
     }
@@ -489,7 +503,18 @@ public class SpringDependenciesConfig {
         return new SpaceService(spaces(), animators());
     }
 
+    @Bean
+    public RoleService roleService() {
+        return new RoleService(roles());
+    }
+
     // END POINTS
+
+    @Bean
+    public RoleEndPoints roleEndPoints() {
+        return new RoleEndPoints(roleService());
+    }
+
     @Bean
     public StreamingEventEndPoints streamingEventEndPoints() {
         return new StreamingEventEndPoints(animators(), streamingEvents(), customerReader());
