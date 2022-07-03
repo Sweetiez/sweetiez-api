@@ -1,5 +1,7 @@
 package fr.sweetiez.api.core.roles;
 
+import org.springframework.http.ResponseEntity;
+
 import java.util.Collection;
 
 public class RoleService {
@@ -24,5 +26,20 @@ public class RoleService {
                 .orElseThrow();
 
         return roles.save(new Role(null, name));
+    }
+
+    public Role update(Long id, String newName) {
+        var roles = this.roles.findAll();
+
+        var role = roles.stream()
+                .filter(r -> r.id().equals(id))
+                .findFirst()
+                .orElseThrow();
+
+        if (roles.stream().anyMatch(r -> r.name().equals(newName))) {
+            throw new RoleAlreadyExistsException();
+        }
+
+        return this.roles.save(new Role(role.id(), newName));
     }
 }

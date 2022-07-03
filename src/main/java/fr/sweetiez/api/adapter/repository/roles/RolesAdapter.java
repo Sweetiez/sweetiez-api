@@ -6,6 +6,7 @@ import fr.sweetiez.api.core.roles.Roles;
 import fr.sweetiez.api.infrastructure.repository.accounts.RoleRepository;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public class RolesAdapter implements Roles {
     private final RoleRepository repository;
@@ -22,5 +23,9 @@ public class RolesAdapter implements Roles {
 
     public Role save(Role role) {
         return mapper.toDto(repository.save(mapper.toEntity(role)));
+    }
+
+    public Optional<Role> findById(Long id) {
+        return repository.findById(id).map(mapper::toDto);
     }
 }
