@@ -19,4 +19,8 @@ public class RolesAdapter implements Roles {
     public Collection<Role> findAll() {
         return repository.findAll().stream().map(mapper::toDto).toList();
     }
+
+    public Role save(Role role) {
+        return mapper.toDto(repository.save(mapper.toEntity(role)));
+    }
 }
