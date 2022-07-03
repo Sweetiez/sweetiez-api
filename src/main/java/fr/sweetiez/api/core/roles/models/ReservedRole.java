@@ -1,4 +1,4 @@
-package fr.sweetiez.api.core.roles;
+package fr.sweetiez.api.core.roles.models;
 
 import java.util.ArrayList;
 import java.util.List;

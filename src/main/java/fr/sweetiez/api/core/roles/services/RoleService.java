@@ -1,4 +1,10 @@
-package fr.sweetiez.api.core.roles;
+package fr.sweetiez.api.core.roles.services;
+
+import fr.sweetiez.api.core.roles.models.ReservedRole;
+import fr.sweetiez.api.core.roles.models.Role;
+import fr.sweetiez.api.core.roles.exceptions.ReservedRoleException;
+import fr.sweetiez.api.core.roles.exceptions.RoleAlreadyExistsException;
+import fr.sweetiez.api.core.roles.ports.Roles;
 
 import java.util.Collection;
 

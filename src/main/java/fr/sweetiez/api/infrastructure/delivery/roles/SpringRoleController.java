@@ -1,8 +1,8 @@
 package fr.sweetiez.api.infrastructure.delivery.roles;
 
 import fr.sweetiez.api.adapter.delivery.role.RoleEndPoints;
-import fr.sweetiez.api.core.roles.RoleName;
-import fr.sweetiez.api.core.roles.Role;
+import fr.sweetiez.api.core.roles.models.RoleName;
+import fr.sweetiez.api.core.roles.models.Role;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

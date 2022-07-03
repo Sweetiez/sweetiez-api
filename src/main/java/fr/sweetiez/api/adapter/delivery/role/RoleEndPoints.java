@@ -1,8 +1,8 @@
 package fr.sweetiez.api.adapter.delivery.role;
 
-import fr.sweetiez.api.core.roles.RoleName;
-import fr.sweetiez.api.core.roles.Role;
-import fr.sweetiez.api.core.roles.RoleService;
+import fr.sweetiez.api.core.roles.models.RoleName;
+import fr.sweetiez.api.core.roles.models.Role;
+import fr.sweetiez.api.core.roles.services.RoleService;
 import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
