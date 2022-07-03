@@ -20,7 +20,7 @@ public class JoinRoomStrategy implements EventStrategy {
     public JoinRoomStrategy(Rooms rooms) {
         this.rooms = rooms;
         mapper = new ObjectMapper();
-        ROOM_LIMIT = 100;
+        ROOM_LIMIT = 5;
     }
 
     public Rooms execute(WebSocketSession session, Object payload) throws IOException {

@@ -1,17 +1,14 @@
 package fr.sweetiez.api.infrastructure.app.socket.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.sweetiez.api.infrastructure.app.socket.events.models.Payload;
 import fr.sweetiez.api.infrastructure.app.socket.events.models.Rooms;
 import fr.sweetiez.api.infrastructure.app.socket.events.models.emitted.UserJoinedEventData;
-import fr.sweetiez.api.infrastructure.app.socket.events.models.Payload;
 import fr.sweetiez.api.infrastructure.app.socket.events.models.received.SendSignalEventData;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 public class SendSignalStrategy implements EventStrategy {
     private final Rooms rooms;
