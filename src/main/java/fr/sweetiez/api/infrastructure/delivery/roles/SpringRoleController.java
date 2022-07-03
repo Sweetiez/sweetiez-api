@@ -1,13 +1,10 @@
 package fr.sweetiez.api.infrastructure.delivery.roles;
 
 import fr.sweetiez.api.adapter.delivery.role.RoleEndPoints;
-import fr.sweetiez.api.core.roles.CreateRoleRequest;
+import fr.sweetiez.api.core.roles.RoleName;
 import fr.sweetiez.api.core.roles.Role;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -26,7 +23,12 @@ public class SpringRoleController {
     }
 
     @PostMapping("/admin/roles")
-    private ResponseEntity<?> create(@RequestBody CreateRoleRequest request) {
-        return roleEndPoints.create(request);
+    private ResponseEntity<?> create(@RequestBody RoleName roleName) {
+        return roleEndPoints.create(roleName);
+    }
+
+    @PutMapping("/admin/roles/{id}")
+    private ResponseEntity<Role> update(@PathVariable Long id, @RequestBody RoleName roleName) {
+        return roleEndPoints.update(id, roleName.name());
     }
 }
