@@ -27,6 +27,10 @@ public class RoleService {
     }
 
     public Role update(Long id, String newName) {
+        if (ReservedRole.isReserved(newName)) {
+            throw new ReservedRoleException();
+        }
+
         var roles = this.roles.findAll();
 
         var role = roles.stream()
