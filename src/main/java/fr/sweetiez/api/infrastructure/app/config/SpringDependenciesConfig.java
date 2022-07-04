@@ -54,6 +54,7 @@ import fr.sweetiez.api.core.events.animator.Animators;
 import fr.sweetiez.api.core.events.events.face_to_face_event.FaceToFaceEvents;
 import fr.sweetiez.api.core.events.events.streaming_event.StreamingEvents;
 import fr.sweetiez.api.core.events.space.Spaces;
+import fr.sweetiez.api.core.events.use_case.face_to_face.SpaceService;
 import fr.sweetiez.api.core.ingredients.ports.IngredientApi;
 import fr.sweetiez.api.core.ingredients.ports.Ingredients;
 import fr.sweetiez.api.core.ingredients.ports.TranslatorApi;
@@ -264,7 +265,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public Animators animators() {
-        return new AnimatorsAdapter(animatorRepository, customerRepository);
+        return new AnimatorsAdapter(animatorRepository, customerRepository, accountRepository);
     }
 
     @Bean
@@ -483,6 +484,11 @@ public class SpringDependenciesConfig {
         return new DashboardService(dashboardReader());
     }
 
+    @Bean
+    public SpaceService spaceService() {
+        return new SpaceService(spaces(), animators());
+    }
+
     // END POINTS
     @Bean
     public StreamingEventEndPoints streamingEventEndPoints() {
@@ -491,7 +497,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public FaceToFaceEventEndPoints faceToFaceEventEndPoints() {
-        return new FaceToFaceEventEndPoints(animators(), spaces(), faceToFaceEvents(), customerReader());
+        return new FaceToFaceEventEndPoints(animators(), spaces(), faceToFaceEvents(), customerReader(), spaceService());
     }
   
     @Bean

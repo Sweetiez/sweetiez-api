@@ -12,4 +12,6 @@ public interface OrdersReader {
     Optional<Order> findByPaymentIntent(String paymentIntent);
 
     Orders findByEmail(String clientEmail);
+
+    Orders findByEmailIfPaid(String clientEmail);
 }

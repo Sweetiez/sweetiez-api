@@ -16,6 +16,8 @@ public interface OrderRepository extends JpaRepository<OrderEntity, UUID> {
 
     List<OrderEntity> findByEmail(String email);
 
+    List<OrderEntity> findByEmailAndStatusEquals(String email, OrderStatus status);
+
     List<OrderEntity> findAllByCreatedAtAfter(LocalDate date);
 
     List<OrderEntity> findAllByCreatedAtAfterAndCreatedAtBefore(LocalDate after, LocalDate before);

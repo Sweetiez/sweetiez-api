@@ -1,5 +1,7 @@
 package fr.sweetiez.api.core.events.use_case.face_to_face.models;
 
+import fr.sweetiez.api.core.events.events.StatusEvent;
+
 import java.util.UUID;
 
 public record EventAdminResponse(
@@ -9,5 +11,6 @@ public record EventAdminResponse(
         Location localisation,
         ScheduleResponse schedule,
         Availability availability,
-        AnimatorResponse animator
+        AnimatorResponse animator,
+        StatusEvent status
 ) {}

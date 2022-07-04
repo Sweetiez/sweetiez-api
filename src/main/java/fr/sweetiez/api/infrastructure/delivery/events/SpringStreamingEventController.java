@@ -47,6 +47,11 @@ public class SpringStreamingEventController {
         return endPoints.subscribeEvent(request);
     }
 
+    @GetMapping("/events/streaming/subscribers/{id}")
+    public ResponseEntity<Collection<EventResponse>> retrieveMyEvents(@PathVariable UUID id) {
+        return endPoints.retrieveMyEvents(id);
+    }
+
     @GetMapping("/events/streaming")
     public ResponseEntity<Collection<EventResponse>> retrieveAllPublished() {
         return endPoints.retrieveAllPublished();
