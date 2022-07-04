@@ -36,7 +36,7 @@ public class FaceToFaceEventEntity {
     private final UUID space;
 
 
-    @OneToMany
+    @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
     private final List<CustomerEntity> subscribers;
 
