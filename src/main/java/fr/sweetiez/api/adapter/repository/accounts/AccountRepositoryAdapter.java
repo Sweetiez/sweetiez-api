@@ -4,12 +4,13 @@ import fr.sweetiez.api.adapter.shared.AccountMapper;
 import fr.sweetiez.api.core.authentication.models.Account;
 import fr.sweetiez.api.core.roles.models.Role;
 import fr.sweetiez.api.core.authentication.ports.AuthenticationRepository;
+import fr.sweetiez.api.core.roles.ports.Accounts;
 import fr.sweetiez.api.infrastructure.repository.accounts.AccountRepository;
 import fr.sweetiez.api.infrastructure.repository.accounts.RoleRepository;
 
 import java.util.Optional;
 
-public class AccountRepositoryAdapter implements AuthenticationRepository {
+public class AccountRepositoryAdapter implements AuthenticationRepository, Accounts {
 
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
@@ -42,5 +43,9 @@ public class AccountRepositoryAdapter implements AuthenticationRepository {
     public Optional<Account> findByResetPasswordToken(String token) {
         return accountRepository.findByPasswordUpdateToken(token)
                 .map(mapper::toDto);
+    }
+
+    public Account save(Account account) {
+        return mapper.toDto(accountRepository.save(mapper.toEntity(account)));
     }
 }

@@ -80,6 +80,7 @@ import fr.sweetiez.api.core.recipes.ports.RecipeReader;
 import fr.sweetiez.api.core.recipes.ports.RecipeWriter;
 import fr.sweetiez.api.core.recipes.services.RecipeService;
 import fr.sweetiez.api.core.reports.services.ReportService;
+import fr.sweetiez.api.core.roles.ports.Accounts;
 import fr.sweetiez.api.core.roles.services.RoleService;
 import fr.sweetiez.api.core.roles.ports.Roles;
 import fr.sweetiez.api.infrastructure.app.security.TokenProvider;
@@ -405,6 +406,11 @@ public class SpringDependenciesConfig {
     }
 
     @Bean
+    public Accounts accounts() {
+        return new AccountRepositoryAdapter(accountRepository, roleRepository, accountMapper());
+    }
+
+    @Bean
     public Roles roles() {
         return new RolesAdapter(roleRepository, roleMapper());
     }
@@ -505,7 +511,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public RoleService roleService() {
-        return new RoleService(roles());
+        return new RoleService(roles(), accounts(), customerReader());
     }
 
     // END POINTS

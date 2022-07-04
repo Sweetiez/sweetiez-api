@@ -1,14 +1,17 @@
 package fr.sweetiez.api.infrastructure.delivery.roles;
 
 import fr.sweetiez.api.adapter.delivery.role.RoleEndPoints;
-import fr.sweetiez.api.core.roles.models.RoleName;
+import fr.sweetiez.api.core.roles.models.AccountResponse;
 import fr.sweetiez.api.core.roles.models.Role;
+import fr.sweetiez.api.core.roles.models.RoleName;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @RestController
+@RequestMapping("/admin/roles")
 public class SpringRoleController {
 
     private final RoleEndPoints roleEndPoints;
@@ -17,18 +20,24 @@ public class SpringRoleController {
         this.roleEndPoints = roleEndPoints;
     }
 
-    @GetMapping("/roles")
+    @GetMapping
     public ResponseEntity<Collection<Role>> retrieveAll() {
         return roleEndPoints.retrieveAll();
     }
 
-    @PostMapping("/admin/roles")
-    private ResponseEntity<?> create(@RequestBody RoleName roleName) {
+    @PostMapping()
+    public ResponseEntity<?> create(@RequestBody RoleName roleName) {
         return roleEndPoints.create(roleName);
     }
 
-    @PutMapping("/admin/roles/{id}")
-    private ResponseEntity<Role> update(@PathVariable Long id, @RequestBody RoleName roleName) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Role> update(@PathVariable Long id, @RequestBody RoleName roleName) {
         return roleEndPoints.update(id, roleName.name());
     }
+
+    @PutMapping("/users/{id}")
+    public ResponseEntity<AccountResponse> addRoleToAccount(@PathVariable UUID id, @RequestBody Roles request) {
+        return roleEndPoints.updateUserRoles(id, request.roles());
+    }
+
 }
