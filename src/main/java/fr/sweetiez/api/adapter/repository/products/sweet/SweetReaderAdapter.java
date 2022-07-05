@@ -29,7 +29,7 @@ public class SweetReaderAdapter implements ProductsReader<Sweet> {
         return repository.findAllByState(State.PUBLISHED)
                 .stream()
                 .map(sweetMapper::toDto)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     public Collection<Sweet> findAll() {

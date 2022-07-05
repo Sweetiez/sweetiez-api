@@ -36,7 +36,7 @@ public class StreamingEventEntity {
     private final Integer places;
 
 
-    @OneToMany
+    @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
     private final List<CustomerEntity> subscribers;
 
