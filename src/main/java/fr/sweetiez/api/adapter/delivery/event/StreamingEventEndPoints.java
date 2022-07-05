@@ -124,4 +124,14 @@ public class StreamingEventEndPoints {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    public ResponseEntity<?> participate(AttendMasterClassRequest request) {
+        var useCase = new AttendMasterclass(events);
+        var canAttend = useCase.attendMasterclass(request);
+
+        var response =
+                (canAttend) ? ResponseEntity.ok() : ResponseEntity.badRequest();
+
+        return response.build();
+    }
 }

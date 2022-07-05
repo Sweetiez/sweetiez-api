@@ -2,6 +2,7 @@ package fr.sweetiez.api.infrastructure.delivery.events;
 
 import fr.sweetiez.api.adapter.delivery.event.StreamingEventEndPoints;
 import fr.sweetiez.api.core.events.events.streaming_event.StreamingEvent;
+import fr.sweetiez.api.core.events.use_case.streaming.AttendMasterClassRequest;
 import fr.sweetiez.api.core.events.use_case.streaming.models.requests.CreateStreamingEventRequestDTO;
 import fr.sweetiez.api.core.events.use_case.streaming.models.requests.RescheduleEventRequest;
 import fr.sweetiez.api.core.events.use_case.streaming.models.requests.SubscribeEventRequest;
@@ -60,5 +61,10 @@ public class SpringStreamingEventController {
     @GetMapping("/admin/events/streaming")
     public ResponseEntity<Collection<EventAdminResponse>> retrieveAll() {
         return endPoints.retrieveAll();
+    }
+
+    @PostMapping("/events/participate")
+    public ResponseEntity<?> canAttendMasterclass(@RequestBody AttendMasterClassRequest request) {
+        return endPoints.participate(request);
     }
 }
