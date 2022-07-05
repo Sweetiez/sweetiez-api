@@ -66,7 +66,8 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.authorizeRequests()
                 .antMatchers("/evaluations",
                         "/order/me",
-                        "/user/**"
+                        "/user/**",
+                        "/events/participate"
                         ).hasRole("USER")
                 .antMatchers(
                         "/admin/**"
