@@ -23,12 +23,12 @@ import fr.sweetiez.api.adapter.gateways.allergen.EdamamApi;
 import fr.sweetiez.api.adapter.gateways.translator.LibreTranslateApi;
 import fr.sweetiez.api.adapter.repository.*;
 import fr.sweetiez.api.adapter.repository.accounts.AccountRepositoryAdapter;
-import fr.sweetiez.api.adapter.repository.dashboard.DashboardReaderAdapter;
-import fr.sweetiez.api.adapter.repository.events.AnimatorsAdapter;
 import fr.sweetiez.api.adapter.repository.customers.CustomerReaderAdapter;
 import fr.sweetiez.api.adapter.repository.customers.CustomerWriterAdapter;
+import fr.sweetiez.api.adapter.repository.dashboard.DashboardReaderAdapter;
 import fr.sweetiez.api.adapter.repository.evaluations.EvaluationReaderAdapter;
 import fr.sweetiez.api.adapter.repository.evaluations.EvaluationWriterAdapter;
+import fr.sweetiez.api.adapter.repository.events.AnimatorsAdapter;
 import fr.sweetiez.api.adapter.repository.events.face_to_face.FaceToFaceEventsAdapter;
 import fr.sweetiez.api.adapter.repository.events.face_to_face.SpacesAdapter;
 import fr.sweetiez.api.adapter.repository.events.streaming.StreamingEventsAdapter;
@@ -568,7 +568,7 @@ public class SpringDependenciesConfig {
 
     @Bean
     public IngredientEndPoints ingredientEndPoints() {
-        return new IngredientEndPoints(ingredientService());
+        return new IngredientEndPoints(ingredientService(), sweetService());
     }
   
     @Bean
