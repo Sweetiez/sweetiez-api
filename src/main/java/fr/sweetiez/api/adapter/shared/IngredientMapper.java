@@ -5,13 +5,15 @@ import fr.sweetiez.api.core.ingredients.models.Ingredient;
 import fr.sweetiez.api.infrastructure.repository.ingredients.HealthPropertyEntity;
 import fr.sweetiez.api.infrastructure.repository.ingredients.IngredientEntity;
 
+import java.util.stream.Collectors;
+
 public class IngredientMapper {
 
     public IngredientEntity toEntity(Ingredient ingredient) {
         var healthProperties = ingredient.healthProperties()
                 .stream()
                 .map(this::toEntity)
-                .toList();
+                .collect(Collectors.toList());
 
         return new IngredientEntity(ingredient.id(), ingredient.name(), healthProperties);
     }
@@ -20,7 +22,7 @@ public class IngredientMapper {
         var healthProperties = entity.getHealthProperties()
                 .stream()
                 .map(this::toDto)
-                .toList();
+                .collect(Collectors.toList());
 
         return new Ingredient(entity.getId(), entity.getName(), healthProperties);
     }

@@ -8,9 +8,11 @@ import fr.sweetiez.api.core.ingredients.models.IngredientResponse;
 import fr.sweetiez.api.core.ingredients.ports.IngredientApi;
 import fr.sweetiez.api.core.ingredients.ports.Ingredients;
 import fr.sweetiez.api.core.ingredients.ports.TranslatorApi;
+import fr.sweetiez.api.core.products.services.SweetService;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -115,5 +117,13 @@ public class IngredientService {
                 .stream()
                 .map(ingredient -> new IngredientResponse(ingredient.id(), ingredient.name()))
                 .toList();
+    }
+
+    public Optional<Ingredient> findById(UUID ingredientId) {
+        return ingredientRepository.findById(ingredientId);
+    }
+
+    public void deleteIngredient(UUID id) {
+        ingredientRepository.delete(id);
     }
 }

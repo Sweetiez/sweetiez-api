@@ -1,6 +1,7 @@
 package fr.sweetiez.api.core.products.services;
 
 import fr.sweetiez.api.core.evaluations.services.EvaluationService;
+import fr.sweetiez.api.core.ingredients.models.Ingredient;
 import fr.sweetiez.api.core.ingredients.services.IngredientService;
 import fr.sweetiez.api.core.products.models.Product;
 import fr.sweetiez.api.core.products.models.Sweet;
@@ -107,6 +108,20 @@ public class SweetService implements ProductService{
         publishedSweets.addAll(common);
 
         return publishedSweets;
+    }
+
+    public void deleteIngredientContainedInSweets(UUID ingredientId) {
+        var ingredient = ingredientService.findById(ingredientId).orElseThrow();
+        retrieveAll()
+                .stream()
+                .filter(sweet -> sweet.ingredients().contains(ingredient))
+                .forEach(sweet -> {
+                    System.out.println(sweet);
+                    sweet.ingredients().remove(ingredient);
+                    writer.save(sweet);
+                });
+
+        ingredientService.deleteIngredient(ingredient.id());
     }
 
     public DetailedSweetResponse retrieveDetailsOf(ProductID id) {

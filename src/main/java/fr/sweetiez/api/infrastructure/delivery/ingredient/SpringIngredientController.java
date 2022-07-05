@@ -4,12 +4,11 @@ import fr.sweetiez.api.adapter.delivery.ingredient.IngredientEndPoints;
 import fr.sweetiez.api.core.ingredients.models.CreateIngredientRequest;
 import fr.sweetiez.api.core.ingredients.models.IngredientResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @RestController
 public class SpringIngredientController {
@@ -28,5 +27,12 @@ public class SpringIngredientController {
     @GetMapping("/admin/ingredients")
     public ResponseEntity<Collection<IngredientResponse>> retrieveAll() {
         return endPoints.retrieveAll();
+    }
+
+    @DeleteMapping("/admin/ingredients/{id}")
+    @Transactional
+    public ResponseEntity<Object> delete(@PathVariable("id") UUID id)
+    {
+        return endPoints.deleteIngredient(id);
     }
 }

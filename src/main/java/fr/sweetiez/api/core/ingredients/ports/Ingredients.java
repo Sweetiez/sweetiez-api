@@ -9,9 +9,11 @@ import java.util.UUID;
 
 public interface Ingredients {
     Optional<Ingredient> findByName(String name);
+    Optional<Ingredient> findById(UUID id);
     Collection<HealthProperty> retrieveAllHealthProperties();
     HealthProperty saveHealthProperty(HealthProperty dietProperty);
     Ingredient saveIngredient(Ingredient ingredient);
     Collection<Ingredient> findAllById(Collection<UUID> ingredients);
     Collection<Ingredient> findAll();
+    void delete(UUID id);
 }

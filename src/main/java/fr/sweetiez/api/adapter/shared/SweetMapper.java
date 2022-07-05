@@ -12,6 +12,7 @@ import fr.sweetiez.api.core.products.models.common.details.characteristics.Chara
 import fr.sweetiez.api.infrastructure.repository.products.sweets.SweetEntity;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SweetMapper {
 
@@ -37,8 +38,9 @@ public class SweetMapper {
                         .stream()
                         .map(image -> image.isEmpty() ? image : image.concat(";"))
                         .reduce("", String::concat),
-                sweet.ingredients().stream().map(ingredientMapper::toEntity).toList(),
-                sweet.details().valuation().evaluations().stream().map(evaluationMapper::toEntity).toList()
+                sweet.ingredients().stream().map(ingredientMapper::toEntity).collect(Collectors.toList()),
+                sweet.details().valuation().evaluations().stream().map(evaluationMapper::toEntity)
+                        .collect(Collectors.toList())
         );
     }
 
@@ -51,9 +53,9 @@ public class SweetMapper {
                 new Details(
                         List.of(entity.getImages().split(";")),
                         new Characteristics(entity.getHighlight(), entity.getState(), entity.getFlavor()),
-                        new Valuation(entity.getEvaluations().stream().map(evaluationMapper::toDto).toList())
+                        new Valuation(entity.getEvaluations().stream().map(evaluationMapper::toDto).collect(Collectors.toList()))
                 ),
-                entity.getIngredients().stream().map(ingredientMapper::toDto).toList()
+                entity.getIngredients().stream().map(ingredientMapper::toDto).collect(Collectors.toList())
         );
     }
 }

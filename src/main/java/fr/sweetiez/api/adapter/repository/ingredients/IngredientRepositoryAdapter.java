@@ -31,6 +31,10 @@ public class IngredientRepositoryAdapter implements Ingredients {
         return repository.findByName(name).map(mapper::toDto);
     }
 
+    public Optional<Ingredient> findById(UUID id) {
+        return repository.findById(id).map(mapper::toDto);
+    }
+
     public Collection<HealthProperty> retrieveAllHealthProperties() {
         return healthPropertyRepository.findAll()
                 .stream()
@@ -58,5 +62,10 @@ public class IngredientRepositoryAdapter implements Ingredients {
                 .stream()
                 .map(mapper::toDto)
                 .toList();
+    }
+
+    @Override
+    public void delete(UUID id) {
+        repository.deleteById(id);
     }
 }
